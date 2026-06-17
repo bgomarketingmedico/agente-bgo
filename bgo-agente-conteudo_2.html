@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B.GO — Calendário de Conteúdo Médico</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap');
+:root {
+  --bg:#0d0d0f;--surface:#141416;--surface2:#1c1c1f;--surface3:#222226;
+  --border:#2a2a2e;--border2:#363639;
+  --accent:#7c3aed;--accent2:#a855f7;--accent-soft:rgba(124,58,237,0.15);--accent-glow:rgba(124,58,237,0.08);
+  --text:#f0f0f2;--text2:#9494a0;--text3:#5c5c6a;
+  --green:#22c55e;--green-soft:rgba(34,197,94,0.1);--yellow:#f59e0b;--yellow-soft:rgba(245,158,11,0.1);--red:#ef4444;
+  --r:12px;--r-sm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:13.5px;line-height:1.6;}
+.app{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:50;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:12px;color:#fff;}
+.logo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;}
+.logo-tag{font-size:11px;color:var(--text3);margin-top:-2px;}
+.pill{background:var(--accent-soft);border:1px solid var(--accent);color:var(--accent2);font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.steps-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:48px;display:flex;align-items:center;flex-shrink:0;}
+.step-btn{display:flex;align-items:center;gap:8px;padding:0 14px;height:100%;font-size:12px;font-weight:500;color:var(--text3);border-bottom:2px solid transparent;cursor:pointer;transition:all 0.15s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;}
+.step-btn.active{color:var(--accent2);border-bottom-color:var(--accent);}
+.step-btn.done{color:var(--text2);}
+.step-btn.done .step-n{background:var(--green);color:#000;}
+.step-n{width:20px;height:20px;border-radius:50%;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text3);flex-shrink:0;}
+.step-btn.active .step-n{background:var(--accent);color:#fff;}
+.step-arrow{color:var(--border2);margin:0 2px;font-size:10px;}
+.content{flex:1;overflow:hidden;display:flex;}
+.step-panel{display:none;width:100%;height:100%;overflow-y:auto;padding:22px 26px;}
+.step-panel.active{display:flex;flex-direction:column;}
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:13px;}
+.card-title{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.fg{margin-bottom:11px;}
+.fg:last-child{margin-bottom:0;}
+label{display:block;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px;letter-spacing:0.3px;}
+label .req{color:var(--accent2);}
+input[type=text],select,textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:9px 12px;outline:none;transition:border-color 0.15s,box-shadow 0.15s;-webkit-appearance:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+input::placeholder,textarea::placeholder{color:var(--text3);}
+textarea{resize:vertical;}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%235c5c6a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;cursor:pointer;}
+.hint{font-size:11px;color:var(--text3);margin-top:5px;line-height:1.6;}
+.warn-box{background:var(--yellow-soft);border:1px solid rgba(245,158,11,0.3);border-radius:var(--r-sm);padding:10px 13px;font-size:11px;color:var(--yellow);line-height:1.6;margin-top:11px;}
+.info-box{background:var(--accent-glow);border:1px solid var(--accent);border-radius:var(--r-sm);padding:10px 13px;font-size:11px;color:var(--accent2);line-height:1.6;margin-top:11px;}
+
+/* STEP 2 */
+.s2-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.format-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:13px;}
+.format-row{display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 13px;transition:border-color 0.15s;}
+.format-row.selected{border-color:var(--accent);background:var(--accent-glow);}
+.format-check{width:18px;height:18px;border:2px solid var(--border2);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
+.format-check.checked{background:var(--accent);border-color:var(--accent);}
+.format-check.checked::after{content:'✓';font-size:11px;color:#fff;font-weight:700;}
+.format-icon{font-size:17px;flex-shrink:0;}
+.format-name{font-size:13px;font-weight:500;color:var(--text);flex:1;}
+.format-desc{font-size:11px;color:var(--text3);}
+.qty-control{display:flex;align-items:center;border:1px solid var(--border2);border-radius:var(--r-sm);overflow:hidden;flex-shrink:0;}
+.qty-btn{width:27px;height:27px;background:var(--surface3);border:none;color:var(--text2);font-size:15px;cursor:pointer;transition:background 0.15s;display:flex;align-items:center;justify-content:center;}
+.qty-btn:hover{background:var(--border2);}
+.qty-num{width:30px;height:27px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--text);border-left:1px solid var(--border);border-right:1px solid var(--border);}
+.total-bar{background:var(--accent-soft);border:1px solid var(--accent);border-radius:var(--r-sm);padding:11px 15px;display:flex;justify-content:space-between;align-items:center;}
+.total-label{font-size:12px;color:var(--accent2);font-weight:600;}
+.total-val{font-size:18px;font-weight:700;color:var(--accent2);font-family:'Syne',sans-serif;}
+.total-sub{font-size:11px;color:var(--text3);}
+
+/* HISTÓRICO DE TEMAS */
+.hist-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.hist-tag{background:var(--surface3);border:1px solid var(--border2);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--text3);}
+.hist-tag.repeat{background:rgba(239,68,68,0.1);border-color:var(--red);color:var(--red);}
+.hist-empty{font-size:11px;color:var(--text3);font-style:italic;}
+
+/* STEP 3 */
+.preview-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.preview-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;}
+.preview-sub{font-size:12px;color:var(--text3);margin-top:3px;}
+.cal-table-wrap{overflow-x:auto;}
+.cal-table{width:100%;border-collapse:separate;border-spacing:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.cal-table th{background:var(--surface2);padding:9px 13px;font-size:10px;font-weight:700;color:var(--text3);text-align:left;letter-spacing:0.5px;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.cal-table td{padding:9px 13px;border-bottom:1px solid var(--border);font-size:12px;vertical-align:middle;}
+.cal-table tr:last-child td{border-bottom:none;}
+.cal-table tr:hover td{background:var(--surface2);}
+.td-num{color:var(--text3);font-size:11px;font-weight:600;width:32px;}
+.td-date{color:var(--text2);width:95px;}
+.format-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;}
+.tag-reels{background:rgba(168,85,247,0.15);color:#c084fc;}
+.tag-carrossel{background:rgba(59,130,246,0.15);color:#60a5fa;}
+.tag-post{background:rgba(245,158,11,0.15);color:#fbbf24;}
+.tag-youtube{background:rgba(239,68,68,0.15);color:#f87171;}
+.tag-stories{background:rgba(20,184,166,0.15);color:#2dd4bf;}
+.tag-whatsapp{background:rgba(34,197,94,0.15);color:#4ade80;}
+.td-repeat{color:var(--red);font-size:10px;margin-left:5px;}
+
+/* STEP 4 */
+.gen-layout{display:grid;grid-template-columns:270px 1fr;gap:13px;flex:1;min-height:0;}
+.gen-sidebar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);display:flex;flex-direction:column;overflow:hidden;max-height:calc(100vh - 195px);}
+.gen-sidebar-header{padding:11px 13px;border-bottom:1px solid var(--border);font-size:10px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--text3);flex-shrink:0;}
+.gen-items{overflow-y:auto;flex:1;}
+.gen-item{padding:9px 13px;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.12s;}
+.gen-item:last-child{border-bottom:none;}
+.gen-item:hover{background:var(--surface2);}
+.gen-item.active{background:var(--accent-soft);}
+.gen-item.active .gen-item-num{background:var(--accent);color:#fff;}
+.gen-item-num{width:21px;height:21px;border-radius:50%;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--text3);flex-shrink:0;}
+.gen-item-info{flex:1;min-width:0;}
+.gen-item-title{font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.gen-item-sub{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.gen-item-status{font-size:13px;flex-shrink:0;}
+.gen-main{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);display:flex;flex-direction:column;max-height:calc(100vh - 195px);}
+.gen-main-header{padding:13px 17px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.gen-main-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
+.gen-main-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+.gen-main-body{flex:1;padding:17px;overflow-y:auto;}
+.gen-empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;text-align:center;color:var(--text3);min-height:160px;}
+.gen-content-text{font-size:13.5px;line-height:1.95;color:var(--text);white-space:pre-wrap;}
+.progress-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:13px 17px;margin-bottom:13px;flex-shrink:0;}
+.progress-info{display:flex;justify-content:space-between;margin-bottom:7px;}
+.progress-label{font-size:12px;color:var(--text2);font-weight:500;}
+.progress-pct{font-size:12px;color:var(--accent2);font-weight:600;}
+.progress-bar-bg{height:5px;background:var(--surface3);border-radius:3px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;transition:width 0.4s ease;width:0%;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:var(--r-sm);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all 0.15s;white-space:nowrap;}
+.btn:disabled{opacity:0.45;cursor:not-allowed;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;}
+.btn-primary:hover:not(:disabled){opacity:0.88;transform:translateY(-1px);}
+.btn-ghost{background:var(--surface2);border:1px solid var(--border);color:var(--text2);}
+.btn-ghost:hover:not(:disabled){border-color:var(--accent);color:var(--accent2);background:var(--accent-glow);}
+.btn-sm{padding:6px 11px;font-size:12px;}
+.btn-copy-done{border-color:var(--green)!important;color:var(--green)!important;background:var(--green-soft)!important;}
+.bottom-bar{background:var(--surface);border-top:1px solid var(--border);padding:10px 26px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.bottom-info{font-size:12px;color:var(--text3);}
+.spinner{width:13px;height:13px;border:2px solid rgba(255,255,255,0.25);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(4px);}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:26px;width:460px;max-width:95vw;}
+.modal-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:5px;}
+.modal-sub{font-size:12px;color:var(--text3);margin-bottom:18px;line-height:1.7;}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- MODAL CONFIG -->
+<div class="modal-bg" id="modal-config">
+  <div class="modal">
+    <div class="modal-title">Configuração inicial</div>
+    <div class="modal-sub">Cole a URL do seu Cloudflare Worker. Ela fica salva no navegador com segurança.</div>
+    <div class="fg">
+      <label>URL do Cloudflare Worker <span class="req">*</span></label>
+      <input type="text" id="worker-url" placeholder="https://bgo-proxy.SEU-USUARIO.workers.dev"/>
+    </div>
+    <div class="warn-box">⚠ Nunca cole sua API Key aqui. Ela fica protegida apenas no Worker.</div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="salvarConfig()">Salvar e continuar</button>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-mark">B.G</div>
+    <div>
+      <div class="logo-name">B.GO Marketing Médico</div>
+      <div class="logo-tag">Agente de Calendário Mensal</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:9px;">
+    <div class="pill" id="pill-total">0 conteúdos</div>
+    <button class="btn btn-ghost btn-sm" onclick="abrirConfig()" title="Configurações">⚙</button>
+  </div>
+</header>
+
+<!-- STEPS -->
+<div class="steps-bar">
+  <button class="step-btn active" id="sb-1" onclick="goStep(1)"><div class="step-n">1</div>Médico / Clínica</button>
+  <span class="step-arrow">›</span>
+  <button class="step-btn" id="sb-2" onclick="goStep(2)"><div class="step-n">2</div>Formatos e Temas</button>
+  <span class="step-arrow">›</span>
+  <button class="step-btn" id="sb-3" onclick="goStep(3)"><div class="step-n">3</div>Prévia do Calendário</button>
+  <span class="step-arrow">›</span>
+  <button class="step-btn" id="sb-4" onclick="goStep(4)"><div class="step-n">4</div>Gerar Conteúdo</button>
+</div>
+
+<div class="content">
+
+<!-- STEP 1 -->
+<div class="step-panel active" id="step-1">
+  <div class="form-card">
+    <div class="card-title">Identificação do Médico ou Clínica</div>
+    <div class="grid-2">
+      <div class="fg"><label>Nome completo <span class="req">*</span></label><input type="text" id="nome" placeholder="Ex: Dr. Carlos Ferreira / Clínica Renovar"/></div>
+      <div class="fg"><label>Especialidade <span class="req">*</span></label>
+        <select id="especialidade">
+          <option value="">Selecione...</option>
+          <option>Angiologia</option><option>Cardiologia</option><option>Cirurgia Plástica</option>
+          <option>Dermatologia</option><option>Endocrinologia</option><option>Fisioterapia</option>
+          <option>Gastroenterologia</option><option>Ginecologia e Obstetrícia</option>
+          <option>Medicina Estética</option><option>Neurologia</option><option>Nutrição</option>
+          <option>Oftalmologia</option><option>Oncologia</option><option>Ortopedia</option>
+          <option>Otorrinolaringologia</option><option>Pediatria</option><option>Podologia</option>
+          <option>Psiquiatria</option><option>Reumatologia</option><option>Urologia</option>
+          <option>Clínica Geral / Multispecialidade</option><option value="__outro__">Outra...</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg" id="esp-outro-wrap" style="display:none;"><label>Qual especialidade?</label><input type="text" id="esp-outro" placeholder="Digite a especialidade"/></div>
+    <div class="grid-3">
+      <div class="fg"><label>CRM <span class="req">*</span></label><input type="text" id="crm" placeholder="Ex: SP 123456"/></div>
+      <div class="fg"><label>RQE</label><input type="text" id="rqe" placeholder="Ex: 12345"/></div>
+      <div class="fg"><label>Cidade / Estado</label><input type="text" id="cidade" placeholder="Ex: Brasília, DF"/></div>
+    </div>
+  </div>
+  <div class="form-card">
+    <div class="card-title">Perfil e Contexto</div>
+    <div class="grid-2">
+      <div class="fg"><label>Paciente ideal</label><input type="text" id="paciente" placeholder="Ex: Mulheres 35-55 com dor nas pernas"/></div>
+      <div class="fg"><label>Tom de voz</label>
+        <select id="tom">
+          <option value="medico-amigo">Médico amigo inteligente (recomendado)</option>
+          <option value="educativo">Educativo e acessível</option>
+          <option value="emocional">Emocional e próximo</option>
+          <option value="tecnico">Técnico e clínico</option>
+          <option value="urgente">Urgente / preventivo</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg"><label>Diferenciais da clínica</label><textarea id="extras" rows="2" placeholder="Procedimentos, equipamentos, convênios, anos de experiência, localização..."></textarea></div>
+    <div class="fg"><label>Link de agendamento / WhatsApp</label><input type="text" id="link" placeholder="Ex: linktr.ee/drnome ou wa.me/5561..."/></div>
+  </div>
+  <div class="form-card">
+    <div class="card-title">Contexto do Mês — O que impulsiona a geração</div>
+    <div class="fg">
+      <label>Foco especial deste mês</label>
+      <textarea id="contexto-mes" rows="3" placeholder="Ex: Lançamento do protocolo de escleroterapia. Campanha do Dia das Mães. Verão chegando — foco em exposição das pernas. Novo equipamento laser instalado. Parceria com academia da região..."></textarea>
+      <div class="hint">💡 Quanto mais específico, mais diferente e personalizado sai o conteúdo. Este campo garante que cada mês tenha identidade própria.</div>
+    </div>
+    <div class="fg">
+      <label>Informação contraintuitiva da especialidade</label>
+      <textarea id="contra" rows="2" placeholder="Ex: A maioria das varizes não dói — e esse é exatamente o sinal de alerta. / Colesterol alto não tem sintomas — por isso mata silenciosamente."></textarea>
+      <div class="hint">💡 Conteúdos que contradizem o senso comum viralizam mais. O agente vai usar isso nos ganchos do mês.</div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 2 -->
+<div class="step-panel" id="step-2">
+  <div class="s2-grid">
+    <div>
+      <div class="form-card">
+        <div class="card-title">Período</div>
+        <div class="grid-2">
+          <div class="fg" style="margin-bottom:0;"><label>Mês</label>
+            <select id="mes">
+              <option value="1">Janeiro</option><option value="2">Fevereiro</option><option value="3">Março</option>
+              <option value="4">Abril</option><option value="5">Maio</option><option value="6">Junho</option>
+              <option value="7">Julho</option><option value="8">Agosto</option><option value="9">Setembro</option>
+              <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
+            </select>
+          </div>
+          <div class="fg" style="margin-bottom:0;"><label>Ano</label>
+            <select id="ano"><option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option></select>
+          </div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="card-title">Temas do Mês</div>
+        <div class="fg">
+          <label>Temas separados por vírgula <span class="req">*</span></label>
+          <textarea id="temas" rows="5" placeholder="Ex: varizes, lipedema, trombose, sinais de alerta, quando consultar, mitos sobre meias de compressão, prevenção em gestantes, pós-operatório..."></textarea>
+          <div class="hint">💡 Pode ter menos temas que conteúdos. O agente distribui e cria variações automaticamente.</div>
+        </div>
+        <div id="hist-section">
+          <div class="card-title" style="margin-top:14px;">Temas Usados no Mês Anterior</div>
+          <div id="hist-container"><div class="hist-empty">Nenhum histórico salvo ainda.</div></div>
+          <div class="hint" style="margin-top:6px;">Temas em <span style="color:var(--red);">vermelho</span> estão repetindo este mês.</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-card">
+      <div class="card-title">Formatos e Quantidade</div>
+      <div class="format-rows">
+        <div class="format-row" data-format="reels">
+          <div class="format-check" onclick="toggleFormat(this)"></div>
+          <div class="format-icon">🎬</div>
+          <div style="flex:1;"><div class="format-name">Reels</div><div class="format-desc">Roteiro 30-60s com gancho triplo e CTA</div></div>
+          <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><div class="qty-num">4</div><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
+        </div>
+        <div class="format-row" data-format="carrossel">
+          <div class="format-check" onclick="toggleFormat(this)"></div>
+          <div class="format-icon">📊</div>
+          <div style="flex:1;"><div class="format-name">Carrossel</div><div class="format-desc">8-10 slides educativos + briefing designer</div></div>
+          <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><div class="qty-num">4</div><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
+        </div>
+        <div class="format-row" data-format="post">
+          <div class="format-check" onclick="toggleFormat(this)"></div>
+          <div class="format-icon">📸</div>
+          <div style="flex:1;"><div class="format-name">Post único</div><div class="format-desc">Legenda completa + arte + hashtags</div></div>
+          <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><div class="qty-num">4</div><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
+        </div>
+        <div class="format-row" data-format="youtube">
+          <div class="format-check" onclick="toggleFormat(this)"></div>
+          <div class="format-icon">▶️</div>
+          <div style="flex:1;"><div class="format-name">YouTube</div><div class="format-desc">Roteiro 5-10min em 3 atos + SEO</div></div>
+          <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><div class="qty-num">2</div><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
+        </div>
+        <div class="format-row" data-format="stories">
+          <div class="format-check" onclick="toggleFormat(this)"></div>
+          <div class="format-icon">📱</div>
+          <div style="flex:1;"><div class="format-name">Stories</div><div class="format-desc">Sequência 8-12 stories com interação</div></div>
+          <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><div class="qty-num">4</div><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
+        </div>
+        <div class="format-row" data-format="whatsapp">
+          <div class="format-check" onclick="toggleFormat(this)"></div>
+          <div class="format-icon">💬</div>
+          <div style="flex:1;"><div class="format-name">WhatsApp / CRM</div><div class="format-desc">5 mensagens: confirmação ao pós-consulta</div></div>
+          <div class="qty-control"><button class="qty-btn" onclick="changeQty(this,-1)">−</button><div class="qty-num">2</div><button class="qty-btn" onclick="changeQty(this,1)">+</button></div>
+        </div>
+      </div>
+      <div class="total-bar">
+        <div><div class="total-label">Total de conteúdos</div><div class="total-sub" id="total-detail">Selecione os formatos acima</div></div>
+        <div class="total-val" id="total-num">0</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="step-panel" id="step-3">
+  <div class="preview-header">
+    <div><div class="preview-title" id="prev-title">Calendário</div><div class="preview-sub" id="prev-sub"></div></div>
+    <button class="btn btn-ghost btn-sm" onclick="goStep(2)">← Ajustar</button>
+  </div>
+  <div id="repeat-warn" class="warn-box" style="display:none;margin-bottom:13px;"></div>
+  <div class="cal-table-wrap">
+    <table class="cal-table">
+      <thead><tr><th style="width:32px;">#</th><th style="width:95px;">Data</th><th style="width:125px;">Formato</th><th>Tema</th></tr></thead>
+      <tbody id="cal-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- STEP 4 -->
+<div class="step-panel" id="step-4">
+  <div class="progress-wrap">
+    <div class="progress-info">
+      <div class="progress-label" id="prog-label">Pronto para iniciar</div>
+      <div class="progress-pct" id="prog-pct">0%</div>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-fill"></div></div>
+  </div>
+  <div class="gen-layout">
+    <div class="gen-sidebar">
+      <div class="gen-sidebar-header">Conteúdos do Mês</div>
+      <div class="gen-items" id="gen-items"></div>
+    </div>
+    <div class="gen-main">
+      <div class="gen-main-header">
+        <div><div class="gen-main-title" id="view-title">Selecione um conteúdo</div><div class="gen-main-sub" id="view-sub">Inicie a geração ou clique em um item</div></div>
+        <div style="display:flex;gap:7px;">
+          <button class="btn btn-ghost btn-sm" id="btn-copy-cur" onclick="copiarAtual()" style="display:none;">⎘ Copiar</button>
+        </div>
+      </div>
+      <div class="gen-main-body" id="view-body">
+        <div class="gen-empty"><div style="font-size:26px;">✦</div><div>Clique em "Iniciar Geração" para começar</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="bottom-bar">
+  <div class="bottom-info" id="bottom-info">Preencha os dados para começar</div>
+  <div style="display:flex;gap:8px;">
+    <button class="btn btn-ghost" id="btn-back" onclick="prevStep()" style="display:none;">← Voltar</button>
+    <button class="btn btn-primary" id="btn-next" onclick="nextStep()">Próximo →</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+const MESES=['','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const DIAS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+const FL={reels:'Reels',carrossel:'Carrossel',post:'Post',youtube:'YouTube',stories:'Stories',whatsapp:'WhatsApp'};
+const FI={reels:'🎬',carrossel:'📊',post:'📸',youtube:'▶️',stories:'📱',whatsapp:'💬'};
+
+let currentStep=1,selectedFormats={},calendar=[],contents={},generating=false,activeView=null;
+
+window.onload=()=>{
+  const now=new Date();
+  document.getElementById('mes').value=now.getMonth()+1;
+  document.getElementById('ano').value=now.getFullYear();
+  updateTotal();
+  document.getElementById('especialidade').addEventListener('change',function(){
+    document.getElementById('esp-outro-wrap').style.display=this.value==='__outro__'?'block':'none';
+  });
+  document.getElementById('temas').addEventListener('input',checkRepeatTopics);
+  const saved=localStorage.getItem('bgo_worker_url');
+  document.getElementById('modal-config').style.display=saved?'none':'flex';
+  if(saved)document.getElementById('worker-url').value=saved;
+  renderHistorico();
+};
+
+function salvarConfig(){
+  const url=document.getElementById('worker-url').value.trim();
+  if(!url){alert('Cole a URL do Worker.');return;}
+  localStorage.setItem('bgo_worker_url',url);
+  document.getElementById('modal-config').style.display='none';
+}
+function abrirConfig(){document.getElementById('modal-config').style.display='flex';}
+function getWorkerUrl(){return localStorage.getItem('bgo_worker_url')||'';}
+
+// ─── HISTÓRICO DE TEMAS ───────────────────────────────────
+function getHistKey(clienteKey){return `bgo_hist_${clienteKey}`;}
+function getClienteKey(){return (document.getElementById('crm').value||'geral').replace(/\s/g,'_').toLowerCase();}
+
+function salvarHistorico(temas){
+  const key=getHistKey(getClienteKey());
+  const mes=document.getElementById('mes').value;
+  const ano=document.getElementById('ano').value;
+  const dados=JSON.parse(localStorage.getItem(key)||'{}');
+  dados[`${ano}-${mes}`]=temas;
+  // mantém apenas os últimos 3 meses
+  const keys=Object.keys(dados).sort().reverse().slice(0,3);
+  const novo={};keys.forEach(k=>novo[k]=dados[k]);
+  localStorage.setItem(key,JSON.stringify(novo));
+}
+
+function getHistoricoAnterior(){
+  const key=getHistKey(getClienteKey());
+  const dados=JSON.parse(localStorage.getItem(key)||'{}');
+  const keys=Object.keys(dados).sort().reverse();
+  if(keys.length===0)return[];
+  const mesAtual=`${document.getElementById('ano').value}-${document.getElementById('mes').value}`;
+  const anterior=keys.find(k=>k!==mesAtual);
+  return anterior?dados[anterior]:[];
+}
+
+function renderHistorico(){
+  const hist=getHistoricoAnterior();
+  const container=document.getElementById('hist-container');
+  if(!hist||hist.length===0){
+    container.innerHTML='<div class="hist-empty">Nenhum histórico salvo ainda.</div>';
+    return;
+  }
+  const atuais=getTemasList();
+  container.innerHTML='<div class="hist-list">'+
+    hist.map(t=>{
+      const rep=atuais.some(a=>a.toLowerCase()===t.toLowerCase());
+      return`<span class="hist-tag${rep?' repeat':''}">${t}</span>`;
+    }).join('')+'</div>';
+}
+
+function checkRepeatTopics(){
+  renderHistorico();
+}
+
+function getTemasList(){
+  return document.getElementById('temas').value.split(',').map(t=>t.trim()).filter(Boolean);
+}
+
+// ─── STEPS ────────────────────────────────────────────────
+function goStep(n){
+  if(n>currentStep&&!validateStep(currentStep))return;
+  currentStep=n;
+  if(n===2)renderHistorico();
+  if(n===3)buildCalendarPreview();
+  if(n===4)buildGenStep();
+  renderSteps();
+}
+function nextStep(){
+  if(currentStep===4){startGeneration();return;}
+  if(!validateStep(currentStep))return;
+  currentStep++;
+  if(currentStep===2)renderHistorico();
+  if(currentStep===3)buildCalendarPreview();
+  if(currentStep===4)buildGenStep();
+  renderSteps();
+}
+function prevStep(){if(currentStep>1){currentStep--;renderSteps();}}
+
+function renderSteps(){
+  for(let i=1;i<=4;i++){
+    document.getElementById(`step-${i}`).classList.toggle('active',i===currentStep);
+    const sb=document.getElementById(`sb-${i}`);
+    sb.classList.toggle('active',i===currentStep);
+    sb.classList.toggle('done',i<currentStep);
+    sb.querySelector('.step-n').textContent=i<currentStep?'✓':i;
+  }
+  document.getElementById('btn-back').style.display=currentStep>1?'flex':'none';
+  const btn=document.getElementById('btn-next');
+  btn.disabled=false;
+  if(currentStep===4){
+    btn.innerHTML=generating?'<div class="spinner"></div> Gerando...':'▶ Iniciar Geração';
+    btn.disabled=generating;
+  }else{btn.innerHTML='Próximo →';}
+  updateBottomInfo();
+}
+
+function updateBottomInfo(){
+  const done=Object.values(contents).filter(c=>c.status==='done').length;
+  const infos=['Preencha os dados do médico',`${getTotalConteudos()} conteúdos configurados`,
+    `${calendar.length} conteúdos distribuídos no mês`,`${done}/${calendar.length} gerados`];
+  document.getElementById('bottom-info').textContent=infos[currentStep-1]||'';
+}
+
+function validateStep(n){
+  if(n===1){
+    if(!document.getElementById('nome').value.trim()||!document.getElementById('crm').value.trim()||!getEsp()){
+      alert('Preencha Nome, CRM e Especialidade.');return false;
+    }
+  }
+  if(n===2){
+    if(!document.getElementById('temas').value.trim()){alert('Adicione pelo menos um tema.');return false;}
+    if(getTotalConteudos()===0){alert('Selecione pelo menos um formato.');return false;}
+  }
+  return true;
+}
+function getEsp(){const v=document.getElementById('especialidade').value;return v==='__outro__'?document.getElementById('esp-outro').value.trim():v;}
+
+// ─── FORMAT CONTROLS ──────────────────────────────────────
+function toggleFormat(el){
+  const row=el.closest('.format-row'),fmt=row.dataset.format;
+  const on=el.classList.toggle('checked');
+  row.classList.toggle('selected',on);
+  if(on)selectedFormats[fmt]=getRowQty(row);else delete selectedFormats[fmt];
+  updateTotal();
+}
+function changeQty(btn,d){
+  const qEl=btn.parentElement.querySelector('.qty-num');
+  let v=parseInt(qEl.textContent)+d;if(v<0)v=0;
+  qEl.textContent=v;
+  const fmt=btn.closest('.format-row').dataset.format;
+  if(selectedFormats[fmt]!==undefined)selectedFormats[fmt]=v;
+  updateTotal();
+}
+function getRowQty(row){return parseInt(row.querySelector('.qty-num').textContent);}
+function getTotalConteudos(){return Object.values(selectedFormats).reduce((a,b)=>a+b,0);}
+function updateTotal(){
+  const t=getTotalConteudos();
+  document.getElementById('total-num').textContent=t;
+  document.getElementById('pill-total').textContent=t+' conteúdos';
+  const p=Object.entries(selectedFormats).filter(([,v])=>v>0).map(([k,v])=>`${v} ${FL[k]}`).join(' · ');
+  document.getElementById('total-detail').textContent=p||'Selecione os formatos acima';
+}
+
+// ─── CALENDAR ─────────────────────────────────────────────
+function buildCalendarPreview(){
+  const mes=parseInt(document.getElementById('mes').value);
+  const ano=parseInt(document.getElementById('ano').value);
+  const temas=getTemasList();
+  const list=[];
+  Object.entries(selectedFormats).forEach(([fmt,qty])=>{for(let i=0;i<qty;i++)list.push(fmt);});
+  const shuffled=shuffle([...list]);
+  const days=[];
+  const dim=new Date(ano,mes,0).getDate();
+  for(let d=1;d<=dim;d++){if(new Date(ano,mes-1,d).getDay()!==0)days.push(d);}
+  calendar=[];
+  const sp=Math.max(1,Math.floor(days.length/shuffled.length));
+  let di=0,ti=0;
+  shuffled.forEach((fmt,i)=>{
+    const d=days[Math.min(di,days.length-1)];
+    const dt=new Date(ano,mes-1,d);
+    calendar.push({num:i+1,day:d,dateStr:`${DIAS[dt.getDay()]}, ${d} ${MESES[mes].substring(0,3)}`,format:fmt,tema:temas[ti%temas.length]});
+    ti++;di+=sp;
+  });
+  calendar.sort((a,b)=>a.day-b.day);
+  calendar.forEach((c,i)=>c.num=i+1);
+
+  // Verifica repetições
+  const hist=getHistoricoAnterior();
+  const repeats=temas.filter(t=>hist.some(h=>h.toLowerCase()===t.toLowerCase()));
+
+  const warnEl=document.getElementById('repeat-warn');
+  if(repeats.length>0){
+    warnEl.style.display='block';
+    warnEl.textContent=`⚠ ${repeats.length} tema(s) repetido(s) do mês anterior: ${repeats.join(', ')}. Considere trocá-los para garantir variedade.`;
+  }else{warnEl.style.display='none';}
+
+  const tbody=document.getElementById('cal-tbody');
+  tbody.innerHTML='';
+  calendar.forEach(item=>{
+    const isRepeat=hist.some(h=>h.toLowerCase()===item.tema.toLowerCase());
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td class="td-num">${item.num}</td><td class="td-date">${item.dateStr}</td><td><span class="format-tag tag-${item.format}">${FI[item.format]} ${FL[item.format]}</span></td><td>${item.tema}${isRepeat?'<span class="td-repeat">↺ repetido</span>':''}</td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('prev-title').textContent=`Calendário — ${MESES[mes]} ${ano}`;
+  document.getElementById('prev-sub').textContent=`${calendar.length} conteúdos · ${temas.length} temas · distribuídos em dias úteis`;
+  renderSteps();
+}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+
+// ─── GEN SETUP ────────────────────────────────────────────
+function buildGenStep(){
+  contents={};
+  const container=document.getElementById('gen-items');
+  container.innerHTML='';
+  calendar.forEach((item,i)=>{
+    contents[i]={text:null,status:'pending'};
+    const el=document.createElement('div');
+    el.className='gen-item';el.id=`gi-${i}`;el.onclick=()=>viewContent(i);
+    el.innerHTML=`<div class="gen-item-num" id="gin-${i}">${item.num}</div><div class="gen-item-info"><div class="gen-item-title">${FI[item.format]} ${FL[item.format]}</div><div class="gen-item-sub">${item.tema}</div></div><div class="gen-item-status" id="gis-${i}">⏳</div>`;
+    container.appendChild(el);
+  });
+  setProgress(0,'Clique em "Iniciar Geração" para começar');
+  renderSteps();
+}
+
+// ─── SYSTEM PROMPT COMPLETO ───────────────────────────────
+function buildSystem(){
+  const contra=document.getElementById('contra').value.trim();
+  return `Você é o Agente de Conteúdo Médico da B.GO Marketing Médico de Alta Performance, criado por Bruno, com 22 anos de experiência em marketing médico.
+
+Você produz conteúdo médico de máxima qualidade, pronto para publicar, com compliance total na Resolução CFM nº 2.336/2023.
+
+━━━ MISSÃO TRIPLA DE CADA CONTEÚDO ━━━
+1. O MÉDICO lê e pensa: "Esse conteúdo me representa com autoridade e profissionalismo."
+2. O PACIENTE lê e pensa: "Esse médico entende exatamente o que eu estou sentindo. Preciso consultar."
+3. O ALGORITMO distribui porque: o conteúdo gera salvamentos, compartilhamentos e comentários.
+
+━━━ TOM: O MÉDICO AMIGO INTELIGENTE ━━━
+O tom que mais converte no Brasil não é o médico formal nem o influencer.
+É o médico amigo inteligente — aquele que você ligaria às 22h com uma dúvida de saúde,
+que explicaria de forma honesta, sem enrolação, sem jargão, sem assustar.
+Combine autoridade clínica com acessibilidade humana.
+
+━━━ REFERÊNCIAS DE ESTILO ━━━
+Marketing: Leandro Ladeira (funis e persuasão direta), Ícaro de Carvalho (narrativa humana),
+Philip Kotler (posicionamento), Pedro Sobral, Caio Carneiro.
+Autoridade médica: Draúzio Varela (acessível e confiável).
+Roteiro: Robert McKee (3 atos), Aaron Sorkin (densidade e ritmo), Billy Wilder (cada elemento revela algo),
+Glória Perez (emoção popular), Manoel Carlos (cotidiano familiar), Walcyr Carrasco (moral clara).
+
+━━━ FRAMEWORK SVS — OBRIGATÓRIO EM TODO CONTEÚDO ━━━
+Antes de finalizar, verifique internamente se o conteúdo atende os 3 critérios:
+S — SALVAR: ensina algo que o paciente vai querer reler. Aumenta alcance no algoritmo.
+V — VERIFICAR: o paciente manda para alguém — "você tem isso?" ou "olha que interessante". É o compartilhamento emocional.
+S — SEGUIR: o médico aparece como autoridade tão clara que o paciente segue para não perder o próximo.
+Se o conteúdo não atender os 3, reescreva até atender.
+
+━━━ FUNIL DE 8 CAMADAS (obrigatório em todos os formatos) ━━━
+
+CAMADA 1 — GANCHO VISUAL
+O que o olho vê nos primeiros frames ou no slide de capa.
+Para vídeos: ação, movimento ou expressão facial intensa.
+Para carrossel: imagem ou frase que para o scroll.
+Regra: se não parar o scroll em 1 segundo, não serve.
+
+CAMADA 2 — GANCHO ESCRITO
+A primeira frase lida. Máximo 10 palavras. Deixa a curiosidade completamente aberta.
+SEMPRE parta de uma situação que o paciente sente vergonha, medo ou curiosidade de admitir.
+Exemplos fortes: "Você esconde as pernas no verão por causa das varizes?"
+"Esse sintoma que você ignora pode estar te matando devagar."
+"Ninguém te contou a verdade sobre isso."
+
+CAMADA 3 — LOOP DE CURIOSIDADE
+Abre um loop que o cérebro PRECISA fechar. Faz uma promessa que só se cumpre no final.
+O paciente não pode sair sem ver o final.
+Exemplo: "Vou te mostrar por que a maioria dos tratamentos não funciona. E não é o que você está pensando."
+
+CAMADA 4 — CONTEXTO (PONTO A)
+Situação cotidiana ESPECÍFICA que o paciente reconhece na própria vida.
+Use "você" no texto. Seja dolorosamente específico.
+Exemplo ruim: "Muitas pessoas sofrem com varizes."
+Exemplo forte: "Você chega em casa depois de um dia longo, tira a meia e vê aquele roxo nas pernas. E pensa: 'Vou deixar para ver depois.'"
+Referência: Manoel Carlos — o cotidiano familiar que todo mundo reconhece.
+
+CAMADA 5 — CORRELAÇÃO (PONTO B) — A INFORMAÇÃO CONTRAINTUITIVA
+A ponte entre sintoma e causa real. O "pequeno segredo" que contradiz o senso comum.
+Esta camada É O CORAÇÃO DA VIRALIZAÇÃO. Conteúdos que as pessoas salvam e compartilham
+quase sempre têm uma informação que quebra expectativa.
+${contra?`Use esta informação contraintuitiva fornecida sobre a especialidade: "${contra}"`:'Crie uma informação contraintuitiva real e baseada em evidências sobre a especialidade.'}
+Referência: Billy Wilder — cada elemento revela algo que muda tudo.
+
+CAMADA 6 — ENSINO E EMBASAMENTO
+Núcleo educativo. Ensine algo concreto, específico, com embasamento real.
+Use analogias do cotidiano, metáforas visuais, comparações simples.
+A ESPECIFICIDADE PASSA CREDIBILIDADE: cite mecanismos reais, números, nomes técnicos explicados.
+Exemplo fraco: "As varizes podem causar problemas sérios."
+Exemplo com credibilidade: "A insuficiência venosa crônica afeta 30% das mulheres acima de 40 anos —
+e a maioria descobre tarde porque a dor só aparece no estágio 3."
+Referência: Aaron Sorkin — densidade de informação sem perder o ritmo.
+
+CAMADA 7 — MORAL DA HISTÓRIA
+A grande lição. O insight transformador. A frase que o paciente vai salvar ou compartilhar.
+Deve funcionar como um post sozinha — fora do contexto do conteúdo.
+Exemplos: "Tratar o sintoma sem entender a causa é apagar fumaça sem desligar o fogo."
+"Prevenção não é custo. É o único investimento com retorno garantido."
+Referência: Walcyr Carrasco / Glória Perez — a moral que justifica toda a jornada.
+
+CAMADA 8 — AUTORIDADE E CTA QUE CONVERTE
+Identificação obrigatória completa.
+CTA com os 3 elementos que convertem:
+1. CONSEQUÊNCIA de não agir
+2. FACILIDADE de agir agora
+3. PERMISSÃO EMOCIONAL para agir
+Exemplo fraco: "Agende sua consulta pelo link na bio."
+Exemplo que converte: "Se você se identificou com algum desses sinais, o momento certo de cuidar é agora —
+não quando piorar. O link na bio tem agenda disponível. Cuide-se enquanto dá tempo."
+
+━━━ REGRAS ABSOLUTAS CFM 2.336/2023 ━━━
+1. NUNCA use "—" como separador. Use ":" ou ponto final.
+2. Identificação obrigatória: Nome + MÉDICO(A) + CRM-[Estado] [Número] + Especialidade + RQE (quando houver).
+3. Zero garantias de resultado — nem explícitas nem implícitas.
+4. Proibido: superlativos ("revolucionário", "o melhor"), sensacionalismo, apelo indevido ao medo.
+5. Conteúdo baseado em literatura médica confirmada. Nunca invente dados ou estudos.
+6. Desconto: apenas em consultas, jamais em procedimentos.
+
+━━━ TÉCNICAS EXTRAS DE CONVERSÃO ━━━
+- SPIN Selling médico: Situação, Problema, Implicação, Necessidade de solução
+- Troca de crenças: desconstrua objeções ANTES que apareçam
+- Estágios de consciência: adapte o conteúdo ao nível de consciência do paciente
+  Nível 1 (sem consciência): sintomas e situações cotidianas
+  Nível 2 (consciente do problema): causas e consequências de não tratar
+  Nível 3 (consciente da solução): compare abordagens
+  Nível 4 (consciente do produto): diferencie o médico/clínica
+  Nível 5 (pronto para agir): CTA direto, remova fricção`;
+}
+
+// ─── FORMAT GUIDES ────────────────────────────────────────
+function buildFormatGuide(fmt){
+  const g={
+    reels:`FORMATO: Reels (30-60 segundos)
+
+Estrutura com marcações de produção:
+
+[CÂMERA — GANCHO VISUAL: 0s]
+Descreva exatamente o que aparece na tela. Ação forte, expressão ou situação inusitada.
+
+[TEXTO NA TELA — GANCHO ESCRITO: 0-2s]
+Máximo 10 palavras. Situação de vergonha, medo ou curiosidade do paciente.
+
+[VOZ — LOOP DE CURIOSIDADE: 0-5s]
+Primeira frase falada. Abre o loop que só fecha no final.
+
+[CÂMERA + VOZ — CONTEXTO: 5-15s]
+Situação cotidiana específica. O paciente se reconhece.
+
+[VOZ + TEXTO — INFORMAÇÃO CONTRAINTUITIVA: 15-25s]
+A quebra de expectativa. O que o paciente não sabia.
+
+[VOZ + CORTES — ENSINO COM ESPECIFICIDADE: 25-50s]
+Ensino com dado real, analogia e mecanismo clínico acessível.
+
+[VOZ — MORAL: 50-57s]
+Frase de impacto. Pausa. Deixe respirar.
+
+[CÂMERA + TEXTO — AUTORIDADE E CTA: 57-60s]
+Identificação completa + CTA com os 3 elementos de conversão.
+
+ENTREGUE TAMBÉM:
+LEGENDA (150-200 palavras): gancho como primeira linha, resumo do ensino, moral, CTA convertedor, identificação.
+HASHTAGS: 15 (5 nicho da especialidade, 5 especialidade geral, 5 alcance amplo).
+BRIEFING EDITOR: ritmo de corte, expressão facial nos momentos-chave, música sugerida, elementos de texto.
+Obs: linguagem para ser FALADA, não lida. O médico nunca usa teleprompter.`,
+
+    carrossel:`FORMATO: Carrossel Educativo (8-10 slides)
+
+SLIDE 1 — CAPA (Camadas 1 e 2)
+Gancho visual + gancho escrito. Máximo 8 palavras. Situação de vergonha, medo ou curiosidade.
+Descreva a imagem de capa.
+
+SLIDE 2 — LOOP DE CURIOSIDADE (Camada 3)
+Expanda a promessa. Crie o loop que faz o leitor deslizar até o final.
+
+SLIDE 3 — CONTEXTO (Camada 4)
+Situação específica. Use "você". O leitor se reconhece na própria vida.
+
+SLIDE 4 — INFORMAÇÃO CONTRAINTUITIVA (Camada 5)
+A quebra de expectativa. O que ninguém te contou. A virada da narrativa.
+
+SLIDES 5 a N — ENSINO COM ESPECIFICIDADE (Camada 6)
+Um conceito por slide. Máximo 3 linhas. Use dado real + analogia.
+Sugira ícone ou elemento visual por slide.
+
+SLIDE PENÚLTIMO — MORAL (Camada 7)
+A grande frase. O insight compartilhável. Funciona sozinha fora do contexto.
+
+SLIDE FINAL — AUTORIDADE E CTA (Camada 8)
+Foto do médico + identificação completa + CTA com 3 elementos de conversão.
+
+ENTREGUE TAMBÉM:
+LEGENDA COMPLETA: gancho como primeira linha, 2-3 parágrafos, moral, CTA convertedor, identificação.
+HASHTAGS: 15 (5 nicho, 5 especialidade, 5 alcance).
+BRIEFING DESIGNER: paleta sugerida, estilo visual, tipo de imagem por slide.`,
+
+    post:`FORMATO: Post Único
+
+LEGENDA COMPLETA (300-400 palavras):
+Primeira linha: gancho escrito (máximo 10 palavras, situação de vergonha/medo/curiosidade do paciente).
+Parágrafos curtos. Fácil de ler no celular. Todas as 8 camadas integradas em texto corrido.
+Inclua a informação contraintuitiva na camada 5.
+CTA final com os 3 elementos de conversão.
+Identificação completa.
+
+SUGESTÃO DE ARTE: descreva a imagem ideal (composição, elementos visuais, cor, se tem foto do médico).
+
+HASHTAGS: 15 (5 nicho, 5 especialidade, 5 alcance).
+
+COPY ALTERNATIVA: versão de 80-100 palavras para stories ou repost.`,
+
+    youtube:`FORMATO: Roteiro YouTube (5-10 minutos)
+
+ATO 1 — O MUNDO DO PACIENTE (0-25%)
+[0-30s] Gancho duplo: abra com a situação mais constrangedora ou a promessa mais forte da especialidade.
+NÃO comece se apresentando. Comece pelo problema ou pela informação contraintuitiva.
+[30s-2min] Loop de curiosidade. Apresentação do médico com identificação completa.
+[2-5min] Contexto aprofundado. SPIN: Situação e Problema. Cotidiano específico do paciente.
+
+ATO 2 — O CONFLITO E A REVELAÇÃO (25-75%)
+Informação contraintuitiva. SPIN: Implicação e Necessidade.
+Ensino com especificidade: dados reais, analogias, casos anonimizados.
+Quebre objeções antes que apareçam.
+
+ATO 3 — RESOLUÇÃO E AÇÃO (75-100%)
+Moral da história que transforma a visão do paciente.
+CTA com os 3 elementos de conversão. Reforce identificação.
+
+ENTREGUE TAMBÉM:
+TÍTULO SEO + 3 variações (keyword + curiosidade ou informação contraintuitiva).
+DESCRIÇÃO: com identificação completa e links.
+THUMBNAIL: imagem + texto de capa (máximo 6 palavras, deve gerar curiosidade ou choque).
+MARCAÇÕES: cortes, B-roll sugerido, legendas-chave.`,
+
+    stories:`FORMATO: Sequência de Stories (8-12 stories)
+
+Story a story com: texto (máximo 3 linhas), interação sugerida, visual.
+
+Story 1: Gancho forte que para o scroll. Situação de vergonha ou curiosidade do paciente.
+Stories 2-3: Contexto específico. O seguidor se reconhece.
+Story 4: Informação contraintuitiva. A quebra de expectativa.
+Stories 5-7: Ensino com especificidade. Um ponto por story. Enquetes para engajamento.
+Story 8-9: Moral da história. O insight compartilhável.
+Story 10-11: Autoridade (identificação) + CTA com os 3 elementos de conversão.
+Story final: Caixa de perguntas para gerar conteúdo futuro.
+
+ENTREGUE TAMBÉM:
+FLUXO DE INTERAÇÃO: o que mostrar dependendo da resposta de cada enquete.`,
+
+    whatsapp:`FORMATO: Sequência WhatsApp/CRM (5 mensagens)
+
+Mensagens diretas, calorosas, de baixa fricção. Máximo 5 linhas cada.
+Linguagem humana — nunca parecer automático.
+
+MSG 1 — Imediata após agendamento:
+Confirmação calorosa + o que esperar + como se preparar. Reforce a decisão certa de cuidar da saúde.
+
+MSG 2 — 24h antes da consulta:
+Lembrete + preparação específica para a especialidade + antecipação positiva.
+
+MSG 3 — 24-48h após a consulta:
+Verificação de bem-estar + próximos passos em linguagem simples + abertura para dúvidas.
+
+MSG 4 — 7 dias depois:
+Conteúdo educativo relacionado ao tema da consulta (use a informação contraintuitiva da especialidade).
+Abertura para dúvidas + convite para retorno.
+
+MSG DE REATIVAÇÃO — 3-6 meses sem retorno:
+Referência ao histórico do paciente + motivo relevante para voltar agora + CTA de baixa fricção.
+Use uma informação nova sobre a especialidade para justificar o contato.`
+  };
+  return g[fmt]||'Crie o conteúdo aplicando as 8 camadas e o framework SVS.';
+}
+
+// ─── GENERATE ONE ─────────────────────────────────────────
+async function generateOne(item,workerUrl){
+  const nome=document.getElementById('nome').value.trim();
+  const crm=document.getElementById('crm').value.trim();
+  const rqe=document.getElementById('rqe').value.trim();
+  const esp=getEsp();
+  const cid=document.getElementById('cidade').value.trim();
+  const pac=document.getElementById('paciente').value.trim();
+  const tom=document.getElementById('tom').value;
+  const ext=document.getElementById('extras').value.trim();
+  const lnk=document.getElementById('link').value.trim();
+  const ctx=document.getElementById('contexto-mes').value.trim();
+  const mes=parseInt(document.getElementById('mes').value);
+  const ano=parseInt(document.getElementById('ano').value);
+
+  const tomMap={'medico-amigo':'Médico amigo inteligente: autoridade clínica com acessibilidade humana',
+    'educativo':'Educativo e acessível','emocional':'Emocional e próximo',
+    'tecnico':'Técnico e clínico','urgente':'Urgente e preventivo'};
+
+  const userPrompt=`Crie um conteúdo para ${MESES[mes]} de ${ano}.
+
+MÉDICO / CLÍNICA: ${nome}
+CRM: ${crm}${rqe?'\nRQE: '+rqe:''}
+ESPECIALIDADE: ${esp}
+CIDADE: ${cid||'Brasil'}
+PACIENTE IDEAL: ${pac||'Público geral da especialidade'}
+TOM DE VOZ: ${tomMap[tom]||tom}
+${ext?'DIFERENCIAIS DA CLÍNICA: '+ext:''}
+${lnk?'LINK DE AGENDAMENTO: '+lnk:''}
+${ctx?'CONTEXTO E FOCO DESTE MÊS: '+ctx:''}
+
+TEMA DO CONTEÚDO: ${item.tema}
+DATA PREVISTA: ${item.dateStr}
+
+${buildFormatGuide(item.format)}
+
+REGRAS FINAIS:
+- Conteúdo 100% pronto para publicar, sem comentários ou meta-texto fora do formato
+- Aplique o framework SVS (Salvar, Verificar, Seguir) internamente antes de finalizar
+- Compliance CFM 2.336/2023 obrigatório em todos os elementos
+- Nunca use "—" como separador
+- Identificação completa sempre presente`;
+
+  const resp=await fetch(workerUrl,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:buildSystem(),messages:[{role:'user',content:userPrompt}]})
+  });
+  if(!resp.ok){const e=await resp.text();throw new Error(`Worker ${resp.status}: ${e.substring(0,120)}`);}
+  const json=await resp.json();
+  if(json.error)throw new Error(json.error.message||JSON.stringify(json.error));
+  const text=json.content?.map(b=>b.text||'').join('')||'';
+  if(!text)throw new Error('Resposta vazia da API');
+  return text;
+}
+
+// ─── GENERATION ───────────────────────────────────────────
+async function startGeneration(){
+  if(generating)return;
+  const workerUrl=getWorkerUrl();
+  if(!workerUrl){alert('Configure a URL do Cloudflare Worker (botão ⚙).');abrirConfig();return;}
+  generating=true;renderSteps();
+  const total=calendar.length;
+  for(let i=0;i<total;i++){
+    setItemStatus(i,'loading');
+    setProgress(Math.round((i/total)*100),`Gerando ${i+1} de ${total}: ${FL[calendar[i].format]} — ${calendar[i].tema}`);
+    try{
+      const text=await generateOne(calendar[i],workerUrl);
+      contents[i]={text,status:'done'};setItemStatus(i,'done');
+      if(i===0||activeView===null)viewContent(i);
+    }catch(e){
+      contents[i]={text:`Erro: ${e.message}`,status:'error'};setItemStatus(i,'error');
+    }
+    updateBottomInfo();
+  }
+  // Salva histórico de temas após geração completa
+  salvarHistorico(getTemasList());
+  setProgress(100,`✓ ${total} conteúdos gerados e temas salvos no histórico!`);
+  generating=false;
+  const btn=document.getElementById('btn-next');
+  btn.innerHTML='⬇ Exportar tudo';btn.onclick=exportarTudo;btn.disabled=false;
+}
+
+function viewContent(i){
+  activeView=i;
+  document.querySelectorAll('.gen-item').forEach(el=>el.classList.remove('active'));
+  const el=document.getElementById(`gi-${i}`);if(el)el.classList.add('active');
+  const item=calendar[i],c=contents[i];
+  document.getElementById('view-title').textContent=`${FI[item.format]} ${FL[item.format]} — ${item.tema}`;
+  document.getElementById('view-sub').textContent=`${item.dateStr} · Conteúdo #${item.num}`;
+  const copyBtn=document.getElementById('btn-copy-cur');
+  const body=document.getElementById('view-body');
+  if(!c||c.status==='pending'){
+    copyBtn.style.display='none';
+    body.innerHTML='<div class="gen-empty"><div>⏳</div><div>Aguardando geração...</div></div>';
+  }else if(c.status==='loading'){
+    copyBtn.style.display='none';
+    body.innerHTML='<div class="gen-empty"><div class="spinner" style="width:22px;height:22px;border-width:3px;"></div><div>Gerando conteúdo...</div></div>';
+  }else if(c.status==='done'){
+    copyBtn.style.display='flex';
+    body.innerHTML=`<div class="gen-content-text">${esc(c.text)}</div>`;
+  }else{
+    copyBtn.style.display='none';
+    body.innerHTML=`<div class="gen-empty" style="color:var(--red);">${esc(c.text)}</div>`;
+  }
+}
+
+function setItemStatus(i,st){
+  const icons={loading:'⏳',done:'✅',error:'❌'};
+  const el=document.getElementById(`gis-${i}`);if(el)el.textContent=icons[st]||'⏳';
+  if(st==='loading'||st==='done')viewContent(i);
+}
+function setProgress(pct,label){
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-label').textContent=label;
+}
+function copiarAtual(){
+  if(activeView===null||!contents[activeView]?.text)return;
+  navigator.clipboard.writeText(contents[activeView].text).then(()=>{
+    const btn=document.getElementById('btn-copy-cur');
+    btn.classList.add('btn-copy-done');btn.textContent='✓ Copiado!';
+    setTimeout(()=>{btn.classList.remove('btn-copy-done');btn.innerHTML='⎘ Copiar';},2000);
+  });
+}
+function exportarTudo(){
+  const mes=parseInt(document.getElementById('mes').value);
+  const ano=parseInt(document.getElementById('ano').value);
+  const nome=document.getElementById('nome').value.trim();
+  let out=`CALENDÁRIO DE CONTEÚDO — ${MESES[mes].toUpperCase()} ${ano}\n${nome} | ${getEsp()}\nGerado por B.GO Marketing Médico de Alta Performance\n${'='.repeat(64)}\n\n`;
+  calendar.forEach((item,i)=>{
+    out+=`${'─'.repeat(64)}\nCONTEÚDO #${item.num} | ${FL[item.format].toUpperCase()} | ${item.dateStr}\nTEMA: ${item.tema}\n${'─'.repeat(64)}\n\n`;
+    out+=(contents[i]?.text||'[Não gerado]')+'\n\n';
+  });
+  const blob=new Blob([out],{type:'text/plain;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`BGO_${MESES[mes]}_${ano}_${nome.replace(/\s+/g,'_')}.txt`;
+  a.click();URL.revokeObjectURL(url);
+}
+function esc(t){return(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+</script>
+</body>
+</html>
