@@ -9,159 +9,118 @@
 :root{
   --roxo:#2D0A34;--roxo-med:#3D1545;--roxo-light:#F2EEF4;--roxo-mid:#8B5A9A;
   --verde:#25D366;--verde-dark:#1A9E50;
-  --bg:#F7F5F9;--surface:#FFFFFF;--border:#E2D9E8;
+  --bg:#F7F5F9;--surface:#fff;--border:#E2D9E8;
   --text:#1A0A1E;--muted:#6B5878;--radius:10px;
   --shadow:0 2px 12px rgba(45,10,52,.08);
 }
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-
-/* HEADER */
-header{background:var(--roxo);padding:16px 32px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
-.logo-mark{width:38px;height:38px;background:white;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;color:var(--roxo);flex-shrink:0}
-.logo-text{color:white}
-.logo-text strong{display:block;font-size:15px;font-weight:700;line-height:1.2}
-.logo-text span{font-size:10px;opacity:.6;letter-spacing:.04em}
+header{background:var(--roxo);padding:16px 28px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100}
+.logo-mark{width:36px;height:36px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:var(--roxo);flex-shrink:0}
+.logo-text{color:#fff}
+.logo-text strong{display:block;font-size:14px;font-weight:700}
+.logo-text span{font-size:10px;opacity:.6}
 .header-nav{margin-left:auto;display:flex;gap:4px}
-.nav-btn{background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s;font-family:inherit}
-.nav-btn:hover{background:rgba(255,255,255,.18)}
-.nav-btn.active{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.35)}
-
-/* PÁGINAS */
-.page{display:none;max-width:980px;margin:0 auto;padding:28px 24px}
+.nav-btn{background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.15);border-radius:7px;padding:7px 13px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
+.nav-btn:hover,.nav-btn.active{background:rgba(255,255,255,.22)}
+.page{display:none;max-width:960px;margin:0 auto;padding:28px 20px}
 .page.active{display:block}
-
-/* CARDS */
 .card{background:var(--surface);border-radius:14px;border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px}
-.card-header{background:var(--roxo-light);padding:13px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.card-header .icon{width:28px;height:28px;background:var(--roxo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.card-header h2{font-size:13px;font-weight:600;color:var(--roxo)}
-.card-header p{font-size:11px;color:var(--muted);margin-top:1px}
-.card-header .card-header-actions{margin-left:auto}
-.card-body{padding:20px}
-
-/* GRID */
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:720px){.grid2{grid-template-columns:1fr}}
-
-/* FORM */
-.field{margin-bottom:14px}
-.field:last-child{margin-bottom:0}
-label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px}
-label .req{color:#c0392b}
+.ch{background:var(--roxo-light);padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.ch-icon{width:26px;height:26px;background:var(--roxo);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ch h2{font-size:13px;font-weight:600;color:var(--roxo)}
+.ch p{font-size:11px;color:var(--muted);margin-top:1px}
+.cb{padding:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:700px){.grid2{grid-template-columns:1fr}}
+.field{margin-bottom:13px}
+label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.req{color:#c0392b}
 input[type=text],input[type=tel],input[type=url],input[type=color],select{
-  width:100%;border:1.5px solid var(--border);border-radius:var(--radius);padding:9px 12px;
-  font-size:13px;font-family:inherit;color:var(--text);background:var(--surface);outline:none;
-  transition:border-color .15s,box-shadow .15s
-}
-input:focus,select:focus{border-color:var(--roxo-mid);box-shadow:0 0 0 3px rgba(139,90,154,.12)}
+  width:100%;border:1.5px solid var(--border);border-radius:var(--radius);
+  padding:9px 11px;font-size:13px;font-family:inherit;color:var(--text);
+  background:var(--surface);outline:none;transition:border-color .15s}
+input:focus,select:focus{border-color:var(--roxo-mid);box-shadow:0 0 0 3px rgba(139,90,154,.1)}
 input[type=color]{height:40px;padding:4px 8px;cursor:pointer}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.hint{font-size:11px;color:var(--muted);margin-top:4px}
-
-/* TOGGLE */
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
-.toggle-row:last-child{border-bottom:none;padding-bottom:0}
-.toggle-label{font-size:13px;color:var(--text)}
-.toggle-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.hint{font-size:11px;color:var(--muted);margin-top:3px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)}
+.toggle-row:last-child{border-bottom:none}
+.tl{font-size:13px;color:var(--text)}
+.ts{font-size:11px;color:var(--muted);margin-top:1px}
 .toggle{position:relative;width:36px;height:20px;flex-shrink:0}
 .toggle input{opacity:0;width:0;height:0;position:absolute}
 .slider{position:absolute;inset:0;background:#D0C8D8;border-radius:20px;cursor:pointer;transition:background .2s}
-.slider::after{content:"";position:absolute;width:14px;height:14px;left:3px;top:3px;background:white;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.slider::after{content:"";position:absolute;width:14px;height:14px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .toggle input:checked+.slider{background:var(--verde)}
 .toggle input:checked+.slider::after{transform:translateX(16px)}
-
-/* BOTÕES */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 18px;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .15s;text-decoration:none}
-.btn-roxo{background:var(--roxo);color:white}
-.btn-roxo:hover{background:var(--roxo-med);transform:translateY(-1px)}
-.btn-verde{background:var(--verde);color:white}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 16px;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .15s;text-decoration:none}
+.btn-roxo{background:var(--roxo);color:#fff}
+.btn-roxo:hover{background:var(--roxo-med)}
+.btn-verde{background:var(--verde);color:#fff}
 .btn-verde:hover{background:var(--verde-dark)}
 .btn-outline{background:transparent;color:var(--roxo);border:1.5px solid var(--roxo)}
 .btn-outline:hover{background:var(--roxo-light)}
-.btn-sm{padding:6px 12px;font-size:12px}
+.btn-sm{padding:6px 11px;font-size:12px}
 .btn-full{width:100%;padding:13px}
-.btn:disabled{opacity:.5;cursor:default;transform:none!important}
-
-/* TABS */
-.tabs{display:flex;border-bottom:1px solid var(--border);padding:0 20px;gap:4px;overflow-x:auto}
-.tab{padding:10px 13px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap}
+.tabs{display:flex;border-bottom:1px solid var(--border);padding:0 18px;gap:2px;overflow-x:auto}
+.tab{padding:10px 12px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap}
 .tab.active{color:var(--roxo);border-bottom-color:var(--roxo)}
-.tab-content{display:none;padding:20px}
-.tab-content.active{display:block}
-
-/* CODE */
-.code-block{background:#1A0A1E;border-radius:10px;padding:16px;position:relative}
-.code-block pre{font-family:"SF Mono","Fira Code",monospace;font-size:11.5px;line-height:1.65;color:#E8D8F0;overflow-x:auto;white-space:pre;max-height:340px;overflow-y:auto}
-.copy-btn{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:5px 10px;font-size:11px;cursor:pointer;transition:background .15s}
-.copy-btn:hover{background:rgba(255,255,255,.18)}
+.tc{display:none;padding:18px}
+.tc.active{display:block}
+.code-block{background:#1A0A1E;border-radius:10px;padding:14px;position:relative}
+.code-block pre{font-family:"SF Mono","Fira Code",monospace;font-size:11px;line-height:1.6;color:#E8D8F0;overflow-x:auto;white-space:pre;max-height:320px;overflow-y:auto}
+.copy-btn{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.15);border-radius:5px;padding:4px 9px;font-size:11px;cursor:pointer}
 .copy-btn.ok{background:rgba(37,211,102,.25);color:#25D366;border-color:#25D366}
-
-/* URL BOX */
-.url-share-box{background:var(--roxo-light);border:1.5px solid #C9A8D8;border-radius:10px;padding:14px 16px;margin-top:0}
-.url-share-box .url-label{font-size:11px;font-weight:700;color:var(--roxo);margin-bottom:6px;letter-spacing:.03em}
-.url-share-row{display:flex;gap:8px;align-items:center}
-.url-share-row input{flex:1;background:white;font-family:monospace;font-size:11.5px;color:var(--text);border:1px solid var(--border)}
+.banner{border-radius:9px;padding:11px 13px;display:flex;gap:9px;margin-bottom:13px;font-size:13px;line-height:1.5}
+.bg{background:#E6F4ED;border:1px solid #A8D8B9;color:#1A5C35}
+.by{background:#FFF8E1;border:1px solid #FFD54F;color:#795500}
+.bp{background:var(--roxo-light);border:1px solid #C9A8D8;color:var(--roxo)}
+.url-box{background:var(--roxo-light);border:1.5px solid #C9A8D8;border-radius:10px;padding:13px 15px}
+.url-label{font-size:11px;font-weight:700;color:var(--roxo);margin-bottom:6px;letter-spacing:.03em}
+.url-row{display:flex;gap:7px;align-items:center}
+.url-row input{flex:1;background:#fff;font-family:monospace;font-size:11px;color:var(--text)}
 .url-hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5}
-
-/* BANNER */
-.banner{border-radius:10px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;font-size:13px;line-height:1.5}
-.banner-green{background:#E6F4ED;border:1px solid #A8D8B9;color:#1A5C35}
-.banner-yellow{background:#FFF8E1;border:1px solid #FFD54F;color:#795500}
-.banner-roxo{background:var(--roxo-light);border:1px solid #C9A8D8;color:var(--roxo)}
-
-/* STEP LIST */
-.steps-guia{list-style:none}
-.step-item{display:flex;gap:0;margin-bottom:0}
-.step-left{display:flex;flex-direction:column;align-items:center;width:44px;flex-shrink:0}
-.step-num{width:32px;height:32px;border-radius:50%;background:var(--roxo);color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;z-index:1}
-.step-num.done{background:#1A7A44}
-.step-num.auto{background:#1565C0}
-.step-line{width:2px;flex:1;min-height:16px;background:var(--border);margin:4px 0}
-.step-body{flex:1;padding:0 0 20px 4px}
-.step-body h3{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
-.step-body p{font-size:12.5px;color:var(--muted);line-height:1.6;margin:0}
-.step-body code{background:var(--roxo-light);color:var(--roxo);padding:1px 6px;border-radius:4px;font-size:11px;font-family:monospace}
-.step-body strong{color:var(--text);font-weight:600}
-.step-alert{background:#FFF8E1;border:1px solid #FFD54F;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:12px;color:#795500;line-height:1.5}
-.step-alert.verde{background:#E6F4ED;border-color:#A8D8B9;color:#1A5C35}
-.step-alert.roxo{background:var(--roxo-light);border-color:#C9A8D8;color:var(--roxo)}
-.platform-tabs{display:flex;gap:8px;margin-top:10px}
-.ptab{padding:5px 12px;font-size:11px;font-weight:600;border-radius:20px;cursor:pointer;border:1.5px solid var(--border);color:var(--muted);background:var(--surface);transition:all .15s}
-.ptab.active{background:var(--roxo);color:white;border-color:var(--roxo)}
-.ptab-content{display:none;margin-top:8px;font-size:12.5px;color:var(--muted);line-height:1.6}
-.ptab-content.active{display:block}
-.badge-auto{display:inline-flex;align-items:center;gap:4px;background:#E3F2FD;color:#1565C0;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;margin-left:6px}
-
-/* DASHBOARD CLIENTES */
-.clientes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
-.cliente-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .2s}
-.cliente-card:hover{box-shadow:0 4px 20px rgba(45,10,52,.12)}
-.cliente-card-top{background:var(--roxo);padding:16px;display:flex;align-items:flex-start;gap:10px}
-.cliente-avatar{width:38px;height:38px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.cliente-nome{color:white;font-size:14px;font-weight:700;line-height:1.3}
-.cliente-wa{color:rgba(255,255,255,.65);font-size:11px;margin-top:2px}
-.cliente-card-body{padding:14px 16px}
-.counter-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.counter-box{text-align:center}
-.counter-num{font-size:28px;font-weight:800;color:var(--roxo);line-height:1}
-.counter-label{font-size:10px;color:var(--muted);margin-top:2px;font-weight:600;letter-spacing:.03em}
-.counter-divider{width:1px;height:40px;background:var(--border)}
-.counter-loading{font-size:11px;color:var(--muted);font-style:italic}
-.cliente-actions{display:flex;flex-direction:column;gap:6px}
-.cliente-actions .btn{font-size:11.5px;padding:7px 12px;justify-content:flex-start}
-
-/* EMPTY STATE */
-.empty-state{text-align:center;padding:48px 24px;color:var(--muted)}
-.empty-state .icon{font-size:40px;margin-bottom:12px}
-.empty-state h3{font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px}
-.empty-state p{font-size:13px;line-height:1.6}
-
-/* PREVIEW */
-.preview-wrap{border:1px solid var(--border);border-radius:10px;overflow:hidden;height:200px;position:relative;background:linear-gradient(135deg,#f5f5f5,#e8e8e8);display:flex;align-items:center;justify-content:center}
-.preview-inner{text-align:center;color:#999;font-size:13px}
-#wa-preview-btn{position:absolute;bottom:16px;right:16px;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer;border:none;transition:transform .2s}
-#wa-preview-btn:hover{transform:scale(1.08)}
-#wa-preview-btn svg{width:28px;height:28px;fill:white}
+.steps{list-style:none}
+.si{display:flex;margin-bottom:0}
+.sl{display:flex;flex-direction:column;align-items:center;width:42px;flex-shrink:0}
+.sn{width:30px;height:30px;border-radius:50%;background:var(--roxo);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.sn.done{background:#1A7A44}
+.sn.auto{background:#1565C0}
+.sline{width:2px;flex:1;min-height:14px;background:var(--border);margin:4px 0}
+.sb{flex:1;padding:0 0 18px 4px}
+.sb h3{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.sb p{font-size:12px;color:var(--muted);line-height:1.6;margin:0}
+.sb code{background:var(--roxo-light);color:var(--roxo);padding:1px 5px;border-radius:4px;font-size:11px;font-family:monospace}
+.sa{border-radius:7px;padding:9px 11px;margin-top:7px;font-size:12px;line-height:1.5}
+.sa-g{background:#E6F4ED;border:1px solid #A8D8B9;color:#1A5C35}
+.sa-b{background:#E3F2FD;border:1px solid #90CAF9;color:#1565C0}
+.ptabs{display:flex;gap:7px;margin-top:9px}
+.ptab{padding:4px 11px;font-size:11px;font-weight:600;border-radius:20px;cursor:pointer;border:1.5px solid var(--border);color:var(--muted);background:var(--surface);transition:all .15s}
+.ptab.active{background:var(--roxo);color:#fff;border-color:var(--roxo)}
+.ptc{display:none;margin-top:7px;font-size:12px;color:var(--muted);line-height:1.6}
+.ptc.active{display:block}
+.badge-auto{display:inline-flex;background:#E3F2FD;color:#1565C0;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;margin-left:5px}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.cc{background:var(--surface);border:1px solid var(--border);border-radius:13px;box-shadow:var(--shadow);overflow:hidden}
+.cc-top{background:var(--roxo);padding:14px;display:flex;align-items:flex-start;gap:9px}
+.cc-av{width:36px;height:36px;background:rgba(255,255,255,.15);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.cc-nome{color:#fff;font-size:13px;font-weight:700;line-height:1.3}
+.cc-wa{color:rgba(255,255,255,.6);font-size:11px;margin-top:1px}
+.cc-body{padding:13px 15px}
+.cnt-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.cnt-box{text-align:center}
+.cnt-num{font-size:26px;font-weight:800;color:var(--roxo);line-height:1}
+.cnt-lbl{font-size:10px;color:var(--muted);margin-top:1px;font-weight:600}
+.cnt-div{width:1px;height:36px;background:var(--border)}
+.cc-actions{display:flex;flex-direction:column;gap:5px}
+.cc-actions .btn{font-size:11px;padding:6px 10px;justify-content:flex-start}
+.empty{text-align:center;padding:44px 20px;color:var(--muted);grid-column:1/-1}
+.empty .ei{font-size:38px;margin-bottom:10px}
+.empty h3{font-size:14px;font-weight:600;color:var(--text);margin-bottom:5px}
+.pw-wrap{border:1px solid var(--border);border-radius:9px;overflow:hidden;height:180px;position:relative;background:#f0f0f0;display:flex;align-items:center;justify-content:center}
+.pw-inner{text-align:center;color:#999;font-size:13px}
+#wa-prev{position:absolute;bottom:14px;right:14px;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer;border:none}
+#wa-prev svg{width:26px;height:26px;fill:#fff}
 </style>
 </head>
 <body>
@@ -173,591 +132,378 @@ input[type=color]{height:40px;padding:4px 8px;cursor:pointer}
     <span>MARKETING MÉDICO DE ALTA PERFORMANCE</span>
   </div>
   <div class="header-nav">
-    <button class="nav-btn active" onclick="showPage('dashboard')">📊 Clientes</button>
-    <button class="nav-btn" onclick="showPage('criar')">＋ Novo Cliente</button>
+    <button class="nav-btn active" id="nav-dashboard" onclick="showPage('dashboard')">📊 Clientes</button>
+    <button class="nav-btn" id="nav-criar" onclick="showPage('criar')">＋ Novo Cliente</button>
   </div>
 </header>
 
-<!-- ═══ PÁGINA: DASHBOARD CLIENTES ═══ -->
+<!-- DASHBOARD -->
 <div class="page active" id="page-dashboard">
-
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
     <div>
-      <h1 style="font-size:18px;font-weight:700;color:var(--text)">Clientes ativos</h1>
-      <p style="font-size:12px;color:var(--muted);margin-top:2px">Leads capturados este mês em tempo real</p>
+      <h1 style="font-size:17px;font-weight:700">Clientes ativos</h1>
+      <p style="font-size:12px;color:var(--muted);margin-top:2px">Leads capturados este mês</p>
     </div>
     <button class="btn btn-roxo btn-sm" onclick="showPage('criar')">＋ Novo cliente</button>
   </div>
-
-  <div class="clientes-grid" id="clientesGrid">
-    <div class="empty-state" style="grid-column:1/-1">
-      <div class="icon">🏥</div>
-      <h3>Nenhum cliente ainda</h3>
-      <p>Clique em <strong>"＋ Novo Cliente"</strong> para gerar o primeiro widget e ele aparecerá aqui automaticamente.</p>
-    </div>
-  </div>
+  <div class="cg" id="clientesGrid"></div>
 </div>
 
-<!-- ═══ PÁGINA: CRIAR WIDGET ═══ -->
+<!-- CRIAR -->
 <div class="page" id="page-criar">
-
-  <div style="margin-bottom:20px">
-    <h1 style="font-size:18px;font-weight:700;color:var(--text)">Novo widget</h1>
-    <p style="font-size:12px;color:var(--muted);margin-top:2px">Preencha os dados e gere o snippet + Apps Script prontos</p>
+  <div style="margin-bottom:18px">
+    <h1 style="font-size:17px;font-weight:700">Novo widget</h1>
+    <p style="font-size:12px;color:var(--muted);margin-top:2px">Preencha os dados e gere tudo automaticamente</p>
   </div>
 
   <div class="grid2">
-
     <div class="card">
-      <div class="card-header"><div class="icon">🏥</div><div><h2>Dados do cliente</h2><p>Informações da clínica</p></div></div>
-      <div class="card-body">
-        <div class="field"><label>Nome do cliente <span class="req">*</span></label><input type="text" id="nomeCliente" placeholder="Ex: Prima Pelle Dermatologia"/></div>
-        <div class="field"><label>WhatsApp do cliente <span class="req">*</span></label><input type="tel" id="whatsapp" placeholder="5561999999999"/><div class="hint">DDI+DDD+número, só números</div></div>
-        <div class="field"><label>Mensagem inicial no WhatsApp</label><input type="text" id="mensagemWA" value="Olá! Meu nome é {{nome}} e gostaria de agendar uma consulta."/><div class="hint">Use {{nome}} para incluir o nome do lead</div></div>
-        <div class="field"><label>URL do Google Apps Script</label><input type="url" id="webhookUrl" placeholder="https://script.google.com/macros/s/..."/><div class="hint">Obtida no Passo 4 após gerar e configurar</div></div>
+      <div class="ch"><div class="ch-icon">🏥</div><div><h2>Dados do cliente</h2><p>Informações da clínica</p></div></div>
+      <div class="cb">
+        <div class="field"><label>Nome do cliente <span class="req">*</span></label><input type="text" id="nomeCliente" placeholder="Ex: Prima Pelle Dermatologia"></div>
+        <div class="field"><label>WhatsApp <span class="req">*</span></label><input type="tel" id="whatsapp" placeholder="5561999999999"><div class="hint">DDI+DDD+número, só números</div></div>
+        <div class="field"><label>Mensagem inicial</label><input type="text" id="mensagemWA" value="Olá! Meu nome é {{nome}} e gostaria de agendar uma consulta."><div class="hint">Use {{nome}} para o nome do lead</div></div>
+        <div class="field"><label>URL do Google Apps Script</label><input type="url" id="webhookUrl" placeholder="https://script.google.com/macros/s/..."><div class="hint">Obtida após publicar o Apps Script</div></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-header"><div class="icon">🎨</div><div><h2>Aparência e campos</h2><p>Personalização do formulário</p></div></div>
-      <div class="card-body">
+      <div class="ch"><div class="ch-icon">🎨</div><div><h2>Aparência e campos</h2><p>Personalização do formulário</p></div></div>
+      <div class="cb">
         <div class="field-row">
-          <div class="field"><label>Cor principal</label><input type="color" id="corPrincipal" value="#25D366"/></div>
-          <div class="field"><label>Cor hover</label><input type="color" id="corSecundaria" value="#1DA851"/></div>
+          <div class="field"><label>Cor principal</label><input type="color" id="corPrincipal" value="#25D366"></div>
+          <div class="field"><label>Cor hover</label><input type="color" id="corSecundaria" value="#1DA851"></div>
         </div>
-        <div class="field"><label>Título do modal</label><input type="text" id="tituloModal" value="Fale com a gente"/></div>
-        <div class="field"><label>Subtítulo do modal</label><input type="text" id="subtituloModal" value="Preencha para iniciarmos a conversa."/></div>
-        <div style="margin-top:16px;margin-bottom:8px">
+        <div class="field"><label>Título do modal</label><input type="text" id="tituloModal" value="Fale com a gente"></div>
+        <div class="field"><label>Subtítulo</label><input type="text" id="subtituloModal" value="Preencha para iniciarmos a conversa."></div>
+        <div style="margin-top:14px">
           <label style="margin-bottom:8px;display:block">Campos opcionais</label>
-          <div class="toggle-row"><div><div class="toggle-label">Especialidade / Tratamento</div><div class="toggle-sub">Campo de texto livre</div></div><label class="toggle"><input type="checkbox" id="exibirEsp" checked><span class="slider"></span></label></div>
-          <div class="toggle-row"><div><div class="toggle-label">Particular ou Convênio?</div><div class="toggle-sub">Lista suspensa</div></div><label class="toggle"><input type="checkbox" id="exibirConv" checked><span class="slider"></span></label></div>
+          <div class="toggle-row">
+            <div><div class="tl">Especialidade / Tratamento</div><div class="ts">Campo de texto livre</div></div>
+            <label class="toggle"><input type="checkbox" id="exibirEsp" checked><span class="slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="tl">Particular ou Convênio?</div><div class="ts">Lista suspensa</div></div>
+            <label class="toggle"><input type="checkbox" id="exibirConv" checked><span class="slider"></span></label>
+          </div>
         </div>
-        <button class="btn btn-roxo btn-full" style="margin-top:8px" onclick="gerarWidget()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        <button class="btn btn-roxo btn-full" style="margin-top:14px" onclick="gerarWidget()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
           Gerar widget para este cliente
         </button>
       </div>
     </div>
-
-  </div><!-- /grid2 -->
+  </div>
 
   <!-- OUTPUT -->
   <div class="card" id="outputCard" style="display:none">
-    <div class="card-header">
-      <div class="icon">✅</div>
-      <div><h2 id="outputTitle">Widget gerado</h2><p id="outputSubtitle">Siga o passo a passo abaixo</p></div>
-    </div>
+    <div class="ch"><div class="ch-icon">✅</div><div><h2 id="outputTitle">Widget gerado</h2><p id="outputSub">Siga o passo a passo</p></div></div>
 
-    <!-- URL COMPARTILHÁVEL -->
-    <div style="padding:16px 20px 0">
-      <div class="url-share-box">
+    <div style="padding:15px 18px 0">
+      <div class="url-box">
         <div class="url-label">🔗 URL LIMPA — para botões CTA do site</div>
-        <div class="url-share-row">
-          <input type="text" id="urlCompartilhavel" readonly/>
-          <button class="btn btn-roxo btn-sm" onclick="copiarURL()">Copiar</button>
+        <div class="url-row">
+          <input type="text" id="urlShare" readonly>
+          <button class="btn btn-roxo btn-sm" onclick="copiarUrl()">Copiar</button>
         </div>
-        <div class="url-hint">Cole esta URL nos botões "WhatsApp" do site (<code>href="..."</code>). O visitante clica → formulário B.GO captura o lead → WhatsApp abre.<br><br>
-        ⬇️ <strong>Baixe também o arquivo do cliente</strong> e suba na pasta <code>wa/</code> do seu GitHub:</div>
-        <button class="btn btn-verde btn-sm" style="margin-top:8px;width:100%" id="btnBaixarPagina" onclick="baixarPaginaCliente()">
-          ⬇️ Baixar página do cliente para subir no GitHub
-        </button>
-        <div id="instrucaoGithub" style="display:none;margin-top:10px;background:#E6F4ED;border:1px solid #A8D8B9;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A5C35;line-height:1.6">
-          <strong>Como subir no GitHub:</strong><br>
-          1. No repositório <code>agente-bgo</code>, crie a pasta <code>wa</code> se não existir<br>
-          2. Dentro de <code>wa/</code>, suba o arquivo baixado acima<br>
-          3. Após o deploy (~30s), a URL estará no ar ✅
+        <div class="url-hint">Cole esta URL nos botões WhatsApp do site: <code style="font-size:11px;background:#fff;border:1px solid var(--border);padding:1px 5px;border-radius:4px">&lt;a href="URL"&gt;WhatsApp&lt;/a&gt;</code></div>
+        <button class="btn btn-verde btn-sm" style="margin-top:9px;width:100%" id="btnBaixar" onclick="baixarPagina()">⬇️ Baixar página do cliente (subir na pasta wa/ do GitHub)</button>
+        <div id="instrGithub" style="display:none;margin-top:9px;font-size:11.5px;color:#1A5C35;background:#E6F4ED;border:1px solid #A8D8B9;border-radius:7px;padding:9px 11px;line-height:1.6">
+          <strong>Como subir:</strong> no repositório agente-bgo → pasta <code>wa/</code> → suba o arquivo baixado → aguarde ~30s → URL no ar ✅
         </div>
       </div>
     </div>
 
-    <div class="tabs" style="margin-top:16px">
+    <div class="tabs" style="margin-top:14px">
       <div class="tab active" onclick="showTab('passo')">📋 Passo a Passo</div>
-      <div class="tab" onclick="showTab('snippet')">💻 Snippet do Site</div>
-      <div class="tab" onclick="showTab('appsscript')">⚙️ Apps Script</div>
-      <div class="tab" onclick="showTab('preview')">👁️ Preview</div>
+      <div class="tab" onclick="showTab('snippet')">💻 Snippet</div>
+      <div class="tab" onclick="showTab('apps')">⚙️ Apps Script</div>
+      <div class="tab" onclick="showTab('prev')">👁️ Preview</div>
     </div>
 
-    <div class="tab-content active" id="tab-passo"><ul class="steps-guia" id="stepsGuia"></ul></div>
+    <div class="tc active" id="tc-passo"><ul class="steps" id="stepsList"></ul></div>
 
-    <div class="tab-content" id="tab-snippet">
-      <div class="banner banner-green"><span>✅</span><span>Snippet pronto. Cole antes do <code>&lt;/body&gt;</code> no site do cliente.</span></div>
-      <div class="code-block"><button class="copy-btn" onclick="copiar('codeSnippet',this)">Copiar</button><pre id="codeSnippet"></pre></div>
+    <div class="tc" id="tc-snippet">
+      <div class="banner bg">✅ Cole antes do &lt;/body&gt; no site do cliente.</div>
+      <div class="code-block"><button class="copy-btn" onclick="copiarEl('codeSnippet',this)">Copiar</button><pre id="codeSnippet"></pre></div>
     </div>
 
-    <div class="tab-content" id="tab-appsscript">
-      <div class="banner banner-roxo"><span>⚙️</span><span>Cole no Google Apps Script. Execute <code>configurarCliente()</code> e publique como Web App.</span></div>
-      <div class="code-block"><button class="copy-btn" onclick="copiar('codeAppsScript',this)">Copiar</button><pre id="codeAppsScript"></pre></div>
+    <div class="tc" id="tc-apps">
+      <div class="banner bp">⚙️ Cole no Google Apps Script. Execute configurarCliente() e publique como Web App.</div>
+      <div class="code-block"><button class="copy-btn" onclick="copiarEl('codeApps',this)">Copiar</button><pre id="codeApps"></pre></div>
     </div>
 
-    <div class="tab-content" id="tab-preview">
-      <p style="font-size:13px;color:var(--muted);margin-bottom:14px">Prévia do botão flutuante.</p>
-      <div class="preview-wrap">
-        <div class="preview-inner"><div style="font-size:28px;margin-bottom:8px">🖥️</div>Site do cliente</div>
-        <button id="wa-preview-btn" onclick="alert('Abre o formulário!')">
-          <svg viewBox="0 0 24 24"><path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/></svg>
-        </button>
+    <div class="tc" id="tc-prev">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Prévia do botão flutuante.</p>
+      <div class="pw-wrap">
+        <div class="pw-inner"><div style="font-size:26px;margin-bottom:7px">🖥️</div>Site do cliente</div>
+        <button id="wa-prev"><svg viewBox="0 0 24 24"><path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/></svg></button>
       </div>
     </div>
   </div>
-
 </div><!-- /page-criar -->
 
 <script>
-// ═══════════════════════════════════════════════════
-// STORAGE — salva/carrega clientes no localStorage
-// ═══════════════════════════════════════════════════
-function getClientes(){try{return JSON.parse(localStorage.getItem('bgo_clientes')||'[]')}catch(e){return[]}}
-function saveClientes(arr){localStorage.setItem('bgo_clientes',JSON.stringify(arr))}
-function addCliente(obj){
-  var arr=getClientes();
-  var idx=arr.findIndex(function(c){return c.nome===obj.nome});
-  if(idx>=0)arr[idx]=obj; else arr.unshift(obj);
-  saveClientes(arr);
+// ── HELPERS ──────────────────────────────────────────────────────────
+function slug(s){
+  var m={'a':'áàãâä','e':'éèêë','i':'íìîï','o':'óòõôö','u':'úùûü','c':'ç','n':'ñ'};
+  s=s.toLowerCase();
+  for(var k in m){var cs=m[k].split('');for(var i=0;i<cs.length;i++)s=s.split(cs[i]).join(k);}
+  return s.replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+}
+function getClientes(){try{return JSON.parse(localStorage.getItem('bgo_cl')||'[]')}catch(e){return[]}}
+function saveClientes(a){localStorage.setItem('bgo_cl',JSON.stringify(a))}
+function mesAtual(){var m=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];var d=new Date();return m[d.getMonth()]+'/'+d.getFullYear()}
+
+// ── NAVEGAÇÃO ─────────────────────────────────────────────────────────
+function showPage(p){
+  document.querySelectorAll('.page').forEach(function(el){el.classList.toggle('active',el.id==='page-'+p)});
+  document.getElementById('nav-dashboard').classList.toggle('active',p==='dashboard');
+  document.getElementById('nav-criar').classList.toggle('active',p==='criar');
+  if(p==='dashboard')renderDash();
+}
+function showTab(t){
+  var ts=['passo','snippet','apps','prev'];
+  document.querySelectorAll('.tab').forEach(function(el,i){el.classList.toggle('active',ts[i]===t)});
+  ts.forEach(function(n){document.getElementById('tc-'+n).classList.toggle('active',n===t)});
+}
+function showPtab(g,n){
+  document.querySelectorAll('[data-pg="'+g+'"]').forEach(function(el){el.classList.toggle('active',el.dataset.pn===n)});
+  document.querySelectorAll('[data-tg="'+g+'"]').forEach(function(el){el.classList.toggle('active',el.dataset.tn===n)});
 }
 
-// ═══════════════════════════════════════════════════
-// NAVEGAÇÃO
-// ═══════════════════════════════════════════════════
-function showPage(name){
-  document.querySelectorAll('.page').forEach(function(p){p.classList.toggle('active',p.id==='page-'+name)});
-  document.querySelectorAll('.nav-btn').forEach(function(b,i){
-    var names=['dashboard','criar'];
-    b.classList.toggle('active',names[i]===name);
-  });
-  if(name==='dashboard')renderDashboard();
-}
-
-function showTab(name){
-  var names=['passo','snippet','appsscript','preview'];
-  document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('active',names[i]===name)});
-  document.querySelectorAll('.tab-content').forEach(function(c){c.classList.toggle('active',c.id==='tab-'+name)});
-}
-
-function showPtab(group,name){
-  document.querySelectorAll('.ptab[data-group="'+group+'"]').forEach(function(t){t.classList.toggle('active',t.dataset.name===name)});
-  document.querySelectorAll('.ptab-content[data-group="'+group+'"]').forEach(function(c){c.classList.toggle('active',c.dataset.name===name)});
-}
-
-// ═══════════════════════════════════════════════════
-// COPIAR
-// ═══════════════════════════════════════════════════
-function copiar(elId,btn){
-  navigator.clipboard.writeText(document.getElementById(elId).textContent).then(function(){
+// ── COPIAR ────────────────────────────────────────────────────────────
+function copiarEl(id,btn){
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(function(){
     btn.textContent='✓ Copiado!';btn.classList.add('ok');
     setTimeout(function(){btn.textContent='Copiar';btn.classList.remove('ok')},2000);
   });
 }
-function copiarURL(){
-  var val=document.getElementById('urlCompartilhavel').value;
+function copiarUrl(){
+  var val=document.getElementById('urlShare').value;
   navigator.clipboard.writeText(val).then(function(){
-    var btn=event.target;btn.textContent='✓ Copiado!';
-    setTimeout(function(){btn.textContent='Copiar'},2000);
+    var b=event.target;b.textContent='✓';setTimeout(function(){b.textContent='Copiar'},2000);
   });
 }
 
-function slugify(str){
-  var s=str.toLowerCase();
-  var map={'a':['á','à','ã','â'],'e':['é','ê'],'i':['í'],'o':['ó','ô','õ'],'u':['ú','ü'],'c':['ç'],'n':['ñ']};
-  for(var k in map){map[k].forEach(function(v){s=s.split(v).join(k);});}
-  return s.replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
-}
-
-function baixarPaginaCliente(){
-  var nome      = document.getElementById('nomeCliente').value.trim();
-  var wa        = document.getElementById('whatsapp').value.trim().replace(/\D/g,'');
-  var msg       = document.getElementById('mensagemWA').value.trim();
-  var webhook   = document.getElementById('webhookUrl').value.trim()||'';
-  var cor1      = document.getElementById('corPrincipal').value;
-  var titulo    = document.getElementById('tituloModal').value.trim();
-  var subtitulo = document.getElementById('subtituloModal').value.trim();
-  var exibirEsp = document.getElementById('exibirEsp').checked;
-  var exibirConv= document.getElementById('exibirConv').checked;
-
-  var WICO = '<svg viewBox=\"0 0 24 24\"><path d=\"M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z\"/><\/svg>';
-
-  var extraFields = '';
-  if(exibirEsp) extraFields += '<div class=\"field\"><label>Especialidade / Tratamento</label><input type=\"text\" id=\"f_esp\" placeholder=\"Ex: Varizes...\"></div>';
-  if(exibirConv) extraFields += '<div class=\"field\"><label>Particular ou Convênio?</label><select id=\"f_conv\"><option value=\"\">Selecione…</option><option>Particular</option><option>Convênio</option><option>Não sei ainda</option></select></div>';
-
-  var html = `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WhatsApp — ${nome}</title>
-<meta name="robots" content="noindex">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f7f5f9;min-height:100vh;display:flex;align-items:center;justify-content:center}
-.wrap{width:100%;max-width:440px;margin:16px;animation:up .3s cubic-bezier(.22,1,.36,1)}
-@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
-.modal{background:white;border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(45,10,52,.15)}
-.hd{background:${cor1};padding:20px 20px 16px;display:flex;align-items:flex-start;gap:12px}
-.hd svg{width:28px;height:28px;fill:white;flex-shrink:0;margin-top:2px}
-.hd h2{color:white;font-size:1.05rem;font-weight:700;margin:0 0 3px}
-.hd p{color:rgba(255,255,255,.82);font-size:.82rem;margin:0}
-.bd{padding:20px}
-.field{margin-bottom:14px}
-.field label{display:block;font-size:.76rem;font-weight:700;color:#444;margin-bottom:5px}
-.req{color:#e74c3c}
-.field input,.field select{width:100%;border:1.5px solid #ddd;border-radius:9px;padding:10px 12px;font-size:.88rem;font-family:inherit;outline:none;color:#111;background:#fafafa;transition:border-color .15s}
-.field input:focus,.field select:focus{border-color:${cor1};box-shadow:0 0 0 3px rgba(37,211,102,.1);background:#fff}
-.btn{width:100%;padding:13px;background:${cor1};color:white;border:none;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;margin-top:6px}
-.btn:disabled{opacity:.6;cursor:default}
-.btn svg{width:17px;height:17px;fill:white}
-.err{color:#c0392b;font-size:.77rem;margin-top:8px;display:none}
-.ok{display:none;text-align:center;padding:28px 0 16px}
-.ok svg{width:52px;height:52px;margin-bottom:10px}
-.ok h3{color:#222;font-size:1rem;margin:0 0 6px}
-.ok p{color:#777;font-size:.85rem}
-.lgpd{font-size:.7rem;color:#aaa;text-align:center;margin-top:12px;line-height:1.4}
-.pw{text-align:center;margin-top:14px;font-size:11px;color:#aaa}
-.pw a{color:#8B5A9A;text-decoration:none;font-weight:600}
-</style>
-</head>
-<body>
-<div class="wrap">
-  <div class="modal">
-    <div class="hd">
-      ${WICO}
-      <div><h2>${titulo}</h2><p>${subtitulo}</p></div>
-    </div>
-    <div class="bd">
-      <div id="fa">
-        <div class="field"><label>Nome completo <span class="req">*</span></label><input type="text" id="nm" placeholder="João Silva" autocomplete="name"></div>
-        <div class="field"><label>Celular / WhatsApp <span class="req">*</span></label><input type="tel" id="tel" placeholder="(61) 99999-0000" autocomplete="tel"></div>
-        <div class="field"><label>E-mail <span class="req">*</span></label><input type="email" id="em" placeholder="joao@email.com" autocomplete="email"></div>
-        ${extraFields}
-        <div class="err" id="err">⚠️ Preencha nome, celular e e-mail para continuar.</div>
-        <button class="btn" id="btn">${WICO} Iniciar conversa no WhatsApp</button>
-        <div class="lgpd">Seus dados são usados apenas para entrar em contato. Não enviamos spam.</div>
-      </div>
-      <div class="ok" id="ok">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E6F4ED"/><path d="M7 12.5l3.5 3.5 6.5-7" stroke="#1A7A44" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-        <h3>Tudo certo! 🎉</h3><p>Abrindo o WhatsApp agora…</p>
-      </div>
-    </div>
-  </div>
-  <div class="pw">Powered by <a href="https://bgomarketingmedico.com.br" target="_blank">B.GO Marketing Médico</a></div>
-</div>
-<script>
-var CFG={wa:"${wa}",webhook:"${webhook.replace(/"/g,'\"')}",msg:"${msg.replace(/"/g,'\"').replace(/
-/g,'\n')}"};
-var p=new URLSearchParams(window.location.search);
-function utms(){return{utm_source:p.get("utm_source")||"direto",utm_medium:p.get("utm_medium")||"",utm_campaign:p.get("utm_campaign")||"",utm_content:p.get("utm_content")||"",utm_term:p.get("utm_term")||"",pagina:document.referrer||window.location.href,dispositivo:/Mobi|Android/i.test(navigator.userAgent)?"Mobile":"Desktop"};}
-document.getElementById("btn").addEventListener("click",function(){
-  var nm=document.getElementById("nm").value.trim();
-  var tel=document.getElementById("tel").value.trim();
-  var em=document.getElementById("em").value.trim();
-  if(!nm||!tel||!em||!/\S+@\S+\.\S+/.test(em)){document.getElementById("err").style.display="block";return;}
-  document.getElementById("err").style.display="none";
-  var btn=document.getElementById("btn");btn.disabled=true;btn.textContent="Enviando…";
-  var espEl=document.getElementById("esp");var convEl=document.getElementById("conv");
-  var payload=Object.assign({data:new Date().toLocaleDateString("pt-BR"),hora:new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),nome:nm,telefone:tel,email:em,especialidade:espEl?espEl.value:"",convenio:convEl?convEl.value:""},utms());
-  if(CFG.webhook)fetch(CFG.webhook,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)}).catch(function(){});
-  setTimeout(function(){
-    document.getElementById("fa").style.display="none";
-    document.getElementById("ok").style.display="block";
-    var msgF=CFG.msg.replace("{{nome}}",nm);
-    setTimeout(function(){window.location.href="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(msgF);},900);
-  },700);
-});
-<\/script>
-</body>
-</html>`;
-
-  var slug = slugify(nome);
-  var blob = new Blob([html], {type:'text/html'});
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = slug+'.html';
-  a.click();
-  URL.revokeObjectURL(a.href);
-
-  document.getElementById('instrucaoGithub').style.display = 'block';
-  document.getElementById('btnBaixarPagina').textContent = '✓ Arquivo baixado! Agora suba na pasta wa/ do GitHub';
-  document.getElementById('btnBaixarPagina').style.background = '#1A7A44';
-}
-
-// ═══════════════════════════════════════════════════
-// GERAR WIDGET
-// ═══════════════════════════════════════════════════
+// ── GERAR WIDGET ──────────────────────────────────────────────────────
 function gerarWidget(){
-  var nome      = document.getElementById('nomeCliente').value.trim();
-  var wa        = document.getElementById('whatsapp').value.trim().replace(/\D/g,'');
-  var msg       = document.getElementById('mensagemWA').value.trim();
-  var webhook   = document.getElementById('webhookUrl').value.trim()||'https://script.google.com/macros/s/SEU_DEPLOYMENT_ID/exec';
-  var cor1      = document.getElementById('corPrincipal').value;
-  var cor2      = document.getElementById('corSecundaria').value;
-  var titulo    = document.getElementById('tituloModal').value.trim();
-  var subtitulo = document.getElementById('subtituloModal').value.trim();
-  var exibirEsp = document.getElementById('exibirEsp').checked;
-  var exibirConv= document.getElementById('exibirConv').checked;
+  var nome    =document.getElementById('nomeCliente').value.trim();
+  var wa      =document.getElementById('whatsapp').value.trim().replace(/\D/g,'');
+  var msg     =document.getElementById('mensagemWA').value.trim();
+  var webhook =document.getElementById('webhookUrl').value.trim()||'https://script.google.com/macros/s/SEU_ID/exec';
+  var cor1    =document.getElementById('corPrincipal').value;
+  var cor2    =document.getElementById('corSecundaria').value;
+  var titulo  =document.getElementById('tituloModal').value.trim();
+  var sub     =document.getElementById('subtituloModal').value.trim();
+  var esp     =document.getElementById('exibirEsp').checked;
+  var conv    =document.getElementById('exibirConv').checked;
 
-  if(!nome||!wa){alert('Preencha o nome do cliente e o WhatsApp.');return;}
+  if(!nome||!wa){alert('Preencha o nome do cliente e o número do WhatsApp.');return;}
 
-  var webhookOk = webhook!=='https://script.google.com/macros/s/SEU_DEPLOYMENT_ID/exec';
+  var whOk=webhook.indexOf('SEU_ID')<0;
+  var sl=slug(nome);
+  var urlLimpa='https://bgomarketingmedico.github.io/agente-bgo/wa/'+sl;
 
-  // URL limpa — baseada no slug do cliente
-  function slugify(str){
-  var s=str.toLowerCase();
-  var map={'a':['á','à','ã','â'],'e':['é','ê'],'i':['í'],'o':['ó','ô','õ'],'u':['ú','ü'],'c':['ç'],'n':['ñ']};
-  for(var k in map){map[k].forEach(function(v){s=s.split(v).join(k);});}
-  return s.replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
-}
-  var slug = slugify(nome);
-  var urlShare = 'https://bgomarketingmedico.github.io/agente-bgo/wa/'+slug;
+  document.getElementById('urlShare').value=urlLimpa;
+  document.getElementById('wa-prev').style.background=cor1;
+  document.getElementById('outputTitle').textContent='Widget gerado — '+nome;
+  document.getElementById('outputSub').textContent='URL: '+urlLimpa;
 
-  document.getElementById('urlCompartilhavel').value = urlShare;
-  document.getElementById('wa-preview-btn').style.background = cor1;
-  document.getElementById('outputTitle').textContent = 'Widget gerado — '+nome;
-  document.getElementById('outputSubtitle').textContent = 'Siga o Passo a Passo para configurar o Google';
+  // Salva no localStorage
+  var cl=getClientes();
+  var idx=cl.findIndex(function(c){return c.nome===nome});
+  var obj={nome:nome,wa:wa,webhook:webhook,cor:cor1,titulo:titulo,msg:msg,url:urlLimpa,slug:sl,criado:new Date().toLocaleDateString('pt-BR')};
+  if(idx>=0)cl[idx]=obj;else cl.unshift(obj);
+  saveClientes(cl);
 
-  // Salva cliente no localStorage
-  addCliente({
-    nome: nome, wa: wa, webhook: webhook, cor: cor1,
-    titulo: titulo, msg: msg, urlShare: urlShare,
-    criadoEm: new Date().toLocaleDateString('pt-BR')
-  });
-
-  // Gera snippet
-  gerarSnippet(nome,wa,msg,webhook,cor1,cor2,titulo,subtitulo,exibirEsp,exibirConv,urlShare);
-  gerarAppsScript(nome);
-  gerarPassos(nome,webhook,webhookOk,exibirEsp,exibirConv);
+  gerarSnippet(nome,wa,msg,webhook,cor1,cor2,titulo,sub,esp,conv);
+  gerarApps(nome);
+  gerarPassos(nome,webhook,whOk,sl);
 
   document.getElementById('outputCard').style.display='block';
-  document.getElementById('outputCard').scrollIntoView({behavior:'smooth',block:'start'});
   showTab('passo');
+  setTimeout(function(){document.getElementById('outputCard').scrollIntoView({behavior:'smooth',block:'start'})},100);
 }
 
-// ═══════════════════════════════════════════════════
-// SNIPPET
-// ═══════════════════════════════════════════════════
-function gerarSnippet(nome,wa,msg,webhook,cor1,cor2,titulo,subtitulo,exibirEsp,exibirConv,urlShare){
-  var WICO='<svg viewBox=\\"0 0 24 24\\"><path d=\\"M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z\\"/><\\/svg>';
+// ── SNIPPET ───────────────────────────────────────────────────────────
+function gerarSnippet(nome,wa,msg,webhook,cor1,cor2,titulo,sub,esp,conv){
+  var xH='';
+  if(esp)xH+='<div class=\\"bgo-f\\"><label for=\\"bgo_esp\\">Especialidade</label><input type=\\"text\\" id=\\"bgo_esp\\" placeholder=\\"Ex: Varizes...\\"></div>';
+  if(conv)xH+='<div class=\\"bgo-f\\"><label for=\\"bgo_conv\\">Particular ou Convênio?</label><select id=\\"bgo_conv\\"><option value=\\"\\">Selecione…</option><option>Particular</option><option>Convênio</option><option>Não sei ainda</option></select></div>';
 
-  var s = '<!-- B.GO Widget WhatsApp — '+nome+' | '+new Date().toLocaleDateString('pt-BR')+' -->\n';
-  s += '<script>\n(function(){\n"use strict";\n';
-  s += 'var CFG={\n';
-  s += '  whatsappNumber:"'+wa+'",\n';
-  s += '  whatsappMessage:"'+msg.replace(/"/g,'\\"')+'",\n';
-  s += '  sheetWebhookUrl:"'+webhook+'",\n';
-  s += '  corPrincipal:"'+cor1+'",corSecundaria:"'+cor2+'",\n';
-  s += '  tituloModal:"'+titulo.replace(/"/g,'\\"')+'",\n';
-  s += '  subtituloModal:"'+subtitulo.replace(/"/g,'\\"')+'",\n';
-  s += '  exibirEspecialidade:'+exibirEsp+',exibirConvenio:'+exibirConv+',\n';
-  s += '  urlCompartilhavel:"'+urlShare.replace(/"/g,'\\"')+'"\n};\n';
-  s += `
-// Inicializa widget
-function initBGO(){
-var st=document.createElement("style");
-st.textContent=["#bgo-fab{position:fixed;bottom:24px;right:24px;z-index:9998;width:58px;height:58px;border-radius:50%;background:"+CFG.corPrincipal+";box-shadow:0 4px 18px rgba(0,0,0,.28);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s;}","#bgo-fab:hover{transform:scale(1.09);}","#bgo-fab svg{width:30px;height:30px;fill:#fff;}","#bgo-ov{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);align-items:flex-end;justify-content:center;}","@media(min-width:520px){#bgo-ov{align-items:center;}}","#bgo-ov.open{display:flex;}","#bgo-box{background:#fff;width:100%;max-width:420px;border-radius:20px 20px 0 0;box-shadow:0 -4px 40px rgba(0,0,0,.14);overflow:hidden;animation:bgoUp .25s cubic-bezier(.22,1,.36,1);}","@media(min-width:520px){#bgo-box{border-radius:18px;margin:16px;}}","@keyframes bgoUp{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}","#bgo-hd{background:"+CFG.corPrincipal+";padding:18px 18px 14px;display:flex;align-items:flex-start;gap:12px;}","#bgo-hd svg,#bgo-hd-ico svg{width:26px;height:26px;fill:#fff;flex-shrink:0;margin-top:3px;}","#bgo-hd h3{margin:0 0 3px;color:#fff;font-size:1rem;font-family:inherit;font-weight:700;}","#bgo-hd p{margin:0;color:rgba(255,255,255,.82);font-size:.8rem;font-family:inherit;}","#bgo-xbtn{margin-left:auto;background:rgba(0,0,0,.15);border:none;cursor:pointer;color:#fff;font-size:1rem;padding:6px 8px;border-radius:50%;flex-shrink:0;}","#bgo-body{padding:18px 18px 20px;}",".bgo-f{margin-bottom:13px;}",".bgo-f label{display:block;font-size:.76rem;font-weight:700;color:#444;margin-bottom:5px;font-family:inherit;}",".bgo-f label span{color:#e74c3c;}",".bgo-f input,.bgo-f select{width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:9px;padding:10px 12px;font-size:.88rem;font-family:inherit;outline:none;color:#111;transition:border-color .15s;background:#fafafa;}",".bgo-f input:focus,.bgo-f select:focus{border-color:"+CFG.corPrincipal+";}","#bgo-sbtn{width:100%;padding:13px;background:"+CFG.corPrincipal+";color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;margin-top:6px;}","#bgo-sbtn svg{width:17px;height:17px;fill:#fff;}","#bgo-err{color:#c0392b;font-size:.77rem;margin-top:8px;display:none;font-family:inherit;}","#bgo-ok{display:none;text-align:center;padding:24px 0 12px;}","#bgo-ok svg{width:48px;height:48px;fill:"+CFG.corPrincipal+";}","#bgo-ok p{color:#222;font-size:.9rem;margin:10px 0 0;font-family:inherit;}","#bgo-lgpd{font-size:.7rem;color:#aaa;text-align:center;margin-top:12px;font-family:inherit;line-height:1.4;}"].join("");
+  var s='<!-- B.GO Widget — '+nome+' | '+new Date().toLocaleDateString('pt-BR')+' -->\n<script>\n(function(){\n';
+  s+='var C={wa:"'+wa+'",wh:"'+webhook+'",c1:"'+cor1+'",c2:"'+cor2+'",t:"'+titulo.replace(/"/g,'\\"')+'",s:"'+sub.replace(/"/g,'\\"')+'",m:"'+msg.replace(/"/g,'\\"')+'",esp:'+esp+',conv:'+conv+'};\n';
+  s+=`var W='<svg viewBox="0 0 24 24"><path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/></svg>';\n`;
+  s+=`var st=document.createElement('style');
+st.textContent='#bf{position:fixed;bottom:24px;right:24px;z-index:9998;width:56px;height:56px;border-radius:50%;background:'+C.c1+';box-shadow:0 4px 16px rgba(0,0,0,.28);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s}#bf:hover{transform:scale(1.09)}#bf svg{width:29px;height:29px;fill:#fff}#bov{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);align-items:flex-end;justify-content:center}@media(min-width:500px){#bov{align-items:center}}#bov.op{display:flex}#bbx{background:#fff;width:100%;max-width:420px;border-radius:20px 20px 0 0;overflow:hidden;animation:bgu .25s ease}@media(min-width:500px){#bbx{border-radius:18px;margin:16px}}@keyframes bgu{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}#bhd{background:'+C.c1+';padding:17px 17px 13px;display:flex;align-items:flex-start;gap:11px}#bhd svg{width:25px;height:25px;fill:#fff;flex-shrink:0;margin-top:2px}#bhd h3{margin:0 0 2px;color:#fff;font-size:.98rem;font-family:inherit;font-weight:700}#bhd p{margin:0;color:rgba(255,255,255,.8);font-size:.78rem;font-family:inherit}#bxb{margin-left:auto;background:rgba(0,0,0,.15);border:none;cursor:pointer;color:#fff;font-size:.95rem;padding:5px 7px;border-radius:50%;flex-shrink:0}#bbd{padding:17px}.bfo{margin-bottom:12px}.bfo label{display:block;font-size:.74rem;font-weight:700;color:#444;margin-bottom:4px;font-family:inherit}.bfo label span{color:#e74c3c}.bfo input,.bfo select{width:100%;border:1.5px solid #ddd;border-radius:8px;padding:9px 11px;font-size:.86rem;font-family:inherit;outline:none;color:#111;background:#fafafa}#bsb{width:100%;padding:12px;background:'+C.c1+';color:#fff;border:none;border-radius:9px;font-size:.92rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:inherit;margin-top:5px}#bsb svg{width:16px;height:16px;fill:#fff}#ber{color:#c0392b;font-size:.75rem;margin-top:7px;display:none;font-family:inherit}#bok{display:none;text-align:center;padding:22px 0 10px}#bok svg{width:46px;height:46px;fill:'+C.c1+'}#bok p{color:#222;font-size:.88rem;margin:8px 0 0;font-family:inherit}#blg{font-size:.68rem;color:#aaa;text-align:center;margin-top:10px;font-family:inherit;line-height:1.4}';
 document.head.appendChild(st);
-var WICO='<svg viewBox="0 0 24 24"><path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/></svg>';
-var fab=document.createElement("button");fab.id="bgo-fab";fab.setAttribute("aria-label","WhatsApp");fab.innerHTML=WICO;document.body.appendChild(fab);
-var ov=document.createElement("div");ov.id="bgo-ov";
-var xH="";
-if(CFG.exibirEspecialidade)xH+='<div class="bgo-f"><label for="bgo_esp">Especialidade / Tratamento</label><input type="text" id="bgo_esp" placeholder="Ex: Varizes..."></div>';
-if(CFG.exibirConvenio)xH+='<div class="bgo-f"><label for="bgo_conv">Particular ou Convênio?</label><select id="bgo_conv"><option value="">Selecione…</option><option>Particular</option><option>Convênio</option><option>Não sei ainda</option></select></div>';
-ov.innerHTML='<div id="bgo-box" role="dialog" aria-modal="true"><div id="bgo-hd">'+WICO+'<div><h3>'+CFG.tituloModal+'</h3><p>'+CFG.subtituloModal+'</p></div><button id="bgo-xbtn" aria-label="Fechar">✕</button></div><div id="bgo-body"><div id="bgo-fa"><div class="bgo-f"><label for="bgo_nm">Nome completo <span>*</span></label><input type="text" id="bgo_nm" placeholder="João Silva" autocomplete="name"></div><div class="bgo-f"><label for="bgo_tel">Celular / WhatsApp <span>*</span></label><input type="tel" id="bgo_tel" placeholder="(61) 99999-0000" autocomplete="tel"></div><div class="bgo-f"><label for="bgo_em">E-mail <span>*</span></label><input type="email" id="bgo_em" placeholder="joao@email.com" autocomplete="email"></div>'+xH+'<div id="bgo-err">⚠️ Preencha nome, celular e e-mail.</div><button id="bgo-sbtn">'+WICO+' Iniciar conversa no WhatsApp</button><p id="bgo-lgpd">Seus dados são usados apenas para entrar em contato. Não enviamos spam.</p></div><div id="bgo-ok"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm-1.5 17.5l-4.5-4.5 1.41-1.41L10.5 14.67l6.59-6.59L18.5 9.5l-8 8z"/></svg><p>Dados salvos! Abrindo o WhatsApp…</p></div></div></div>';
+var fab=document.createElement('button');fab.id='bf';fab.innerHTML=W;document.body.appendChild(fab);
+var ov=document.createElement('div');ov.id='bov';
+var xH='${xH.replace(/'/g,"\\'")}';
+ov.innerHTML='<div id="bbx"><div id="bhd">'+W+'<div><h3>'+C.t+'</h3><p>'+C.s+'</p></div><button id="bxb">✕</button></div><div id="bbd"><div id="bfa"><div class="bfo"><label for="bnm">Nome completo <span>*</span></label><input type="text" id="bnm" placeholder="João Silva" autocomplete="name"></div><div class="bfo"><label for="btel">Celular / WhatsApp <span>*</span></label><input type="tel" id="btel" placeholder="(61) 99999-0000" autocomplete="tel"></div><div class="bfo"><label for="bem">E-mail <span>*</span></label><input type="email" id="bem" placeholder="joao@email.com" autocomplete="email"></div>'+xH+'<div id="ber">⚠️ Preencha nome, celular e e-mail.</div><button id="bsb">'+W+' Iniciar conversa no WhatsApp</button><p id="blg">Seus dados são usados apenas para entrar em contato. Não enviamos spam.</p></div><div id="bok"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm-1.5 17.5l-4.5-4.5 1.41-1.41L10.5 14.67l6.59-6.59L18.5 9.5l-8 8z"/></svg><p>Dados salvos! Abrindo WhatsApp…</p></div></div></div>';
 document.body.appendChild(ov);
-function utms(){var p=new URLSearchParams(window.location.search);return{utm_source:p.get("utm_source")||"direto",utm_medium:p.get("utm_medium")||"",utm_campaign:p.get("utm_campaign")||"",utm_content:p.get("utm_content")||"",utm_term:p.get("utm_term")||"",pagina:window.location.href,dispositivo:/Mobi|Android/i.test(navigator.userAgent)?"Mobile":"Desktop"};}
-function dH(){return new Date().toLocaleDateString("pt-BR");}
-function hA(){return new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});}
-function abrirModal(){ov.classList.add("open");setTimeout(function(){var el=document.getElementById("bgo_nm");if(el)el.focus();},100);}
-fab.addEventListener("click",abrirModal);
-// Abre automaticamente se vier via URL compartilhável (?bgo_open=1)
-if(new URLSearchParams(window.location.search).get("bgo_open")==="1")setTimeout(abrirModal,500);
-// Intercepta cliques em links com href=CFG.urlCompartilhavel ou data-bgo-widget
-document.addEventListener("click",function(ev){
-  var a=ev.target.closest("a[href*='bgo_open=1'],a[data-bgo-widget],[data-bgo-widget]");
-  if(a){ev.preventDefault();abrirModal();}
-});
-document.getElementById("bgo-xbtn").addEventListener("click",fechar);
-ov.addEventListener("click",function(ev){if(ev.target===ov)fechar();});
-document.addEventListener("keydown",function(ev){if(ev.key==="Escape")fechar();});
-function fechar(){ov.classList.remove("open");setTimeout(reset,350);}
-function reset(){document.getElementById("bgo-fa").style.display="";document.getElementById("bgo-ok").style.display="none";document.getElementById("bgo-err").style.display="none";["bgo_nm","bgo_tel","bgo_em","bgo_esp","bgo_conv"].forEach(function(id){var el=document.getElementById(id);if(el)el.value="";});document.getElementById("bgo-sbtn").innerHTML=WICO+" Iniciar conversa no WhatsApp";document.getElementById("bgo-sbtn").disabled=false;}
-document.getElementById("bgo-sbtn").addEventListener("click",function(){
-var nome=document.getElementById("bgo_nm").value.trim();
-var tel=document.getElementById("bgo_tel").value.trim();
-var em=document.getElementById("bgo_em").value.trim();
-if(!nome||!tel||!em||!/\\S+@\\S+\\.\\S+/.test(em)){document.getElementById("bgo-err").style.display="block";return;}
-document.getElementById("bgo-err").style.display="none";
-var btn=document.getElementById("bgo-sbtn");btn.disabled=true;btn.textContent="Enviando…";
-var espEl=document.getElementById("bgo_esp");var convEl=document.getElementById("bgo_conv");
-var payload=Object.assign({data:dH(),hora:hA(),nome:nome,telefone:tel,email:em,especialidade:espEl?espEl.value:"",convenio:convEl?convEl.value:""},utms());
-fetch(CFG.sheetWebhookUrl,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)}).catch(function(){});
-setTimeout(function(){document.getElementById("bgo-fa").style.display="none";document.getElementById("bgo-ok").style.display="block";var msgF=CFG.whatsappMessage.replace("{{nome}}",nome);var url="https://wa.me/"+CFG.whatsappNumber+"?text="+encodeURIComponent(msgF);setTimeout(function(){window.open(url,"_blank");setTimeout(fechar,2500);},900);},700);});
-}
-if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",initBGO);}else{initBGO();}
-})();`;
-  s += '\n<\/script>';
-  document.getElementById('codeSnippet').textContent = s;
+function utms(){var p=new URLSearchParams(window.location.search);return{utm_source:p.get('utm_source')||'direto',utm_medium:p.get('utm_medium')||'',utm_campaign:p.get('utm_campaign')||'',pagina:window.location.href,dispositivo:/Mobi|Android/i.test(navigator.userAgent)?'Mobile':'Desktop'};}
+function dH(){return new Date().toLocaleDateString('pt-BR');}
+function hA(){return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+fab.onclick=function(){ov.classList.add('op');setTimeout(function(){document.getElementById('bnm').focus()},100);};
+document.getElementById('bxb').onclick=fechar;
+ov.onclick=function(e){if(e.target===ov)fechar();};
+document.onkeydown=function(e){if(e.key==='Escape')fechar();};
+function fechar(){ov.classList.remove('op');setTimeout(reset,300);}
+function reset(){document.getElementById('bfa').style.display='';document.getElementById('bok').style.display='none';document.getElementById('ber').style.display='none';['bnm','btel','bem','bgo_esp','bgo_conv'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});document.getElementById('bsb').disabled=false;document.getElementById('bsb').innerHTML=W+' Iniciar conversa no WhatsApp';}
+document.getElementById('bsb').onclick=function(){
+  var nm=document.getElementById('bnm').value.trim();
+  var tel=document.getElementById('btel').value.trim();
+  var em=document.getElementById('bem').value.trim();
+  if(!nm||!tel||!em||!/\\S+@\\S+\\.\\S+/.test(em)){document.getElementById('ber').style.display='block';return;}
+  document.getElementById('ber').style.display='none';
+  var btn=document.getElementById('bsb');btn.disabled=true;btn.textContent='Enviando…';
+  var espEl=document.getElementById('bgo_esp');var convEl=document.getElementById('bgo_conv');
+  var pl=Object.assign({data:dH(),hora:hA(),nome:nm,telefone:tel,email:em,especialidade:espEl?espEl.value:'',convenio:convEl?convEl.value:''},utms());
+  fetch(C.wh,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(pl)}).catch(function(){});
+  setTimeout(function(){document.getElementById('bfa').style.display='none';document.getElementById('bok').style.display='block';var mf=C.m.replace('{{nome}}',nm);setTimeout(function(){window.open('https://wa.me/'+C.wa+'?text='+encodeURIComponent(mf),'_blank');setTimeout(fechar,2000);},800);},600);
+};
+})();
+<\/script>`;
+  document.getElementById('codeSnippet').textContent=s;
 }
 
-// ═══════════════════════════════════════════════════
-// APPS SCRIPT
-// ═══════════════════════════════════════════════════
-function gerarAppsScript(nome){
-  var s = '// B.GO — Google Apps Script\n// Cliente: '+nome+'\n// Gerado em: '+new Date().toLocaleDateString('pt-BR')+'\n\n';
-  s += 'var CONFIG={\n  nomeCliente:"'+nome+'",\n  nomePasta:"B.GO — Leads de Clientes"\n};\n\n';
-  s += 'var MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];\n\n';
-  s += 'function configurarCliente(){\n  var pasta=obterOuCriarPasta(CONFIG.nomePasta);\n  var planilha=obterOuCriarPlanilha(pasta,CONFIG.nomeCliente);\n  var ss=SpreadsheetApp.openById(planilha.getId());\n  var s1=ss.getSheetByName("Sheet1")||ss.getSheetByName("Página1");\n  obterOuCriarAbaMes(ss);\n  if(!ss.getSheetByName("📊 Resumo"))criarAbaResumo(ss);\n  if(s1&&ss.getSheets().length>1)ss.deleteSheet(s1);\n  Logger.log("✅ Configurado: "+CONFIG.nomeCliente);\n}\n\n';
-  s += 'function doPost(e){\n  try{\n    var d=JSON.parse(e.postData.contents);\n    var ss=SpreadsheetApp.openById(obterOuCriarPlanilha(obterOuCriarPasta(CONFIG.nomePasta),CONFIG.nomeCliente).getId());\n    var aba=obterOuCriarAbaMes(ss);\n    if(!ss.getSheetByName("📊 Resumo"))criarAbaResumo(ss);\n    var p=aba.getLastRow()+1;\n    aba.appendRow([p-1,d.data||hoje(),d.hora||hora(),d.nome||"",d.telefone||"",d.email||"",d.especialidade||"",d.convenio||"",d.utm_source||"direto",d.utm_medium||"",d.utm_campaign||"",d.utm_content||"",d.utm_term||"",d.pagina||"",d.dispositivo||"","Novo Lead"]);\n    formatarLinha(aba,p);\n    return ContentService.createTextOutput(JSON.stringify({status:"ok",total:aba.getLastRow()-3})).setMimeType(ContentService.MimeType.JSON);\n  }catch(err){\n    return ContentService.createTextOutput(JSON.stringify({status:"erro",msg:err.toString()})).setMimeType(ContentService.MimeType.JSON);\n  }\n}\n\n';
-  s += 'function doGet(e){\n  // Retorna contagem de leads do mês atual para o dashboard\n  try{\n    var ss=SpreadsheetApp.openById(obterOuCriarPlanilha(obterOuCriarPasta(CONFIG.nomePasta),CONFIG.nomeCliente).getId());\n    var d=new Date();\n    var nomeMes=MESES[d.getMonth()]+" "+d.getFullYear();\n    var aba=ss.getSheetByName(nomeMes);\n    var total=aba?Math.max(0,aba.getLastRow()-3):0;\n    var driveUrl="https://drive.google.com/drive/folders/";\n    var pastas=DriveApp.getFoldersByName(CONFIG.nomePasta);\n    if(pastas.hasNext())driveUrl+=pastas.next().getId();\n    return ContentService.createTextOutput(JSON.stringify({status:"ok",cliente:CONFIG.nomeCliente,mes:nomeMes,total:total,driveUrl:driveUrl})).setMimeType(ContentService.MimeType.JSON);\n  }catch(err){\n    return ContentService.createTextOutput(JSON.stringify({status:"erro",msg:err.toString()})).setMimeType(ContentService.MimeType.JSON);\n  }\n}\n\n';
-  s += 'function criarAbaNovoMes(){obterOuCriarAbaMes(SpreadsheetApp.openById(obterOuCriarPlanilha(obterOuCriarPasta(CONFIG.nomePasta),CONFIG.nomeCliente).getId()));}\n\n';
-  s += 'function obterOuCriarPasta(n){var p=DriveApp.getFoldersByName(n);return p.hasNext()?p.next():DriveApp.createFolder(n);}\n';
-  s += 'function obterOuCriarPlanilha(pasta,nc){var n="Leads — "+nc;var a=pasta.getFilesByName(n);if(a.hasNext())return SpreadsheetApp.openById(a.next().getId());var nv=SpreadsheetApp.create(n);var f=DriveApp.getFileById(nv.getId());pasta.addFile(f);DriveApp.getRootFolder().removeFile(f);return nv;}\n';
-  s += 'function obterOuCriarAbaMes(ss){var d=new Date();var n=MESES[d.getMonth()]+" "+d.getFullYear();var a=ss.getSheetByName(n);if(!a){var r=ss.getSheetByName("📊 Resumo");var p=r?ss.getSheets().indexOf(r):ss.getSheets().length;a=ss.insertSheet(n,p);configurarCabecalho(a,n);}return a;}\n';
-  s += 'function configurarCabecalho(aba,mes){var C=[["#",32],["Data",88],["Hora",60],["Nome",180],["Celular / WhatsApp",140],["E-mail",200],["Especialidade",200],["Convênio",155],["UTM Source",105],["UTM Medium",105],["UTM Campaign",145],["UTM Content",105],["UTM Term",100],["Página",270],["Dispositivo",100],["Status",130]];aba.setRowHeight(1,50);aba.getRange(1,1,1,C.length).merge().setValue("B.GO — "+CONFIG.nomeCliente.toUpperCase()).setBackground("#2D0A34").setFontColor("#FFF").setFontFamily("Arial").setFontSize(13).setFontWeight("bold").setHorizontalAlignment("center").setVerticalAlignment("middle");aba.setRowHeight(2,22);aba.getRange(2,1,1,C.length).merge().setValue("Leads do Site  |  "+mes+"  |  bgomarketingmedico.com.br").setBackground("#3D1545").setFontColor("#CCBBCC").setFontFamily("Arial").setFontSize(8).setHorizontalAlignment("center").setVerticalAlignment("middle");aba.setRowHeight(3,28);aba.getRange(3,1,1,C.length).setValues([C.map(function(c){return c[0];})]).setBackground("#F2EEF4").setFontColor("#2D0A34").setFontFamily("Arial").setFontSize(9).setFontWeight("bold").setHorizontalAlignment("center").setVerticalAlignment("middle").setWrap(true).setBorder(true,true,true,true,true,true,"#BBA8C0",SpreadsheetApp.BorderStyle.SOLID_MEDIUM);for(var i=0;i<C.length;i++)aba.setColumnWidth(i+1,C[i][1]);aba.getRange(4,16,500,1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(["Novo Lead","Em Contato","Agendado","Não Atendeu","Fechado","Descartado"],true).build());aba.setFrozenRows(3);}\n';
-  s += 'function formatarLinha(aba,l){var bg=(l%2===0)?"#FAF7FB":"#FFF";aba.setRowHeight(l,20);aba.getRange(l,1,1,16).setBackground(bg).setFontFamily("Arial").setFontSize(9).setVerticalAlignment("middle").setBorder(true,true,true,true,true,true,"#DDD5E0",SpreadsheetApp.BorderStyle.SOLID);aba.getRange(l,1).setHorizontalAlignment("center");aba.getRange(l,16).setFontColor("#1A7A44").setFontWeight("bold").setBackground("#E6F4ED");}\n';
-  s += 'function criarAbaResumo(ss){var a=ss.insertSheet("📊 Resumo");a.setRowHeight(1,50);a.getRange("A1:E1").merge().setValue("RESUMO — "+CONFIG.nomeCliente.toUpperCase()).setBackground("#2D0A34").setFontColor("#FFF").setFontFamily("Arial").setFontSize(13).setFontWeight("bold").setHorizontalAlignment("center").setVerticalAlignment("middle");}\n';
-  s += 'function hoje(){return Utilities.formatDate(new Date(),"America/Sao_Paulo","dd/MM/yyyy");}\n';
-  s += 'function hora(){return Utilities.formatDate(new Date(),"America/Sao_Paulo","HH:mm");}\n';
-  s += 'function testarManual(){doPost({postData:{contents:JSON.stringify({nome:"Teste",telefone:"(61) 99999-0000",email:"teste@bgo.com",utm_source:"google",dispositivo:"Mobile",pagina:"https://teste.com.br"})}});Logger.log("✅ Lead de teste inserido.");}\n';
-  document.getElementById('codeAppsScript').textContent = s;
+// ── APPS SCRIPT ───────────────────────────────────────────────────────
+function gerarApps(nome){
+  var s='// B.GO Apps Script — '+nome+'\nvar CONFIG={nomeCliente:"'+nome+'",nomePasta:"B.GO — Leads de Clientes"};\n';
+  s+='var MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];\n\n';
+  s+='function configurarCliente(){var p=getPasta();var pl=getPlanilha(p);var ss=SpreadsheetApp.openById(pl.getId());var s1=ss.getSheetByName("Sheet1")||ss.getSheetByName("Página1");getMes(ss);if(!ss.getSheetByName("📊 Resumo"))criarResumo(ss);if(s1&&ss.getSheets().length>1)ss.deleteSheet(s1);Logger.log("✅ "+CONFIG.nomeCliente);}\n\n';
+  s+='function doPost(e){try{var d=JSON.parse(e.postData.contents);var ss=SpreadsheetApp.openById(getPlanilha(getPasta()).getId());var aba=getMes(ss);if(!ss.getSheetByName("📊 Resumo"))criarResumo(ss);var p=aba.getLastRow()+1;aba.appendRow([p-1,d.data||hj(),d.hora||hr(),d.nome||"",d.telefone||"",d.email||"",d.especialidade||"",d.convenio||"",d.utm_source||"direto",d.utm_medium||"",d.utm_campaign||"",d.pagina||"",d.dispositivo||"","Novo Lead"]);fmtLinha(aba,p);return ContentService.createTextOutput(JSON.stringify({status:"ok",total:aba.getLastRow()-3})).setMimeType(ContentService.MimeType.JSON);}catch(e){return ContentService.createTextOutput(JSON.stringify({status:"erro",msg:e.toString()})).setMimeType(ContentService.MimeType.JSON);}}\n\n';
+  s+='function doGet(){try{var ss=SpreadsheetApp.openById(getPlanilha(getPasta()).getId());var d=new Date();var n=MESES[d.getMonth()]+" "+d.getFullYear();var a=ss.getSheetByName(n);var total=a?Math.max(0,a.getLastRow()-3):0;var url="https://drive.google.com/drive/folders/";var ps=DriveApp.getFoldersByName(CONFIG.nomePasta);if(ps.hasNext())url+=ps.next().getId();return ContentService.createTextOutput(JSON.stringify({status:"ok",total:total,driveUrl:url})).setMimeType(ContentService.MimeType.JSON);}catch(e){return ContentService.createTextOutput(JSON.stringify({status:"erro"})).setMimeType(ContentService.MimeType.JSON);}}\n\n';
+  s+='function criarAbaNovoMes(){getMes(SpreadsheetApp.openById(getPlanilha(getPasta()).getId()));}\n';
+  s+='function getPasta(){var p=DriveApp.getFoldersByName(CONFIG.nomePasta);return p.hasNext()?p.next():DriveApp.createFolder(CONFIG.nomePasta);}\n';
+  s+='function getPlanilha(pasta){var n="Leads — "+CONFIG.nomeCliente;var a=pasta.getFilesByName(n);if(a.hasNext())return SpreadsheetApp.openById(a.next().getId());var nv=SpreadsheetApp.create(n);var f=DriveApp.getFileById(nv.getId());pasta.addFile(f);DriveApp.getRootFolder().removeFile(f);return nv;}\n';
+  s+='function getMes(ss){var d=new Date();var n=MESES[d.getMonth()]+" "+d.getFullYear();var a=ss.getSheetByName(n);if(!a){var r=ss.getSheetByName("📊 Resumo");var p=r?ss.getSheets().indexOf(r):ss.getSheets().length;a=ss.insertSheet(n,p);cabecalho(a,n);}return a;}\n';
+  s+='function cabecalho(aba,mes){var C=[["#",32],["Data",88],["Hora",60],["Nome",180],["Celular",140],["E-mail",200],["Especialidade",200],["Convênio",155],["UTM Source",105],["UTM Medium",105],["UTM Campaign",145],["Página",270],["Dispositivo",100],["Status",130]];aba.setRowHeight(1,50);aba.getRange(1,1,1,C.length).merge().setValue("B.GO — "+CONFIG.nomeCliente.toUpperCase()).setBackground("#2D0A34").setFontColor("#FFF").setFontFamily("Arial").setFontSize(13).setFontWeight("bold").setHorizontalAlignment("center").setVerticalAlignment("middle");aba.setRowHeight(2,22);aba.getRange(2,1,1,C.length).merge().setValue("Leads do Site  |  "+mes).setBackground("#3D1545").setFontColor("#CCBBCC").setFontFamily("Arial").setFontSize(8).setHorizontalAlignment("center").setVerticalAlignment("middle");aba.setRowHeight(3,28);aba.getRange(3,1,1,C.length).setValues([C.map(function(c){return c[0];})]).setBackground("#F2EEF4").setFontColor("#2D0A34").setFontFamily("Arial").setFontSize(9).setFontWeight("bold").setHorizontalAlignment("center").setVerticalAlignment("middle").setWrap(true);for(var i=0;i<C.length;i++)aba.setColumnWidth(i+1,C[i][1]);aba.getRange(4,14,500,1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(["Novo Lead","Em Contato","Agendado","Não Atendeu","Fechado","Descartado"],true).build());aba.setFrozenRows(3);}\n';
+  s+='function fmtLinha(aba,l){aba.setRowHeight(l,20);aba.getRange(l,1,1,14).setBackground(l%2===0?"#FAF7FB":"#FFF").setFontFamily("Arial").setFontSize(9).setVerticalAlignment("middle");aba.getRange(l,1).setHorizontalAlignment("center");aba.getRange(l,14).setFontColor("#1A7A44").setFontWeight("bold").setBackground("#E6F4ED");}\n';
+  s+='function criarResumo(ss){var a=ss.insertSheet("📊 Resumo");a.getRange("A1:E1").merge().setValue("RESUMO — "+CONFIG.nomeCliente.toUpperCase()).setBackground("#2D0A34").setFontColor("#FFF").setFontFamily("Arial").setFontSize(13).setFontWeight("bold").setHorizontalAlignment("center").setVerticalAlignment("middle");}\n';
+  s+='function hj(){return Utilities.formatDate(new Date(),"America/Sao_Paulo","dd/MM/yyyy");}\n';
+  s+='function hr(){return Utilities.formatDate(new Date(),"America/Sao_Paulo","HH:mm");}\n';
+  s+='function testar(){doPost({postData:{contents:JSON.stringify({nome:"Teste",telefone:"(61) 99999-0000",email:"teste@bgo.com",utm_source:"google",dispositivo:"Mobile",pagina:"https://teste.com.br"})}});Logger.log("✅ Teste inserido.");}\n';
+  document.getElementById('codeApps').textContent=s;
 }
 
-// ═══════════════════════════════════════════════════
-// PASSOS
-// ═══════════════════════════════════════════════════
-function gerarPassos(nome, webhook, webhookOk, exibirEsp, exibirConv){
+// ── PASSOS ────────────────────────────────────────────────────────────
+function gerarPassos(nome,webhook,whOk,sl){
   var steps=[
-    {num:'1',tipo:'',titulo:'Abrir o Google Apps Script',corpo:'Acesse <a href="https://script.google.com" target="_blank" style="color:var(--roxo);font-weight:600">script.google.com</a> e clique em <strong>Novo projeto</strong>. Nomeie: <code>Widget B.GO — '+nome+'</code>',alerta:null},
-    {num:'2',tipo:'',titulo:'Colar o código e salvar',corpo:'Apague o código padrão, cole o conteúdo da aba <strong>⚙️ Apps Script</strong> e salve com <code>Ctrl+S</code>.',alerta:null},
-    {num:'3',tipo:'',titulo:'Executar configurarCliente()',corpo:'No menu de funções selecione <code>configurarCliente</code> e clique em <strong>▶ Executar</strong>. Na primeira vez autorize as permissões do Google.<br><br>Aguarde ~10s até ver no log: <code>✅ Configurado: '+nome+'</code>',alerta:'✅ Cria automaticamente a pasta "B.GO — Leads de Clientes" e a planilha "Leads — '+nome+'" no seu Drive.'},
-    {num:'4',tipo:'',titulo:'Publicar como Web App e copiar a URL',corpo:'Clique em <strong>Implantar → Nova implantação</strong>.<br>• Tipo: <code>App da Web</code><br>• Executar como: <code>Eu</code><br>• Acesso: <code>Qualquer pessoa</code><br><br>Clique em <strong>Implantar</strong>. Em <strong>App da Web → URL</strong> clique em <strong>Copiar</strong>.',alerta:null},
-    {num:'5',tipo:webhookOk?'done':'',titulo:webhookOk?'URL do webhook já configurada ✅':'Colar a URL e gerar novamente',corpo:webhookOk?'A URL já está no snippet. Próximo passo.':'Cole a URL no campo <strong>"URL do Google Apps Script"</strong> e clique em <strong>Gerar widget</strong> novamente.',alerta:null},
-    {num:'6',tipo:'auto',titulo:'Configurar o gatilho mensal',corpo:'Menu lateral <strong>⏰ Acionadores</strong> → role para baixo → <strong>+ Adicionar acionador</strong>.<br>• Função: <code>criarAbaNovoMes</code><br>• Implantação: <code>Versão 1</code><br>• Origem: <code>Baseado no tempo</code><br>• Tipo: <code>Contador de meses</code><br>• Dia: <code>1</code> | Hora: <code>0h às 1h</code><br><br>Clique em <strong>Salvar</strong>.',alerta:'🔄 Todo dia 1° do mês uma nova aba é criada automaticamente.'},
-    {num:'7',tipo:'',titulo:'Colar o snippet no site do cliente',corpo:'Copie o código da aba <strong>💻 Snippet do Site</strong>.',platform:true},
-    {num:'8',tipo:'',titulo:'Usar a URL compartilhável nos botões CTA',corpo:'Para botões de WhatsApp no site, use a URL compartilhável gerada acima.<br><br>Exemplo HTML: <code>&lt;a href="URL_AQUI"&gt;WhatsApp&lt;/a&gt;</code><br><br>Ou adicione <code>data-bgo-widget</code> em qualquer elemento: <code>&lt;button data-bgo-widget&gt;WhatsApp&lt;/button&gt;</code><br><br>Ambos abrem o formulário B.GO e capturam o lead antes de abrir o WhatsApp.',alerta:'✅ O formulário intercepta o clique, captura os dados e só então abre o WhatsApp — igual ao botão flutuante.'},
-    {num:'9',tipo:'done',titulo:'Testar e confirmar',corpo:'Acesse o site com <code>?utm_source=google&utm_medium=cpc&utm_campaign=teste-bgo</code> no final da URL.<br><br>Preencha o formulário com dados fictícios e confirme o lead na planilha do Drive em <strong>B.GO — Leads de Clientes → Leads — '+nome+'</strong>. ✅',alerta:null}
+    {n:'1',t:'',h:'Abrir o Google Apps Script',b:'Acesse <a href="https://script.google.com" target="_blank" style="color:var(--roxo);font-weight:600">script.google.com</a> → <strong>Novo projeto</strong>. Nomeie: <code>Widget B.GO — '+nome+'</code>'},
+    {n:'2',t:'',h:'Colar o código e salvar',b:'Apague tudo, cole o conteúdo da aba <strong>⚙️ Apps Script</strong> e salve com <code>Ctrl+S</code>.'},
+    {n:'3',t:'',h:'Executar configurarCliente()',b:'Selecione <code>configurarCliente</code> no menu e clique em <strong>▶ Executar</strong>. Na primeira vez autorize as permissões. Aguarde o log: <code>✅ '+nome+'</code>',sa:'g',sm:'✅ Cria a pasta "B.GO — Leads de Clientes" e a planilha "Leads — '+nome+'" no Drive automaticamente.'},
+    {n:'4',t:'',h:'Publicar como Web App',b:'<strong>Implantar → Nova implantação</strong> → Tipo: <code>App da Web</code> → Executar como: <code>Eu</code> → Acesso: <code>Qualquer pessoa</code> → Implantar → copie a <strong>URL</strong>.'},
+    {n:'5',t:whOk?'done':'',h:whOk?'URL já configurada ✅':'Colar a URL e gerar novamente',b:whOk?'URL já está no snippet. Próximo passo.':'Cole a URL no campo <strong>"URL do Google Apps Script"</strong> e clique em <strong>Gerar widget</strong> novamente.'},
+    {n:'6',t:'auto',h:'Configurar gatilho mensal',b:'Menu ⏰ <strong>Acionadores</strong> → <strong>+ Adicionar acionador</strong>:<br>• Função: <code>criarAbaNovoMes</code><br>• Implantação: <code>Versão 1</code><br>• Tipo: <code>Contador de meses</code><br>• Dia: <code>1</code> | Hora: <code>0h–1h</code> → Salvar',sa:'b',sm:'🔄 Nova aba criada automaticamente todo dia 1° do mês.'},
+    {n:'7',t:'',h:'Colar snippet no site',b:'Copie da aba <strong>💻 Snippet</strong> e cole antes do <code>&lt;/body&gt;</code>.',plat:true},
+    {n:'8',t:'',h:'Subir página de URL limpa no GitHub',b:'Clique em <strong>⬇️ Baixar página do cliente</strong> acima. Suba o arquivo baixado na pasta <code>wa/</code> do repositório <code>agente-bgo</code>.<br>URL final: <code>bgomarketingmedico.github.io/agente-bgo/wa/'+sl+'</code>',sa:'g',sm:'✅ Cole essa URL em qualquer botão "WhatsApp" do site do cliente.'},
+    {n:'9',t:'done',h:'Testar',b:'Acesse o site com <code>?utm_source=google&amp;utm_medium=cpc&amp;utm_campaign=teste</code>. Preencha o formulário e confirme o lead na planilha do Drive. ✅'}
   ];
-  var ul=document.getElementById('stepsGuia');
-  ul.innerHTML=steps.map(function(s,idx){
-    var isLast=idx===steps.length-1;
-    var nc='step-num'+(s.tipo==='done'?' done':s.tipo==='auto'?' auto':'');
-    var numTxt=s.tipo==='done'&&s.num!=='5'?'✓':s.num;
-    var badge=s.tipo==='auto'?'<span class="badge-auto">🔄 automático</span>':'';
-    var alertH=s.alerta?'<div class="step-alert'+(s.alerta.startsWith('✅')?' verde':s.alerta.startsWith('🔄')?' roxo':'')+'">'+s.alerta+'</div>':'';
-    var platH='';
-    if(s.platform){
-      platH='<div class="platform-tabs"><div class="ptab active" data-group="p'+idx+'" data-name="wix" onclick="showPtab(\'p'+idx+'\',\'wix\')">Wix</div><div class="ptab" data-group="p'+idx+'" data-name="wp" onclick="showPtab(\'p'+idx+'\',\'wp\')">WordPress</div><div class="ptab" data-group="p'+idx+'" data-name="html" onclick="showPtab(\'p'+idx+'\',\'html\')">HTML puro</div></div>'
-      +'<div class="ptab-content active" data-group="p'+idx+'" data-name="wix">Acesse <strong>manage.wix.com</strong> → <strong>Configurações → Código personalizado</strong> → <strong>+ Adicionar</strong>. Cole o snippet, selecione <strong>Todas as páginas</strong>, local <strong>Corpo — fim</strong>. Clique em <strong>Aplicar</strong> e <strong>Publique o site</strong>. ⚠️ Sem publicar o botão não aparece.</div>'
-      +'<div class="ptab-content" data-group="p'+idx+'" data-name="wp">Instale o plugin <strong>WPCode</strong> (gratuito) → <strong>Code Snippets → + Adicionar → HTML</strong>. Cole o código, ative e salve.</div>'
-      +'<div class="ptab-content" data-group="p'+idx+'" data-name="html">Abra o HTML do site, localize <code>&lt;/body&gt;</code> no final e cole o snippet imediatamente antes. Salve e faça o upload.</div>';
+  var ul=document.getElementById('stepsList');
+  ul.innerHTML=steps.map(function(s,i){
+    var isLast=i===steps.length-1;
+    var nc='sn'+(s.t==='done'?' done':s.t==='auto'?' auto':'');
+    var nt=s.t==='done'&&s.n!=='5'?'✓':s.n;
+    var badge=s.t==='auto'?'<span class="badge-auto">🔄 auto</span>':'';
+    var alert_=s.sa?'<div class="sa sa-'+(s.sa==='g'?'g':'b')+'">'+s.sm+'</div>':'';
+    var plat='';
+    if(s.plat){
+      var g='pg'+i;
+      plat='<div class="ptabs">'
+        +'<div class="ptab active" data-pg="'+g+'" data-pn="wix" onclick="showPtab(\''+g+'\',\'wix\')">Wix</div>'
+        +'<div class="ptab" data-pg="'+g+'" data-pn="wp" onclick="showPtab(\''+g+'\',\'wp\')">WordPress</div>'
+        +'<div class="ptab" data-pg="'+g+'" data-pn="html" onclick="showPtab(\''+g+'\',\'html\')">HTML puro</div>'
+        +'</div>'
+        +'<div class="ptc active" data-tg="'+g+'" data-tn="wix"><strong>manage.wix.com</strong> → Configurações → Código personalizado → + Adicionar → cole o snippet → Todas as páginas → Corpo — fim → Aplicar → <strong>Publicar</strong>. ⚠️ Sem publicar o botão não aparece.</div>'
+        +'<div class="ptc" data-tg="'+g+'" data-tn="wp">Plugin <strong>WPCode</strong> (gratuito) → Code Snippets → + Adicionar → HTML → cole → ative → salve.</div>'
+        +'<div class="ptc" data-tg="'+g+'" data-tn="html">Abra o HTML, localize <code>&lt;/body&gt;</code> e cole antes. Salve e faça upload.</div>';
     }
-    return '<li class="step-item"><div class="step-left"><div class="'+nc+'">'+numTxt+'</div>'+(isLast?'':'<div class="step-line"></div>')+'</div><div class="step-body"><h3>'+s.titulo+badge+'</h3><p>'+s.corpo+'</p>'+alertH+platH+'</div></li>';
+    return '<li class="si"><div class="sl"><div class="'+nc+'">'+nt+'</div>'+(isLast?'':'<div class="sline"></div>')+'</div><div class="sb"><h3>'+s.h+badge+'</h3><p>'+s.b+'</p>'+alert_+plat+'</div></li>';
   }).join('');
 }
 
-// ═══════════════════════════════════════════════════
-// DASHBOARD — renderiza cards dos clientes
-// ═══════════════════════════════════════════════════
-function renderDashboard(){
-  var clientes=getClientes();
-  var grid=document.getElementById('clientesGrid');
-  if(!clientes.length){
-    grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="icon">🏥</div><h3>Nenhum cliente ainda</h3><p>Clique em <strong>"＋ Novo Cliente"</strong> para gerar o primeiro widget.</p></div>';
+// ── BAIXAR PÁGINA CLIENTE ─────────────────────────────────────────────
+function baixarPagina(){
+  var nome    =document.getElementById('nomeCliente').value.trim();
+  var wa      =document.getElementById('whatsapp').value.trim().replace(/\D/g,'');
+  var msg     =document.getElementById('mensagemWA').value.trim();
+  var webhook =document.getElementById('webhookUrl').value.trim()||'';
+  var cor1    =document.getElementById('corPrincipal').value;
+  var titulo  =document.getElementById('tituloModal').value.trim();
+  var sub     =document.getElementById('subtituloModal').value.trim();
+  var esp     =document.getElementById('exibirEsp').checked;
+  var conv    =document.getElementById('exibirConv').checked;
+  var sl      =slug(nome);
+
+  var xH='';
+  if(esp)xH+='<div class="field"><label>Especialidade / Tratamento</label><input type="text" id="f_esp" placeholder="Ex: Varizes..."></div>';
+  if(conv)xH+='<div class="field"><label>Particular ou Convênio?</label><select id="f_conv"><option value="">Selecione…</option><option>Particular</option><option>Convênio</option><option>Não sei ainda</option></select></div>';
+
+  var html='<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n<title>WhatsApp — '+nome+'</title>\n<meta name="robots" content="noindex">\n<style>\n*{box-sizing:border-box;margin:0;padding:0}\nbody{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f7f5f9;min-height:100vh;display:flex;align-items:center;justify-content:center}\n.w{width:100%;max-width:420px;margin:14px;animation:up .3s ease}\n@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}\n.m{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(45,10,52,.14)}\n.hd{background:'+cor1+';padding:18px 18px 14px;display:flex;align-items:flex-start;gap:11px}\n.hd svg{width:25px;height:25px;fill:#fff;flex-shrink:0;margin-top:2px}\n.hd h2{color:#fff;font-size:1rem;font-weight:700;margin:0 0 2px}\n.hd p{color:rgba(255,255,255,.8);font-size:.78rem;margin:0}\n.bd{padding:18px}\n.field{margin-bottom:12px}\n.field label{display:block;font-size:.74rem;font-weight:700;color:#444;margin-bottom:4px}\n.field input,.field select{width:100%;border:1.5px solid #ddd;border-radius:8px;padding:9px 11px;font-size:.86rem;font-family:inherit;outline:none;color:#111;background:#fafafa}\n.field input:focus,.field select:focus{border-color:'+cor1+'}\n.btn{width:100%;padding:12px;background:'+cor1+';color:#fff;border:none;border-radius:9px;font-size:.92rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:inherit;margin-top:5px}\n.btn svg{width:16px;height:16px;fill:#fff}\n.btn:disabled{opacity:.6;cursor:default}\n.err{color:#c0392b;font-size:.75rem;margin-top:6px;display:none}\n.ok{display:none;text-align:center;padding:26px 0 12px}\n.ok svg{width:50px;height:50px;margin-bottom:8px}\n.ok h3{color:#222;font-size:.98rem;margin:0 0 5px}\n.ok p{color:#777;font-size:.82rem}\n.lgpd{font-size:.68rem;color:#aaa;text-align:center;margin-top:10px;line-height:1.4}\n.pw{text-align:center;margin-top:13px;font-size:11px;color:#aaa}\n.pw a{color:#8B5A9A;text-decoration:none;font-weight:600}\n</style>\n</head>\n<body>\n<div class="w">\n<div class="m">\n<div class="hd"><svg viewBox="0 0 24 24"><path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/></svg><div><h2>'+titulo+'</h2><p>'+sub+'</p></div></div>\n<div class="bd">\n<div id="fa">\n<div class="field"><label>Nome completo *</label><input type="text" id="nm" placeholder="João Silva" autocomplete="name"></div>\n<div class="field"><label>Celular / WhatsApp *</label><input type="tel" id="tel" placeholder="(61) 99999-0000" autocomplete="tel"></div>\n<div class="field"><label>E-mail *</label><input type="email" id="em" placeholder="joao@email.com" autocomplete="email"></div>\n'+xH+'\n<div class="err" id="err">⚠️ Preencha nome, celular e e-mail.</div>\n<button class="btn" id="btn"><svg viewBox="0 0 24 24"><path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/></svg> Iniciar conversa no WhatsApp</button>\n<div class="lgpd">Seus dados são usados apenas para entrar em contato. Não enviamos spam.</div>\n</div>\n<div class="ok" id="ok"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E6F4ED"/><path d="M7 12.5l3.5 3.5 6.5-7" stroke="#1A7A44" stroke-width="2" fill="none" stroke-linecap="round"/></svg><h3>Tudo certo! 🎉</h3><p>Abrindo o WhatsApp…</p></div>\n</div>\n</div>\n<div class="pw">Powered by <a href="https://bgomarketingmedico.com.br" target="_blank">B.GO Marketing Médico</a></div>\n</div>\n<script>\nvar W="'+wa+'",H="'+webhook.replace(/"/g,'\\"')+'",M="'+msg.replace(/"/g,'\\"')+'";\nvar p=new URLSearchParams(window.location.search);\nfunction utms(){return{utm_source:p.get("utm_source")||"direto",utm_medium:p.get("utm_medium")||"",utm_campaign:p.get("utm_campaign")||"",pagina:document.referrer||location.href,dispositivo:/Mobi|Android/i.test(navigator.userAgent)?"Mobile":"Desktop"};}\ndocument.getElementById("btn").onclick=function(){\nvar nm=document.getElementById("nm").value.trim();\nvar tel=document.getElementById("tel").value.trim();\nvar em=document.getElementById("em").value.trim();\nif(!nm||!tel||!em||!/\\\\S+@\\\\S+\\\\.\\\\S+/.test(em)){document.getElementById("err").style.display="block";return;}\ndocument.getElementById("err").style.display="none";\nvar btn=document.getElementById("btn");btn.disabled=true;btn.textContent="Enviando…";\nvar espEl=document.getElementById("f_esp");var convEl=document.getElementById("f_conv");\nvar pl=Object.assign({data:new Date().toLocaleDateString("pt-BR"),hora:new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),nome:nm,telefone:tel,email:em,especialidade:espEl?espEl.value:"",convenio:convEl?convEl.value:""},utms());\nif(H)fetch(H,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(pl)}).catch(function(){});\nsetTimeout(function(){document.getElementById("fa").style.display="none";document.getElementById("ok").style.display="block";var mf=M.replace("{{nome}}",nm);setTimeout(function(){window.location.href="https://wa.me/"+W+"?text="+encodeURIComponent(mf);},800);},600);\n};\n<\/script>\n</body>\n</html>';
+
+  var b=new Blob([html],{type:'text/html'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=sl+'.html';a.click();URL.revokeObjectURL(a.href);
+  document.getElementById('instrGithub').style.display='block';
+  document.getElementById('btnBaixar').textContent='✓ Baixado! Suba na pasta wa/ do GitHub';
+  document.getElementById('btnBaixar').style.background='#1A7A44';
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────
+function renderDash(){
+  var cl=getClientes();
+  var g=document.getElementById('clientesGrid');
+  if(!cl.length){
+    g.innerHTML='<div class="empty"><div class="ei">🏥</div><h3>Nenhum cliente ainda</h3><p>Clique em <strong>"＋ Novo Cliente"</strong> para começar.</p></div>';
     return;
   }
-  grid.innerHTML=clientes.map(function(c,i){
-    return '<div class="cliente-card" id="card-'+i+'">'
-      +'<div class="cliente-card-top">'
-        +'<div class="cliente-avatar">🏥</div>'
-        +'<div><div class="cliente-nome">'+c.nome+'</div><div class="cliente-wa">+'+c.wa+'</div></div>'
+  g.innerHTML=cl.map(function(c,i){
+    var acoes=c.webhook&&c.webhook.indexOf('SEU_ID')<0
+      ?'<button class="btn btn-roxo btn-sm" onclick="abrirDrive(\''+i+'\')">📁 Abrir no Drive</button>'
+      :'<div style="font-size:11px;color:var(--muted);text-align:center;padding:6px">Configure a URL do Apps Script</div>';
+    return '<div class="cc">'
+      +'<div class="cc-top"><div class="cc-av">🏥</div><div><div class="cc-nome">'+c.nome+'</div><div class="cc-wa">+'+c.wa+'</div></div></div>'
+      +'<div class="cc-body">'
+      +'<div class="cnt-row">'
+        +'<div class="cnt-box"><div class="cnt-num" id="cnt-'+i+'"><span style="font-size:12px;color:var(--muted)">...</span></div><div class="cnt-lbl">LEADS ESTE MÊS</div></div>'
+        +'<div class="cnt-div"></div>'
+        +'<div class="cnt-box"><div class="cnt-num" style="font-size:13px;color:var(--muted)">'+mesAtual()+'</div><div class="cnt-lbl">MÊS ATUAL</div></div>'
       +'</div>'
-      +'<div class="cliente-card-body">'
-        +'<div class="counter-row">'
-          +'<div class="counter-box"><div class="counter-num" id="leads-'+i+'"><span style="font-size:13px;color:var(--muted)">...</span></div><div class="counter-label">LEADS ESTE MÊS</div></div>'
-          +'<div class="counter-divider"></div>'
-          +'<div class="counter-box"><div class="counter-num" style="font-size:13px;color:var(--muted)">'+getMesAtual()+'</div><div class="counter-label">MÊS ATUAL</div></div>'
-        +'</div>'
-        +'<div class="cliente-actions">'
-          +(c.webhook&&c.webhook.indexOf('SEU_DEPLOYMENT')<0
-            ? '<button class="btn btn-roxo btn-sm" onclick="exportarLeads(\''+i+'\',\''+c.nome+'\',\''+c.webhook+'\')">⬇️ Exportar leads do mês</button>'
-                +'<button class="btn btn-outline btn-sm" onclick="abrirDrive(\''+i+'\',\''+c.webhook+'\')">📁 Abrir pasta no Drive</button>'
-            : '<div style="font-size:11px;color:var(--muted);text-align:center;padding:8px">Configure a URL do Apps Script para habilitar exportação</div>'
-          )
-          +'<button class="btn btn-sm" style="background:var(--roxo-light);color:var(--roxo)" onclick="editarCliente(\''+i+'\')">✏️ Editar / Ver snippet</button>'
-        +'</div>'
-      +'</div>'
-    +'</div>';
+      +'<div class="cc-actions">'+acoes+'<button class="btn btn-outline btn-sm" onclick="editarCliente(\''+i+'\')">✏️ Editar / Ver snippet</button></div>'
+      +'</div></div>';
   }).join('');
-
-  // Busca contadores em tempo real
-  clientes.forEach(function(c,i){
-    if(c.webhook&&c.webhook.indexOf('SEU_DEPLOYMENT')<0){
-      buscarLeads(c.webhook, i);
-    } else {
-      document.getElementById('leads-'+i).innerHTML='<span style="font-size:12px;color:var(--muted)">—</span>';
-    }
+  cl.forEach(function(c,i){
+    if(c.webhook&&c.webhook.indexOf('SEU_ID')<0)buscarLeads(c.webhook,i);
+    else document.getElementById('cnt-'+i).innerHTML='<span style="font-size:12px;color:var(--muted)">—</span>';
   });
 }
 
-function getMesAtual(){
-  var m=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  var d=new Date();
-  return m[d.getMonth()]+'/'+d.getFullYear();
+function buscarLeads(wh,i){
+  fetch(wh).then(function(r){return r.json();}).then(function(d){
+    var el=document.getElementById('cnt-'+i);if(el)el.textContent=typeof d.total!=='undefined'?d.total:'—';
+  }).catch(function(){var el=document.getElementById('cnt-'+i);if(el)el.innerHTML='<span style="font-size:12px;color:var(--muted)">—</span>';});
 }
 
-function buscarLeads(webhook, idx){
-  fetch(webhook)
-    .then(function(r){return r.json();})
-    .then(function(data){
-      var el=document.getElementById('leads-'+idx);
-      if(el) el.textContent=data.total||'0';
-    })
-    .catch(function(){
-      var el=document.getElementById('leads-'+idx);
-      if(el) el.innerHTML='<span style="font-size:12px;color:var(--muted)">—</span>';
-    });
+function abrirDrive(i){
+  var c=getClientes()[i];if(!c)return;
+  fetch(c.webhook).then(function(r){return r.json();}).then(function(d){
+    window.open(d.driveUrl||'https://drive.google.com','_blank');
+  }).catch(function(){window.open('https://drive.google.com','_blank');});
 }
 
-function exportarLeads(idx, nome, webhook){
-  var btn=event.target;
-  btn.textContent='Carregando...';btn.disabled=true;
-  fetch(webhook)
-    .then(function(r){return r.json();})
-    .then(function(data){
-      // Abre a planilha diretamente — o usuário exporta de lá
-      if(data.driveUrl){
-        window.open(data.driveUrl,'_blank');
-      } else {
-        alert('Abra o Google Drive e acesse:\nB.GO — Leads de Clientes → Leads — '+nome+'\n\nDe lá você pode exportar como Excel ou CSV.');
-      }
-      btn.textContent='⬇️ Exportar leads do mês';btn.disabled=false;
-    })
-    .catch(function(){
-      alert('Não foi possível conectar. Verifique se o Apps Script está publicado corretamente.');
-      btn.textContent='⬇️ Exportar leads do mês';btn.disabled=false;
-    });
-}
-
-function abrirDrive(idx, webhook){
-  fetch(webhook)
-    .then(function(r){return r.json();})
-    .then(function(data){
-      if(data.driveUrl) window.open(data.driveUrl,'_blank');
-      else window.open('https://drive.google.com','_blank');
-    })
-    .catch(function(){ window.open('https://drive.google.com','_blank'); });
-}
-
-function editarCliente(idx){
-  var c=getClientes()[idx];
-  if(!c)return;
+function editarCliente(i){
+  var c=getClientes()[i];if(!c)return;
   document.getElementById('nomeCliente').value=c.nome;
   document.getElementById('whatsapp').value=c.wa;
   document.getElementById('webhookUrl').value=c.webhook||'';
   document.getElementById('corPrincipal').value=c.cor||'#25D366';
-  showPage('criar');
-  window.scrollTo(0,0);
+  showPage('criar');window.scrollTo(0,0);
 }
 
 // Init
-renderDashboard();
+renderDash();
 </script>
 </body>
 </html>
