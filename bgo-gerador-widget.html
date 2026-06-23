@@ -356,10 +356,10 @@ function copiarURL(){
 }
 
 function slugify(str){
-  return str.toLowerCase()
-    .normalize('NFD').replace(/[̀-ͯ]/g,'')
-    .replace(/[^a-z0-9]+/g,'-')
-    .replace(/^-+|-+$/g,'');
+  var s=str.toLowerCase();
+  var map={'a':['á','à','ã','â'],'e':['é','ê'],'i':['í'],'o':['ó','ô','õ'],'u':['ú','ü'],'c':['ç'],'n':['ñ']};
+  for(var k in map){map[k].forEach(function(v){s=s.split(v).join(k);});}
+  return s.replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
 }
 
 function baixarPaginaCliente(){
@@ -500,11 +500,11 @@ function gerarWidget(){
 
   // URL limpa — baseada no slug do cliente
   function slugify(str){
-    return str.toLowerCase()
-      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-      .replace(/[^a-z0-9]+/g,'-')
-      .replace(/^-+|-+$/g,'');
-  }
+  var s=str.toLowerCase();
+  var map={'a':['á','à','ã','â'],'e':['é','ê'],'i':['í'],'o':['ó','ô','õ'],'u':['ú','ü'],'c':['ç'],'n':['ñ']};
+  for(var k in map){map[k].forEach(function(v){s=s.split(v).join(k);});}
+  return s.replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+}
   var slug = slugify(nome);
   var urlShare = 'https://bgomarketingmedico.github.io/agente-bgo/wa/'+slug;
 
