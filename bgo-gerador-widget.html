@@ -548,19 +548,19 @@ function gerarSnippet(nome,wa,msg,wh,cor1,cor2,titulo,sub,esp,conv,cfs){
   // Monta lista de campos extras para o snippet
   var extraFieldsCode = '';
   if(esp){
-    extraFieldsCode += "\n  addField(form,'bgo_esp','Especialidade / Tratamento','text','Ex: Varizes, Botox…',false);";
+    extraFieldsCode += "\n  addField(fa,'bgo_esp','Especialidade / Tratamento','text','Ex: Varizes, Botox…',false);";
   }
   if(conv){
-    extraFieldsCode += "\n  addSelect(form,'bgo_conv','Particular ou Convênio?',['Particular','Convênio','Não sei ainda']);";
+    extraFieldsCode += "\n  addSelect(fa,'bgo_conv','Particular ou Convênio?',['Particular','Convênio','Não sei ainda']);";
   }
   (cfs||[]).forEach(function(f){
     if(f.tipo==='select'){
       var opts = f.opts.split(',').map(function(o){return o.trim();}).filter(Boolean);
-      extraFieldsCode += "\n  addSelect(form,'"+f.id+"','"+f.label.replace(/'/g,"\\'")+"',"+JSON.stringify(opts)+");";
+      extraFieldsCode += "\n  addSelect(fa,'"+f.id+"','"+f.label.replace(/'/g,"\\'")+"',"+JSON.stringify(opts)+");";
     } else if(f.tipo==='textarea') {
-      extraFieldsCode += "\n  addTextarea(form,'"+f.id+"','"+f.label.replace(/'/g,"\\'")+'\');';
+      extraFieldsCode += "\n  addTextarea(fa,'"+f.id+"','"+f.label.replace(/'/g,"\\'")+'\');';
     } else {
-      extraFieldsCode += "\n  addField(form,'"+f.id+"','"+f.label.replace(/'/g,"\\'")+"','"+f.tipo+"','',false);";
+      extraFieldsCode += "\n  addField(fa,'"+f.id+"','"+f.label.replace(/'/g,"\\'")+"','"+f.tipo+"','',false);";
     }
   });
 
