@@ -3,504 +3,984 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>B.GO — Gerador de Widget WhatsApp</title>
+<title>B.GO — Widget WhatsApp</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --roxo:#2D0A34;--roxo-med:#3D1545;--roxo-light:#F2EEF4;--roxo-mid:#8B5A9A;
-  --verde:#25D366;--verde-dark:#1A9E50;
-  --bg:#F7F5F9;--surface:#fff;--border:#E2D9E8;
-  --text:#1A0A1E;--muted:#6B5878;--radius:10px;
-  --shadow:0 2px 12px rgba(45,10,52,.08);
+  --roxo:#2D0A34;--roxo2:#3D1545;--roxo3:#5A1F6E;
+  --roxo-light:#F2EEF4;--roxo-mid:#8B5A9A;--roxo-border:#C9A8D8;
+  --verde:#25D366;--verde2:#1DA851;
+  --bg:#F4F0F7;--surface:#fff;--border:#E2D9E8;
+  --text:#1A0A1E;--muted:#6B5878;--hint:#9B85A8;
+  --r8:8px;--r12:12px;--r16:16px;
+  --sh:0 2px 12px rgba(45,10,52,.08);
+  --sh2:0 4px 24px rgba(45,10,52,.13);
 }
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-header{background:var(--roxo);padding:16px 28px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100}
-.logo-mark{width:36px;height:36px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:var(--roxo);flex-shrink:0}
-.logo-text{color:#fff}
-.logo-text strong{display:block;font-size:14px;font-weight:700}
-.logo-text span{font-size:10px;opacity:.6}
-.header-nav{margin-left:auto;display:flex;gap:4px}
-.nav-btn{background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.15);border-radius:7px;padding:7px 13px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
-.nav-btn:hover,.nav-btn.active{background:rgba(255,255,255,.22)}
-.page{display:none;max-width:960px;margin:0 auto;padding:28px 20px}
-.page.active{display:block}
-.card{background:var(--surface);border-radius:14px;border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;margin-bottom:20px}
-.ch{background:var(--roxo-light);padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.ch-icon{width:26px;height:26px;background:var(--roxo);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.ch h2{font-size:13px;font-weight:600;color:var(--roxo)}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* ── HEADER ── */
+header{background:var(--roxo);padding:0 28px;height:56px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.25)}
+.logo{width:34px;height:34px;background:#fff;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;color:var(--roxo);flex-shrink:0;letter-spacing:-1px}
+.logo-txt{color:#fff}
+.logo-txt strong{display:block;font-size:14px;font-weight:700;line-height:1.2}
+.logo-txt span{font-size:10px;opacity:.55;letter-spacing:.05em}
+.hnav{margin-left:auto;display:flex;gap:6px}
+.nbtn{background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.12);border-radius:var(--r8);padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:6px}
+.nbtn:hover,.nbtn.on{background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.3)}
+
+/* ── PAGES ── */
+.pg{display:none;max-width:1020px;margin:0 auto;padding:28px 20px}
+.pg.on{display:block}
+
+/* ── DASHBOARD ── */
+.dash-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.dash-top h1{font-size:20px;font-weight:700;color:var(--text)}
+.dash-top p{font-size:12px;color:var(--muted);margin-top:3px}
+
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+.stat-card{background:var(--surface);border-radius:var(--r12);border:1px solid var(--border);padding:16px 18px;box-shadow:var(--sh)}
+.stat-card .sv{font-size:28px;font-weight:800;color:var(--roxo);line-height:1}
+.stat-card .sl{font-size:11px;font-weight:600;color:var(--muted);margin-top:4px;letter-spacing:.03em}
+.stat-card .si{font-size:22px;margin-bottom:6px}
+
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.cc{background:var(--surface);border-radius:var(--r16);border:1px solid var(--border);box-shadow:var(--sh);overflow:hidden;transition:box-shadow .2s,transform .15s}
+.cc:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
+.cc-hd{padding:18px;background:linear-gradient(135deg,var(--roxo),var(--roxo3));position:relative;overflow:hidden}
+.cc-hd::after{content:"";position:absolute;right:-20px;top:-20px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.06)}
+.cc-hd::before{content:"";position:absolute;right:20px;bottom:-30px;width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.04)}
+.cc-nome{color:#fff;font-size:14px;font-weight:700;line-height:1.3;margin-bottom:3px}
+.cc-wa{color:rgba(255,255,255,.6);font-size:11px;display:flex;align-items:center;gap:4px}
+.cc-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.15);color:rgba(255,255,255,.9);font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;margin-top:8px;backdrop-filter:blur(4px)}
+.cc-body{padding:16px}
+.cc-cnt{display:flex;align-items:center;gap:0;margin-bottom:14px;background:var(--roxo-light);border-radius:var(--r8);padding:12px 16px}
+.cc-cnt-main{flex:1}
+.cc-cnt-num{font-size:32px;font-weight:800;color:var(--roxo);line-height:1}
+.cc-cnt-lbl{font-size:10px;font-weight:700;color:var(--muted);margin-top:2px;letter-spacing:.04em}
+.cc-cnt-mes{text-align:right;font-size:11px;color:var(--hint);line-height:1.4}
+.cc-cnt-mes strong{display:block;font-size:13px;font-weight:700;color:var(--roxo-mid)}
+.cc-acts{display:flex;flex-direction:column;gap:6px}
+.ca{display:flex;align-items:center;gap:7px;padding:8px 12px;border-radius:var(--r8);font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .15s;text-align:left;width:100%}
+.ca-roxo{background:var(--roxo);color:#fff}
+.ca-roxo:hover{background:var(--roxo2)}
+.ca-outline{background:transparent;color:var(--roxo);border:1.5px solid var(--roxo-border)}
+.ca-outline:hover{background:var(--roxo-light)}
+.ca-ghost{background:var(--bg);color:var(--muted);border:1px solid var(--border)}
+.ca-ghost:hover{background:var(--roxo-light);color:var(--roxo)}
+.ca svg{width:14px;height:14px;flex-shrink:0}
+
+.empty-dash{text-align:center;padding:60px 20px;grid-column:1/-1}
+.empty-dash .ei{font-size:52px;margin-bottom:16px;opacity:.6}
+.empty-dash h3{font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px}
+.empty-dash p{font-size:13px;color:var(--muted);line-height:1.6;max-width:340px;margin:0 auto}
+
+/* ── CRIAR ── */
+.criar-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:720px){.criar-grid{grid-template-columns:1fr}}
+
+.card{background:var(--surface);border-radius:var(--r16);border:1px solid var(--border);box-shadow:var(--sh);overflow:hidden;margin-bottom:20px}
+.card-last{margin-bottom:0}
+.ch{background:var(--roxo-light);padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.ch-ico{width:28px;height:28px;background:var(--roxo);border-radius:var(--r8);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.ch h2{font-size:13px;font-weight:700;color:var(--roxo)}
 .ch p{font-size:11px;color:var(--muted);margin-top:1px}
-.cb{padding:18px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-@media(max-width:700px){.grid2{grid-template-columns:1fr}}
-.field{margin-bottom:13px}
-label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:4px}
-.req{color:#c0392b}
-input[type=text],input[type=tel],input[type=url],input[type=color],select{
-  width:100%;border:1.5px solid var(--border);border-radius:var(--radius);
-  padding:9px 11px;font-size:13px;font-family:inherit;color:var(--text);
-  background:var(--surface);outline:none;transition:border-color .15s}
-input:focus,select:focus{border-color:var(--roxo-mid);box-shadow:0 0 0 3px rgba(139,90,154,.1)}
-input[type=color]{height:40px;padding:4px 8px;cursor:pointer}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.hint{font-size:11px;color:var(--muted);margin-top:3px}
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border)}
-.toggle-row:last-child{border-bottom:none}
-.tl{font-size:13px;color:var(--text)}
-.ts{font-size:11px;color:var(--muted);margin-top:1px}
-.toggle{position:relative;width:36px;height:20px;flex-shrink:0}
-.toggle input{opacity:0;width:0;height:0;position:absolute}
-.slider{position:absolute;inset:0;background:#D0C8D8;border-radius:20px;cursor:pointer;transition:background .2s}
-.slider::after{content:"";position:absolute;width:14px;height:14px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
-.toggle input:checked+.slider{background:var(--verde)}
-.toggle input:checked+.slider::after{transform:translateX(16px)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 16px;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .15s;text-decoration:none}
+.cb{padding:20px}
+
+.fld{margin-bottom:15px}
+.fld:last-child{margin-bottom:0}
+.fld label{display:block;font-size:11.5px;font-weight:700;color:var(--muted);margin-bottom:5px;letter-spacing:.02em}
+.fld label .req{color:#e74c3c}
+.fld input[type=text],.fld input[type=tel],.fld input[type=url],.fld input[type=color],.fld select,.fld textarea{
+  width:100%;border:1.5px solid var(--border);border-radius:var(--r8);padding:9px 12px;
+  font-size:13px;font-family:inherit;color:var(--text);background:var(--surface);
+  outline:none;transition:border-color .15s,box-shadow .15s}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--roxo-mid);box-shadow:0 0 0 3px rgba(139,90,154,.1)}
+.fld input[type=color]{height:42px;padding:4px 8px;cursor:pointer}
+.fld-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fld-hint{font-size:11px;color:var(--hint);margin-top:4px;line-height:1.4}
+
+.tgl-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.tgl-row:last-child{border-bottom:none;padding-bottom:0}
+.tgl-lbl{font-size:13px;color:var(--text);font-weight:500}
+.tgl-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.tgl{position:relative;width:38px;height:22px;flex-shrink:0}
+.tgl input{opacity:0;width:0;height:0;position:absolute}
+.tgl-sl{position:absolute;inset:0;background:#D0C8D8;border-radius:22px;cursor:pointer;transition:background .2s}
+.tgl-sl::after{content:"";position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.tgl input:checked+.tgl-sl{background:var(--verde)}
+.tgl input:checked+.tgl-sl::after{transform:translateX(16px)}
+
+/* Campos personalizados */
+.custom-fields-list{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.cf-item{display:flex;align-items:center;gap:8px;background:var(--bg);border-radius:var(--r8);padding:9px 12px;border:1px solid var(--border)}
+.cf-item-info{flex:1}
+.cf-item-label{font-size:12px;font-weight:600;color:var(--text)}
+.cf-item-type{font-size:10px;color:var(--muted);margin-top:1px}
+.cf-del{background:none;border:none;cursor:pointer;color:var(--hint);font-size:16px;padding:2px 4px;border-radius:4px;transition:color .15s;flex-shrink:0;line-height:1}
+.cf-del:hover{color:#e74c3c}
+
+.add-field-form{background:var(--bg);border-radius:var(--r8);padding:12px;border:1px dashed var(--roxo-border);margin-top:8px}
+.add-field-form .fld{margin-bottom:10px}
+
+/* ── BTNS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 18px;border-radius:var(--r8);font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:inherit;transition:all .15s}
 .btn-roxo{background:var(--roxo);color:#fff}
-.btn-roxo:hover{background:var(--roxo-med)}
+.btn-roxo:hover{background:var(--roxo2);transform:translateY(-1px)}
 .btn-verde{background:var(--verde);color:#fff}
-.btn-verde:hover{background:var(--verde-dark)}
-.btn-outline{background:transparent;color:var(--roxo);border:1.5px solid var(--roxo)}
+.btn-verde:hover{background:var(--verde2)}
+.btn-outline{background:transparent;color:var(--roxo);border:1.5px solid var(--roxo-border)}
 .btn-outline:hover{background:var(--roxo-light)}
-.btn-sm{padding:6px 11px;font-size:12px}
+.btn-sm{padding:7px 13px;font-size:12px}
 .btn-full{width:100%;padding:13px}
-.tabs{display:flex;border-bottom:1px solid var(--border);padding:0 18px;gap:2px;overflow-x:auto}
-.tab{padding:10px 12px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap}
-.tab.active{color:var(--roxo);border-bottom-color:var(--roxo)}
-.tc{display:none;padding:18px}
-.tc.active{display:block}
-.code-block{background:#1A0A1E;border-radius:10px;padding:14px;position:relative}
-.code-block pre{font-family:"SF Mono","Fira Code",monospace;font-size:11px;line-height:1.6;color:#E8D8F0;overflow-x:auto;white-space:pre;max-height:320px;overflow-y:auto}
-.copy-btn{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.15);border-radius:5px;padding:4px 9px;font-size:11px;cursor:pointer}
-.copy-btn.ok{background:rgba(37,211,102,.25);color:#25D366;border-color:#25D366}
-.banner{border-radius:9px;padding:11px 13px;display:flex;gap:9px;margin-bottom:13px;font-size:13px;line-height:1.5}
-.bg{background:#E6F4ED;border:1px solid #A8D8B9;color:#1A5C35}
-.by{background:#FFF8E1;border:1px solid #FFD54F;color:#795500}
-.bp{background:var(--roxo-light);border:1px solid #C9A8D8;color:var(--roxo)}
-.url-box{background:var(--roxo-light);border:1.5px solid #C9A8D8;border-radius:10px;padding:13px 15px}
-.url-label{font-size:11px;font-weight:700;color:var(--roxo);margin-bottom:6px;letter-spacing:.03em}
-.url-row{display:flex;gap:7px;align-items:center}
-.url-row input{flex:1;background:#fff;font-family:monospace;font-size:11px;color:var(--text)}
-.url-hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5}
+.btn-gerar{background:linear-gradient(135deg,var(--roxo),var(--roxo3));color:#fff;box-shadow:0 4px 14px rgba(45,10,52,.3)}
+.btn-gerar:hover{box-shadow:0 6px 20px rgba(45,10,52,.4);transform:translateY(-1px)}
+
+/* ── OUTPUT ── */
+.output-wrap{display:none}
+.output-wrap.on{display:block}
+
+.url-box{background:linear-gradient(135deg,var(--roxo-light),#EDE6F5);border:1.5px solid var(--roxo-border);border-radius:var(--r12);padding:16px 18px;margin-bottom:20px}
+.url-box-title{font-size:11px;font-weight:700;color:var(--roxo);margin-bottom:8px;letter-spacing:.04em;display:flex;align-items:center;gap:6px}
+.url-row{display:flex;gap:8px;align-items:center}
+.url-row input{flex:1;background:#fff;font-family:monospace;font-size:12px;border:1px solid var(--border);color:var(--text);border-radius:var(--r8);padding:9px 12px;outline:none}
+.url-hint{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.6}
+.url-hint code{background:#fff;border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-size:11px}
+.dl-btn-wrap{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+
+.tabs{display:flex;border-bottom:2px solid var(--border);padding:0 20px;gap:2px;background:var(--surface);border-radius:var(--r16) var(--r16) 0 0;overflow-x:auto}
+.tab{padding:12px 14px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .15s,border-color .15s;white-space:nowrap}
+.tab.on{color:var(--roxo);border-bottom-color:var(--roxo)}
+.tc{display:none;padding:20px;background:var(--surface);border-radius:0 0 var(--r16) var(--r16);border:1px solid var(--border);border-top:none}
+.tc.on{display:block}
+
+.code-wrap{background:#1A0A1E;border-radius:var(--r12);padding:16px;position:relative}
+.code-wrap pre{font-family:"SF Mono","Fira Code","Consolas",monospace;font-size:11px;line-height:1.65;color:#E8D8F0;overflow-x:auto;white-space:pre;max-height:360px;overflow-y:auto}
+.code-wrap pre::-webkit-scrollbar{width:5px;height:5px}
+.code-wrap pre::-webkit-scrollbar-thumb{background:#4A2D5A;border-radius:3px}
+.cp-btn{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:5px 10px;font-size:11px;cursor:pointer;transition:background .15s;font-family:inherit}
+.cp-btn:hover{background:rgba(255,255,255,.18)}
+.cp-btn.ok{background:rgba(37,211,102,.25);color:#25D366;border-color:#25D366}
+
+.bnr{border-radius:var(--r8);padding:11px 14px;display:flex;gap:9px;margin-bottom:14px;font-size:12.5px;line-height:1.5;align-items:flex-start}
+.bnr-g{background:#E6F4ED;border:1px solid #A8D8B9;color:#1A5C35}
+.bnr-p{background:var(--roxo-light);border:1px solid var(--roxo-border);color:var(--roxo)}
+.bnr-y{background:#FFF8E1;border:1px solid #FFD54F;color:#795500}
+
+/* Steps */
 .steps{list-style:none}
 .si{display:flex;margin-bottom:0}
-.sl{display:flex;flex-direction:column;align-items:center;width:42px;flex-shrink:0}
-.sn{width:30px;height:30px;border-radius:50%;background:var(--roxo);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
-.sn.done{background:#1A7A44}
-.sn.auto{background:#1565C0}
-.sline{width:2px;flex:1;min-height:14px;background:var(--border);margin:4px 0}
-.sb{flex:1;padding:0 0 18px 4px}
-.sb h3{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
-.sb p{font-size:12px;color:var(--muted);line-height:1.6;margin:0}
-.sb code{background:var(--roxo-light);color:var(--roxo);padding:1px 5px;border-radius:4px;font-size:11px;font-family:monospace}
-.sa{border-radius:7px;padding:9px 11px;margin-top:7px;font-size:12px;line-height:1.5}
+.sl{display:flex;flex-direction:column;align-items:center;width:44px;flex-shrink:0}
+.sn{width:30px;height:30px;border-radius:50%;background:var(--roxo);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;box-shadow:0 2px 8px rgba(45,10,52,.25)}
+.sn.dn{background:#1A7A44}
+.sn.au{background:#1565C0}
+.sln{width:2px;flex:1;min-height:14px;background:var(--border);margin:4px 0}
+.sb{flex:1;padding:0 0 20px 6px}
+.sb h3{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.sb p{font-size:12px;color:var(--muted);line-height:1.65;margin:0}
+.sb code{background:var(--roxo-light);color:var(--roxo);padding:1px 6px;border-radius:4px;font-size:11px;font-family:monospace}
+.sa{border-radius:var(--r8);padding:9px 12px;margin-top:8px;font-size:12px;line-height:1.5}
 .sa-g{background:#E6F4ED;border:1px solid #A8D8B9;color:#1A5C35}
 .sa-b{background:#E3F2FD;border:1px solid #90CAF9;color:#1565C0}
-.ptabs{display:flex;gap:7px;margin-top:9px}
-.ptab{padding:4px 11px;font-size:11px;font-weight:600;border-radius:20px;cursor:pointer;border:1.5px solid var(--border);color:var(--muted);background:var(--surface);transition:all .15s}
-.ptab.active{background:var(--roxo);color:#fff;border-color:var(--roxo)}
-.ptc{display:none;margin-top:7px;font-size:12px;color:var(--muted);line-height:1.6}
-.ptc.active{display:block}
-.badge-auto{display:inline-flex;background:#E3F2FD;color:#1565C0;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;margin-left:5px}
-.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
-.cc{background:var(--surface);border:1px solid var(--border);border-radius:13px;box-shadow:var(--shadow);overflow:hidden}
-.cc-top{background:var(--roxo);padding:14px;display:flex;align-items:flex-start;gap:9px}
-.cc-av{width:36px;height:36px;background:rgba(255,255,255,.15);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
-.cc-nome{color:#fff;font-size:13px;font-weight:700;line-height:1.3}
-.cc-wa{color:rgba(255,255,255,.6);font-size:11px;margin-top:1px}
-.cc-body{padding:13px 15px}
-.cnt-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
-.cnt-box{text-align:center}
-.cnt-num{font-size:26px;font-weight:800;color:var(--roxo);line-height:1}
-.cnt-lbl{font-size:10px;color:var(--muted);margin-top:1px;font-weight:600}
-.cnt-div{width:1px;height:36px;background:var(--border)}
-.cc-actions{display:flex;flex-direction:column;gap:5px}
-.cc-actions .btn{font-size:11px;padding:6px 10px;justify-content:flex-start}
-.empty{text-align:center;padding:44px 20px;color:var(--muted);grid-column:1/-1}
-.empty .ei{font-size:38px;margin-bottom:10px}
-.empty h3{font-size:14px;font-weight:600;color:var(--text);margin-bottom:5px}
-.pw-wrap{border:1px solid var(--border);border-radius:9px;overflow:hidden;height:180px;position:relative;background:#f0f0f0;display:flex;align-items:center;justify-content:center}
-.pw-inner{text-align:center;color:#999;font-size:13px}
-#wa-prev{position:absolute;bottom:14px;right:14px;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer;border:none}
-#wa-prev svg{width:26px;height:26px;fill:#fff}
+.badge-au{background:#E3F2FD;color:#1565C0;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
+
+.ptabs{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+.ptab{padding:4px 12px;font-size:11px;font-weight:600;border-radius:20px;cursor:pointer;border:1.5px solid var(--border);color:var(--muted);background:var(--surface);transition:all .15s}
+.ptab.on{background:var(--roxo);color:#fff;border-color:var(--roxo)}
+.ptc{display:none;margin-top:8px;font-size:12px;color:var(--muted);line-height:1.65;background:var(--bg);padding:10px 12px;border-radius:var(--r8)}
+.ptc.on{display:block}
+
+/* Preview */
+.prev-wrap{border:1px solid var(--border);border-radius:var(--r12);overflow:hidden;height:200px;position:relative;background:linear-gradient(135deg,#f0edf4,#e8e2ee);display:flex;align-items:center;justify-content:center}
+.prev-inner{text-align:center;color:var(--hint);font-size:13px}
+#wa-prev-btn{position:absolute;bottom:16px;right:16px;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:transform .2s;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+#wa-prev-btn:hover{transform:scale(1.1)}
+#wa-prev-btn svg{width:28px;height:28px;fill:#fff}
+
+@media(max-width:600px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .cg{grid-template-columns:1fr}
+  header{padding:0 16px}
+  .pg{padding:20px 14px}
+}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo-mark">B.</div>
-  <div class="logo-text">
+  <div class="logo">B.</div>
+  <div class="logo-txt">
     <strong>B.GO — Widget WhatsApp</strong>
     <span>MARKETING MÉDICO DE ALTA PERFORMANCE</span>
   </div>
-  <div class="header-nav">
-    <button class="nav-btn active" id="nav-dashboard" onclick="showPage('dashboard')">📊 Clientes</button>
-    <button class="nav-btn" id="nav-criar" onclick="showPage('criar')">＋ Novo Cliente</button>
+  <div class="hnav">
+    <button class="nbtn on" id="nb-dash" onclick="showPg('dash')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Clientes
+    </button>
+    <button class="nbtn" id="nb-criar" onclick="showPg('criar')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Novo Cliente
+    </button>
   </div>
 </header>
 
-<!-- DASHBOARD -->
-<div class="page active" id="page-dashboard">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+<!-- ═══ DASHBOARD ═══ -->
+<div class="pg on" id="pg-dash">
+  <div class="dash-top">
     <div>
-      <h1 style="font-size:17px;font-weight:700">Clientes ativos</h1>
-      <p style="font-size:12px;color:var(--muted);margin-top:2px">Leads capturados este mês</p>
+      <h1>Clientes ativos</h1>
+      <p>Leads capturados este mês em tempo real</p>
     </div>
-    <button class="btn btn-roxo btn-sm" onclick="showPage('criar')">＋ Novo cliente</button>
+    <button class="btn btn-roxo btn-sm" onclick="showPg('criar')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Novo cliente
+    </button>
   </div>
+
+  <div class="stats-row" id="statsRow">
+    <div class="stat-card"><div class="si">🏥</div><div class="sv" id="st-total">0</div><div class="sl">CLIENTES ATIVOS</div></div>
+    <div class="stat-card"><div class="si">📊</div><div class="sv" id="st-leads">—</div><div class="sl">LEADS ESTE MÊS</div></div>
+    <div class="stat-card"><div class="si">📅</div><div class="sv" id="st-mes" style="font-size:16px;margin-top:4px">—</div><div class="sl">MÊS ATUAL</div></div>
+  </div>
+
   <div class="cg" id="clientesGrid"></div>
 </div>
 
-<!-- CRIAR -->
-<div class="page" id="page-criar">
-  <div style="margin-bottom:18px">
-    <h1 style="font-size:17px;font-weight:700">Novo widget</h1>
-    <p style="font-size:12px;color:var(--muted);margin-top:2px">Preencha os dados e gere tudo automaticamente</p>
+<!-- ═══ CRIAR ═══ -->
+<div class="pg" id="pg-criar">
+  <div style="margin-bottom:20px">
+    <h1 style="font-size:18px;font-weight:700">Novo widget</h1>
+    <p style="font-size:12px;color:var(--muted);margin-top:3px">Configure e gere o snippet + Apps Script prontos para usar</p>
   </div>
 
-  <div class="grid2">
-    <div class="card">
-      <div class="ch"><div class="ch-icon">🏥</div><div><h2>Dados do cliente</h2><p>Informações da clínica</p></div></div>
-      <div class="cb">
-        <div class="field"><label>Nome do cliente <span class="req">*</span></label><input type="text" id="nomeCliente" placeholder="Ex: Prima Pelle Dermatologia"></div>
-        <div class="field"><label>WhatsApp <span class="req">*</span></label><input type="tel" id="whatsapp" placeholder="5561999999999"><div class="hint">DDI+DDD+número, só números</div></div>
-        <div class="field"><label>Mensagem inicial</label><input type="text" id="mensagemWA" value="Olá! Meu nome é {{nome}} e gostaria de agendar uma consulta."><div class="hint">Use {{nome}} para o nome do lead</div></div>
-        <div class="field"><label>URL do Google Apps Script</label><input type="url" id="webhookUrl" placeholder="https://script.google.com/macros/s/..."><div class="hint">Obtida após publicar o Apps Script</div></div>
+  <div class="criar-grid">
+
+    <div>
+      <div class="card">
+        <div class="ch"><div class="ch-ico">🏥</div><div><h2>Dados do cliente</h2><p>Informações da clínica</p></div></div>
+        <div class="cb">
+          <div class="fld"><label>Nome do cliente <span class="req">*</span></label><input type="text" id="f-nome" placeholder="Ex: Prima Pelle Dermatologia"></div>
+          <div class="fld"><label>WhatsApp <span class="req">*</span></label><input type="tel" id="f-wa" placeholder="5561999999999"><div class="fld-hint">DDI + DDD + número, só números. Ex: 5561999990000</div></div>
+          <div class="fld"><label>Mensagem inicial no WhatsApp</label><input type="text" id="f-msg" value="Olá! Meu nome é {{nome}} e gostaria de agendar uma consulta."><div class="fld-hint">Use {{nome}} para incluir o nome do lead automaticamente</div></div>
+          <div class="fld"><label>URL do Google Apps Script</label><input type="url" id="f-wh" placeholder="https://script.google.com/macros/s/..."><div class="fld-hint">Obtida no Passo 4 do guia. Pode deixar em branco e preencher depois.</div></div>
+        </div>
+      </div>
+
+      <div class="card card-last">
+        <div class="ch"><div class="ch-ico">🎨</div><div><h2>Aparência</h2><p>Cores e textos do formulário</p></div></div>
+        <div class="cb">
+          <div class="fld-row">
+            <div class="fld"><label>Cor principal</label><input type="color" id="f-cor1" value="#25D366"></div>
+            <div class="fld"><label>Cor hover</label><input type="color" id="f-cor2" value="#1DA851"></div>
+          </div>
+          <div class="fld"><label>Título do formulário</label><input type="text" id="f-titulo" value="Fale com a gente"></div>
+          <div class="fld"><label>Subtítulo</label><input type="text" id="f-sub" value="Preencha para iniciarmos a conversa."></div>
+        </div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="ch"><div class="ch-icon">🎨</div><div><h2>Aparência e campos</h2><p>Personalização do formulário</p></div></div>
-      <div class="cb">
-        <div class="field-row">
-          <div class="field"><label>Cor principal</label><input type="color" id="corPrincipal" value="#25D366"></div>
-          <div class="field"><label>Cor hover</label><input type="color" id="corSecundaria" value="#1DA851"></div>
-        </div>
-        <div class="field"><label>Título do modal</label><input type="text" id="tituloModal" value="Fale com a gente"></div>
-        <div class="field"><label>Subtítulo</label><input type="text" id="subtituloModal" value="Preencha para iniciarmos a conversa."></div>
-        <div style="margin-top:14px">
-          <label style="margin-bottom:8px;display:block">Campos opcionais</label>
-          <div class="toggle-row">
-            <div><div class="tl">Especialidade / Tratamento</div><div class="ts">Campo de texto livre</div></div>
-            <label class="toggle"><input type="checkbox" id="exibirEsp" checked><span class="slider"></span></label>
+    <div>
+      <div class="card">
+        <div class="ch"><div class="ch-ico">📋</div><div><h2>Campos do formulário</h2><p>Obrigatórios + opcionais + personalizados</p></div></div>
+        <div class="cb">
+
+          <div style="margin-bottom:14px">
+            <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;letter-spacing:.03em">CAMPOS OBRIGATÓRIOS (sempre aparecem)</div>
+            <div style="display:flex;flex-direction:column;gap:5px">
+              <div style="background:var(--bg);border-radius:var(--r8);padding:8px 12px;font-size:12px;color:var(--text);display:flex;align-items:center;gap:8px;border:1px solid var(--border)">
+                <span style="color:var(--verde);font-size:14px">✓</span> Nome completo
+              </div>
+              <div style="background:var(--bg);border-radius:var(--r8);padding:8px 12px;font-size:12px;color:var(--text);display:flex;align-items:center;gap:8px;border:1px solid var(--border)">
+                <span style="color:var(--verde);font-size:14px">✓</span> Celular / WhatsApp
+              </div>
+              <div style="background:var(--bg);border-radius:var(--r8);padding:8px 12px;font-size:12px;color:var(--text);display:flex;align-items:center;gap:8px;border:1px solid var(--border)">
+                <span style="color:var(--verde);font-size:14px">✓</span> E-mail
+              </div>
+            </div>
           </div>
-          <div class="toggle-row">
-            <div><div class="tl">Particular ou Convênio?</div><div class="ts">Lista suspensa</div></div>
-            <label class="toggle"><input type="checkbox" id="exibirConv" checked><span class="slider"></span></label>
+
+          <div style="border-top:1px solid var(--border);padding-top:14px;margin-bottom:14px">
+            <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;letter-spacing:.03em">CAMPOS OPCIONAIS</div>
+            <div class="tgl-row">
+              <div><div class="tgl-lbl">Especialidade / Tratamento</div><div class="tgl-sub">Campo de texto livre</div></div>
+              <label class="tgl"><input type="checkbox" id="f-esp" checked><span class="tgl-sl"></span></label>
+            </div>
+            <div class="tgl-row">
+              <div><div class="tgl-lbl">Particular ou Convênio?</div><div class="tgl-sub">Lista suspensa</div></div>
+              <label class="tgl"><input type="checkbox" id="f-conv" checked><span class="tgl-sl"></span></label>
+            </div>
+          </div>
+
+          <div style="border-top:1px solid var(--border);padding-top:14px">
+            <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px;letter-spacing:.03em">CAMPOS PERSONALIZADOS</div>
+            <div class="custom-fields-list" id="customFieldsList"></div>
+            <div id="addFieldForm" style="display:none">
+              <div class="add-field-form">
+                <div class="fld"><label>Nome do campo</label><input type="text" id="cf-label" placeholder="Ex: Como nos conheceu?"></div>
+                <div class="fld-row">
+                  <div class="fld"><label>Tipo</label>
+                    <select id="cf-tipo">
+                      <option value="text">Texto livre</option>
+                      <option value="select">Lista suspensa</option>
+                      <option value="tel">Telefone</option>
+                      <option value="textarea">Texto longo</option>
+                    </select>
+                  </div>
+                  <div class="fld" id="cf-opts-wrap" style="display:none"><label>Opções (separadas por vírgula)</label><input type="text" id="cf-opts" placeholder="Op1, Op2, Op3"></div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:4px">
+                  <button class="btn btn-roxo btn-sm" onclick="addCustomField()">Adicionar campo</button>
+                  <button class="btn btn-outline btn-sm" onclick="document.getElementById('addFieldForm').style.display='none'">Cancelar</button>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-sm" style="width:100%;margin-top:8px" onclick="document.getElementById('addFieldForm').style.display='block';document.getElementById('cf-label').focus()">
+              + Adicionar campo personalizado
+            </button>
           </div>
         </div>
-        <button class="btn btn-roxo btn-full" style="margin-top:14px" onclick="gerarWidget()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-          Gerar widget para este cliente
+      </div>
+
+      <button class="btn btn-gerar btn-full" style="margin-top:16px" onclick="gerarWidget()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Gerar widget para este cliente
+      </button>
+    </div>
+
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="output-wrap" id="outputWrap" style="margin-top:28px">
+
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+      <div style="width:36px;height:36px;background:var(--verde);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div>
+        <div id="out-title" style="font-size:15px;font-weight:700;color:var(--text)">Widget gerado</div>
+        <div id="out-sub" style="font-size:12px;color:var(--muted);margin-top:1px"></div>
+      </div>
+    </div>
+
+    <div class="url-box">
+      <div class="url-box-title">🔗 URL LIMPA — para botões CTA e links do site</div>
+      <div class="url-row">
+        <input type="text" id="urlShare" readonly>
+        <button class="btn btn-roxo btn-sm" onclick="copiarUrl()">Copiar</button>
+      </div>
+      <div class="url-hint">
+        Cole nos botões WhatsApp do site: <code>&lt;a href="URL"&gt;WhatsApp&lt;/a&gt;</code><br>
+        O visitante clica → formulário captura o lead → WhatsApp abre automaticamente
+      </div>
+      <div class="dl-btn-wrap">
+        <button class="btn btn-verde btn-sm" id="btnDl" onclick="baixarPagina()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Baixar página do cliente
+        </button>
+        <div id="dlInfo" style="display:none;font-size:11.5px;color:#1A5C35;background:#E6F4ED;border:1px solid #A8D8B9;border-radius:var(--r8);padding:8px 11px;flex:1;line-height:1.5">
+          Suba na pasta <code style="background:#fff;padding:1px 5px;border-radius:3px;border:1px solid #A8D8B9">wa/</code> do repositório <code style="background:#fff;padding:1px 5px;border-radius:3px;border:1px solid #A8D8B9">agente-bgo</code> → aguarde ~30s → URL no ar ✅
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs" id="outputTabs">
+      <div class="tab on" onclick="showTab('passo')">📋 Passo a Passo</div>
+      <div class="tab" onclick="showTab('snippet')">💻 Snippet do Site</div>
+      <div class="tab" onclick="showTab('apps')">⚙️ Apps Script</div>
+      <div class="tab" onclick="showTab('prev')">👁️ Preview</div>
+    </div>
+
+    <div class="tc on" id="tc-passo"><ul class="steps" id="stepsList"></ul></div>
+
+    <div class="tc" id="tc-snippet">
+      <div class="bnr bnr-g">✅ Cole antes do <code>&lt;/body&gt;</code> no site. Funciona em WordPress, Wix, Squarespace e HTML puro.</div>
+      <div class="code-wrap"><button class="cp-btn" onclick="cp('codeSnippet',this)">Copiar</button><pre id="codeSnippet"></pre></div>
+    </div>
+
+    <div class="tc" id="tc-apps">
+      <div class="bnr bnr-p">⚙️ Cole no Google Apps Script (script.google.com → Novo projeto). Execute <code>configurarCliente()</code> primeiro.</div>
+      <div class="code-wrap"><button class="cp-btn" onclick="cp('codeApps',this)">Copiar</button><pre id="codeApps"></pre></div>
+    </div>
+
+    <div class="tc" id="tc-prev">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Prévia do botão flutuante com as cores configuradas.</p>
+      <div class="prev-wrap">
+        <div class="prev-inner"><div style="font-size:28px;margin-bottom:8px">🖥️</div>Site do cliente</div>
+        <button id="wa-prev-btn">
+          <svg viewBox="0 0 24 24"><path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/></svg>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- OUTPUT -->
-  <div class="card" id="outputCard" style="display:none">
-    <div class="ch"><div class="ch-icon">✅</div><div><h2 id="outputTitle">Widget gerado</h2><p id="outputSub">Siga o passo a passo</p></div></div>
-
-    <div style="padding:15px 18px 0">
-      <div class="url-box">
-        <div class="url-label">🔗 URL LIMPA — para botões CTA do site</div>
-        <div class="url-row">
-          <input type="text" id="urlShare" readonly>
-          <button class="btn btn-roxo btn-sm" onclick="copiarUrl()">Copiar</button>
-        </div>
-        <div class="url-hint">Cole esta URL nos botões WhatsApp do site: <code style="font-size:11px;background:#fff;border:1px solid var(--border);padding:1px 5px;border-radius:4px">&lt;a href="URL"&gt;WhatsApp&lt;/a&gt;</code></div>
-        <button class="btn btn-verde btn-sm" style="margin-top:9px;width:100%" id="btnBaixar" onclick="baixarPagina()">⬇️ Baixar página do cliente (subir na pasta wa/ do GitHub)</button>
-        <div id="instrGithub" style="display:none;margin-top:9px;font-size:11.5px;color:#1A5C35;background:#E6F4ED;border:1px solid #A8D8B9;border-radius:7px;padding:9px 11px;line-height:1.6">
-          <strong>Como subir:</strong> no repositório agente-bgo → pasta <code>wa/</code> → suba o arquivo baixado → aguarde ~30s → URL no ar ✅
-        </div>
-      </div>
-    </div>
-
-    <div class="tabs" style="margin-top:14px">
-      <div class="tab active" onclick="showTab('passo')">📋 Passo a Passo</div>
-      <div class="tab" onclick="showTab('snippet')">💻 Snippet</div>
-      <div class="tab" onclick="showTab('apps')">⚙️ Apps Script</div>
-      <div class="tab" onclick="showTab('prev')">👁️ Preview</div>
-    </div>
-
-    <div class="tc active" id="tc-passo"><ul class="steps" id="stepsList"></ul></div>
-
-    <div class="tc" id="tc-snippet">
-      <div class="banner bg">✅ Cole antes do &lt;/body&gt; no site do cliente.</div>
-      <div class="code-block"><button class="copy-btn" onclick="copiarEl('codeSnippet',this)">Copiar</button><pre id="codeSnippet"></pre></div>
-    </div>
-
-    <div class="tc" id="tc-apps">
-      <div class="banner bp">⚙️ Cole no Google Apps Script. Execute configurarCliente() e publique como Web App.</div>
-      <div class="code-block"><button class="copy-btn" onclick="copiarEl('codeApps',this)">Copiar</button><pre id="codeApps"></pre></div>
-    </div>
-
-    <div class="tc" id="tc-prev">
-      <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Prévia do botão flutuante.</p>
-      <div class="pw-wrap">
-        <div class="pw-inner"><div style="font-size:26px;margin-bottom:7px">🖥️</div>Site do cliente</div>
-        <button id="wa-prev"><svg viewBox="0 0 24 24"><path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/></svg></button>
-      </div>
-    </div>
-  </div>
-</div><!-- /page-criar -->
+</div><!-- /pg-criar -->
 
 <script>
-// ── HELPERS ──────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════
 function slug(s){
   var m={'a':'áàãâä','e':'éèêë','i':'íìîï','o':'óòõôö','u':'úùûü','c':'ç','n':'ñ'};
   s=s.toLowerCase();
   for(var k in m){var cs=m[k].split('');for(var i=0;i<cs.length;i++)s=s.split(cs[i]).join(k);}
   return s.replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
 }
-function getClientes(){try{return JSON.parse(localStorage.getItem('bgo_cl')||'[]')}catch(e){return[]}}
-function saveClientes(a){localStorage.setItem('bgo_cl',JSON.stringify(a))}
-function mesAtual(){var m=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];var d=new Date();return m[d.getMonth()]+'/'+d.getFullYear()}
+function getCl(){try{return JSON.parse(localStorage.getItem('bgo_v2')||'[]')}catch(e){return[]}}
+function saveCl(a){localStorage.setItem('bgo_v2',JSON.stringify(a))}
+function getMes(){var m=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];var d=new Date();return m[d.getMonth()]+'/'+d.getFullYear()}
 
-// ── NAVEGAÇÃO ─────────────────────────────────────────────────────────
-function showPage(p){
-  document.querySelectorAll('.page').forEach(function(el){el.classList.toggle('active',el.id==='page-'+p)});
-  document.getElementById('nav-dashboard').classList.toggle('active',p==='dashboard');
-  document.getElementById('nav-criar').classList.toggle('active',p==='criar');
-  if(p==='dashboard')renderDash();
+var customFields=[];
+
+// ═══════════════════════════════════════════════════
+// NAVEGAÇÃO
+// ═══════════════════════════════════════════════════
+function showPg(p){
+  document.querySelectorAll('.pg').forEach(function(el){el.classList.toggle('on',el.id==='pg-'+p)});
+  document.getElementById('nb-dash').classList.toggle('on',p==='dash');
+  document.getElementById('nb-criar').classList.toggle('on',p==='criar');
+  if(p==='dash')renderDash();
 }
 function showTab(t){
   var ts=['passo','snippet','apps','prev'];
-  document.querySelectorAll('.tab').forEach(function(el,i){el.classList.toggle('active',ts[i]===t)});
-  ts.forEach(function(n){document.getElementById('tc-'+n).classList.toggle('active',n===t)});
+  document.querySelectorAll('#outputTabs .tab').forEach(function(el,i){el.classList.toggle('on',ts[i]===t)});
+  ts.forEach(function(n){document.getElementById('tc-'+n).classList.toggle('on',n===t)});
 }
 function showPtab(g,n){
-  document.querySelectorAll('[data-pg="'+g+'"]').forEach(function(el){el.classList.toggle('active',el.dataset.pn===n)});
-  document.querySelectorAll('[data-tg="'+g+'"]').forEach(function(el){el.classList.toggle('active',el.dataset.tn===n)});
+  document.querySelectorAll('[data-pg="'+g+'"]').forEach(function(el){el.classList.toggle('on',el.dataset.pn===n)});
+  document.querySelectorAll('[data-tg="'+g+'"]').forEach(function(el){el.classList.toggle('on',el.dataset.tn===n)});
 }
 
-// ── COPIAR ────────────────────────────────────────────────────────────
-function copiarEl(id,btn){
+// ═══════════════════════════════════════════════════
+// CAMPOS PERSONALIZADOS
+// ═══════════════════════════════════════════════════
+document.getElementById('cf-tipo').addEventListener('change',function(){
+  document.getElementById('cf-opts-wrap').style.display=this.value==='select'?'block':'none';
+});
+
+function addCustomField(){
+  var lbl=document.getElementById('cf-label').value.trim();
+  var tipo=document.getElementById('cf-tipo').value;
+  var opts=document.getElementById('cf-opts').value.trim();
+  if(!lbl){alert('Digite o nome do campo.');return;}
+  var id='cf_'+Date.now();
+  customFields.push({id:id,label:lbl,tipo:tipo,opts:opts});
+  renderCustomFields();
+  document.getElementById('cf-label').value='';
+  document.getElementById('cf-opts').value='';
+  document.getElementById('addFieldForm').style.display='none';
+}
+
+function removeCustomField(id){
+  customFields=customFields.filter(function(f){return f.id!==id});
+  renderCustomFields();
+}
+
+function renderCustomFields(){
+  var el=document.getElementById('customFieldsList');
+  if(!customFields.length){el.innerHTML='';return;}
+  el.innerHTML=customFields.map(function(f){
+    var tipo=f.tipo==='text'?'Texto':f.tipo==='select'?'Lista ('+f.opts+')':f.tipo==='tel'?'Telefone':'Texto longo';
+    return '<div class="cf-item"><div class="cf-item-info"><div class="cf-item-label">'+f.label+'</div><div class="cf-item-type">'+tipo+'</div></div><button class="cf-del" onclick="removeCustomField(\''+f.id+'\')">×</button></div>';
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// COPIAR
+// ═══════════════════════════════════════════════════
+function cp(id,btn){
   navigator.clipboard.writeText(document.getElementById(id).textContent).then(function(){
     btn.textContent='✓ Copiado!';btn.classList.add('ok');
     setTimeout(function(){btn.textContent='Copiar';btn.classList.remove('ok')},2000);
   });
 }
 function copiarUrl(){
-  var val=document.getElementById('urlShare').value;
-  navigator.clipboard.writeText(val).then(function(){
+  navigator.clipboard.writeText(document.getElementById('urlShare').value).then(function(){
     var b=event.target;b.textContent='✓';setTimeout(function(){b.textContent='Copiar'},2000);
   });
 }
 
-// ── GERAR WIDGET ──────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════
+// GERAR WIDGET
+// ═══════════════════════════════════════════════════
 function gerarWidget(){
-  var nome    =document.getElementById('nomeCliente').value.trim();
-  var wa      =document.getElementById('whatsapp').value.trim().replace(/\D/g,'');
-  var msg     =document.getElementById('mensagemWA').value.trim();
-  var webhook =document.getElementById('webhookUrl').value.trim()||'https://script.google.com/macros/s/SEU_ID/exec';
-  var cor1    =document.getElementById('corPrincipal').value;
-  var cor2    =document.getElementById('corSecundaria').value;
-  var titulo  =document.getElementById('tituloModal').value.trim();
-  var sub     =document.getElementById('subtituloModal').value.trim();
-  var esp     =document.getElementById('exibirEsp').checked;
-  var conv    =document.getElementById('exibirConv').checked;
+  var nome  =document.getElementById('f-nome').value.trim();
+  var wa    =document.getElementById('f-wa').value.trim().replace(/\D/g,'');
+  var msg   =document.getElementById('f-msg').value.trim();
+  var wh    =document.getElementById('f-wh').value.trim()||'https://script.google.com/macros/s/SEU_ID/exec';
+  var cor1  =document.getElementById('f-cor1').value;
+  var cor2  =document.getElementById('f-cor2').value;
+  var titulo=document.getElementById('f-titulo').value.trim();
+  var sub   =document.getElementById('f-sub').value.trim();
+  var esp   =document.getElementById('f-esp').checked;
+  var conv  =document.getElementById('f-conv').checked;
+  var whOk  =wh.indexOf('SEU_ID')<0;
+  var sl    =slug(nome);
 
   if(!nome||!wa){alert('Preencha o nome do cliente e o número do WhatsApp.');return;}
 
-  var whOk=webhook.indexOf('SEU_ID')<0;
-  var sl=slug(nome);
   var urlLimpa='https://bgomarketingmedico.github.io/agente-bgo/wa/'+sl;
-
   document.getElementById('urlShare').value=urlLimpa;
-  document.getElementById('wa-prev').style.background=cor1;
-  document.getElementById('outputTitle').textContent='Widget gerado — '+nome;
-  document.getElementById('outputSub').textContent='URL: '+urlLimpa;
+  document.getElementById('wa-prev-btn').style.background=cor1;
+  document.getElementById('out-title').textContent='Widget gerado — '+nome;
+  document.getElementById('out-sub').textContent='URL: '+urlLimpa;
 
-  // Salva no localStorage
-  var cl=getClientes();
+  // Salva cliente
+  var cl=getCl();
   var idx=cl.findIndex(function(c){return c.nome===nome});
-  var obj={nome:nome,wa:wa,webhook:webhook,cor:cor1,titulo:titulo,msg:msg,url:urlLimpa,slug:sl,criado:new Date().toLocaleDateString('pt-BR')};
+  var obj={nome:nome,wa:wa,wh:wh,cor:cor1,titulo:titulo,msg:msg,url:urlLimpa,slug:sl,criado:new Date().toLocaleDateString('pt-BR'),fields:JSON.parse(JSON.stringify(customFields))};
   if(idx>=0)cl[idx]=obj;else cl.unshift(obj);
-  saveClientes(cl);
+  saveCl(cl);
 
-  gerarSnippet(nome,wa,msg,webhook,cor1,cor2,titulo,sub,esp,conv);
+  gerarSnippet(nome,wa,msg,wh,cor1,cor2,titulo,sub,esp,conv,customFields);
   gerarApps(nome);
-  gerarPassos(nome,webhook,whOk,sl);
+  gerarPassos(nome,wh,whOk,sl);
 
-  document.getElementById('outputCard').style.display='block';
+  document.getElementById('outputWrap').classList.add('on');
   showTab('passo');
-  setTimeout(function(){document.getElementById('outputCard').scrollIntoView({behavior:'smooth',block:'start'})},100);
+  setTimeout(function(){document.getElementById('outputWrap').scrollIntoView({behavior:'smooth',block:'start'})},100);
 }
 
-// ── SNIPPET ───────────────────────────────────────────────────────────
-function gerarSnippet(nome,wa,msg,webhook,cor1,cor2,titulo,sub,esp,conv){
-  var xH='';
-  if(esp)xH+='<div class=\\"bgo-f\\"><label for=\\"bgo_esp\\">Especialidade</label><input type=\\"text\\" id=\\"bgo_esp\\" placeholder=\\"Ex: Varizes...\\"></div>';
-  if(conv)xH+='<div class=\\"bgo-f\\"><label for=\\"bgo_conv\\">Particular ou Convênio?</label><select id=\\"bgo_conv\\"><option value=\\"\\">Selecione…</option><option>Particular</option><option>Convênio</option><option>Não sei ainda</option></select></div>';
+// ═══════════════════════════════════════════════════
+// SNIPPET — 100% inline styles
+// ═══════════════════════════════════════════════════
+function gerarSnippet(nome,wa,msg,wh,cor1,cor2,titulo,sub,esp,conv,cfs){
+  var WA_PATH='M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z';
 
-  var s='<!-- B.GO Widget — '+nome+' | '+new Date().toLocaleDateString('pt-BR')+' -->\n<script>\n(function(){\n';
-  s+='var C={wa:"'+wa+'",wh:"'+webhook+'",c1:"'+cor1+'",c2:"'+cor2+'",t:"'+titulo.replace(/"/g,'\\"')+'",s:"'+sub.replace(/"/g,'\\"')+'",m:"'+msg.replace(/"/g,'\\"')+'",esp:'+esp+',conv:'+conv+'};\n';
-  s+=`var W='<svg viewBox="0 0 24 24"><path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/></svg>';\n`;
-  s+=`var st=document.createElement('style');
-st.textContent='#bf{position:fixed;bottom:24px;right:24px;z-index:9998;width:58px;height:58px;border-radius:50%;background:'+C.c1+';box-shadow:0 6px 20px rgba(0,0,0,.3);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s}#bf:hover{transform:scale(1.1);box-shadow:0 8px 24px rgba(0,0,0,.35)}#bf svg{width:30px;height:30px;fill:#fff}#bov{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);align-items:flex-end;justify-content:center;padding:0}@media(min-width:520px){#bov{align-items:center;padding:16px}}#bov.op{display:flex}#bbx{background:#fff;width:100%;max-width:430px;border-radius:24px 24px 0 0;overflow:hidden;animation:bgu .28s cubic-bezier(.22,1,.36,1);box-shadow:0 -4px 40px rgba(0,0,0,.15)}@media(min-width:520px){#bbx{border-radius:20px}}@keyframes bgu{from{transform:translateY(50px);opacity:0}to{transform:none;opacity:1}}#bhd{background:'+C.c1+';padding:20px 18px 16px;display:flex;align-items:flex-start;gap:12px}#bhd svg{width:26px;height:26px;fill:#fff;flex-shrink:0;margin-top:3px}#bhd h3{margin:0 0 3px;color:#fff;font-size:1rem;font-family:inherit;font-weight:700;line-height:1.3}#bhd p{margin:0;color:rgba(255,255,255,.82);font-size:.8rem;font-family:inherit}#bxb{margin-left:auto;background:rgba(0,0,0,.18);border:none;cursor:pointer;color:#fff;font-size:1rem;padding:6px 8px;border-radius:50%;flex-shrink:0;line-height:1;transition:background .15s}#bxb:hover{background:rgba(0,0,0,.3)}#bbd{padding:20px 18px 22px}.bfo{margin-bottom:15px;display:block;width:100%}.bfo label{display:block;width:100%;font-size:.76rem;font-weight:700;color:#555;margin-bottom:6px;font-family:inherit;letter-spacing:.01em}.bfo label span{color:#e74c3c}.bfo input,.bfo select{display:block;width:100%;border:1.5px solid #e0e0e0;border-radius:10px;padding:11px 13px;font-size:.9rem;font-family:inherit;outline:none;color:#111;background:#f8f8f8;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none;box-sizing:border-box}.bfo input:focus,.bfo select:focus{border-color:'+C.c1+';box-shadow:0 0 0 3px rgba(37,211,102,.12);background:#fff}.bfo select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23888' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}#bsb{width:100%;padding:13px;background:'+C.c1+';color:#fff;border:none;border-radius:11px;font-size:.95rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;margin-top:8px;transition:opacity .2s,transform .1s;box-shadow:0 3px 10px rgba(0,0,0,.15)}#bsb:hover:not(:disabled){opacity:.92;transform:translateY(-1px)}#bsb:disabled{opacity:.6;cursor:default}#bsb svg{width:17px;height:17px;fill:#fff}#ber{color:#c0392b;font-size:.77rem;margin-top:8px;display:none;font-family:inherit;padding:8px 10px;background:#fff0f0;border-radius:7px;border:1px solid #fcc}#bok{display:none;text-align:center;padding:28px 0 14px}#bok svg{width:52px;height:52px;fill:'+C.c1+'}#bok p{color:#222;font-size:.92rem;margin:10px 0 0;font-family:inherit;font-weight:500}#blg{font-size:.69rem;color:#bbb;text-align:center;margin-top:12px;font-family:inherit;line-height:1.5}';
-document.head.appendChild(st);
-var fab=document.createElement('button');fab.id='bf';fab.innerHTML=W;document.body.appendChild(fab);
-var ov=document.createElement('div');ov.id='bov';
-var xH='${xH.replace(/'/g,"\\'")}';
-ov.innerHTML='<div id="bbx"><div id="bhd">'+W+'<div><h3>'+C.t+'</h3><p>'+C.s+'</p></div><button id="bxb">✕</button></div><div id="bbd"><div id="bfa"><div class="bfo"><label for="bnm">Nome completo <span>*</span></label><input type="text" id="bnm" placeholder="João Silva" autocomplete="name"></div><div class="bfo"><label for="btel">Celular / WhatsApp <span>*</span></label><input type="tel" id="btel" placeholder="(61) 99999-0000" autocomplete="tel"></div><div class="bfo"><label for="bem">E-mail <span>*</span></label><input type="email" id="bem" placeholder="joao@email.com" autocomplete="email"></div>'+xH+'<div id="ber">⚠️ Preencha nome, celular e e-mail.</div><button id="bsb">'+W+' Iniciar conversa no WhatsApp</button><p id="blg">Seus dados são usados apenas para entrar em contato. Não enviamos spam.</p></div><div id="bok"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm-1.5 17.5l-4.5-4.5 1.41-1.41L10.5 14.67l6.59-6.59L18.5 9.5l-8 8z"/></svg><p>Dados salvos! Abrindo WhatsApp…</p></div></div></div>';
-document.body.appendChild(ov);
-function utms(){var p=new URLSearchParams(window.location.search);return{utm_source:p.get('utm_source')||'direto',utm_medium:p.get('utm_medium')||'',utm_campaign:p.get('utm_campaign')||'',pagina:window.location.href,dispositivo:/Mobi|Android/i.test(navigator.userAgent)?'Mobile':'Desktop'};}
-function dH(){return new Date().toLocaleDateString('pt-BR');}
-function hA(){return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
-fab.onclick=function(){ov.classList.add('op');setTimeout(function(){document.getElementById('bnm').focus()},100);};
-document.getElementById('bxb').onclick=fechar;
-ov.onclick=function(e){if(e.target===ov)fechar();};
-document.onkeydown=function(e){if(e.key==='Escape')fechar();};
-function fechar(){ov.classList.remove('op');setTimeout(reset,300);}
-function reset(){document.getElementById('bfa').style.display='';document.getElementById('bok').style.display='none';document.getElementById('ber').style.display='none';['bnm','btel','bem','bgo_esp','bgo_conv'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});document.getElementById('bsb').disabled=false;document.getElementById('bsb').innerHTML=W+' Iniciar conversa no WhatsApp';}
-document.getElementById('bsb').onclick=function(){
-  var nm=document.getElementById('bnm').value.trim();
-  var tel=document.getElementById('btel').value.trim();
-  var em=document.getElementById('bem').value.trim();
-  if(!nm||!tel||!em||!/\\S+@\\S+\\.\\S+/.test(em)){document.getElementById('ber').style.display='block';return;}
-  document.getElementById('ber').style.display='none';
-  var btn=document.getElementById('bsb');btn.disabled=true;btn.textContent='Enviando…';
-  var espEl=document.getElementById('bgo_esp');var convEl=document.getElementById('bgo_conv');
-  var pl=Object.assign({data:dH(),hora:hA(),nome:nm,telefone:tel,email:em,especialidade:espEl?espEl.value:'',convenio:convEl?convEl.value:''},utms());
-  fetch(C.wh,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(pl)}).catch(function(){});
-  setTimeout(function(){document.getElementById('bfa').style.display='none';document.getElementById('bok').style.display='block';var mf=C.m.replace('{{nome}}',nm);setTimeout(function(){window.open('https://wa.me/'+C.wa+'?text='+encodeURIComponent(mf),'_blank');setTimeout(fechar,2000);},800);},600);
-};
-})();
-<\/script>`;
+  function svgWa(w,h){return '<svg viewBox="0 0 24 24" style="width:'+w+'px;height:'+h+'px;fill:white;flex-shrink:0"><path d="'+WA_PATH+'"/></svg>';}
+  function fldHtml(id,lbl,type,ph,req){
+    return '<div style="margin-bottom:15px">'
+      +'<label style="display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px;font-family:inherit">'
+      +lbl+(req?' <span style="color:#e74c3c">*</span>':'')+'</label>'
+      +'<input type="'+type+'" id="'+id+'" placeholder="'+ph+'" autocomplete="'+(type==='tel'?'tel':type==='email'?'email':type==='text'&&lbl.toLowerCase().includes('nome')?'name':'off')+'" '
+      +'style="display:block;width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;'
+      +'padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;transition:border-color .15s">'
+      +'</div>';
+  }
+
+  var extraHtml='';
+  if(esp)extraHtml+=fldHtml('bgo_esp','Especialidade / Tratamento','text','Ex: Varizes, Botox…',false);
+  if(conv){
+    extraHtml+='<div style="margin-bottom:15px">'
+      +'<label style="display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px;font-family:inherit">Particular ou Convênio?</label>'
+      +'<select id="bgo_conv" style="display:block;width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;'
+      +'padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;-webkit-appearance:none;appearance:none">'
+      +'<option value="">Selecione…</option><option>Particular</option><option>Convênio</option><option>Não sei ainda</option>'
+      +'</select></div>';
+  }
+  (cfs||[]).forEach(function(f){
+    if(f.tipo==='select'){
+      var opts=f.opts.split(',').map(function(o){return o.trim()}).filter(Boolean);
+      extraHtml+='<div style="margin-bottom:15px">'
+        +'<label style="display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px;font-family:inherit">'+f.label+'</label>'
+        +'<select id="'+f.id+'" style="display:block;width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;'
+        +'padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;-webkit-appearance:none;appearance:none">'
+        +'<option value="">Selecione…</option>'+opts.map(function(o){return '<option>'+o+'</option>'}).join('')
+        +'</select></div>';
+    }else if(f.tipo==='textarea'){
+      extraHtml+='<div style="margin-bottom:15px">'
+        +'<label style="display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px;font-family:inherit">'+f.label+'</label>'
+        +'<textarea id="'+f.id+'" rows="3" style="display:block;width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;'
+        +'padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;resize:vertical"></textarea></div>';
+    }else{
+      extraHtml+=fldHtml(f.id,f.label,f.tipo,'',false);
+    }
+  });
+
+  var allIds=['bgo_nm','bgo_tel','bgo_em'];
+  if(esp)allIds.push('bgo_esp');
+  if(conv)allIds.push('bgo_conv');
+  (cfs||[]).forEach(function(f){allIds.push(f.id);});
+
+  var s='<!-- B.GO Widget WhatsApp — '+nome+' | Gerado em '+new Date().toLocaleDateString('pt-BR')+' -->\n';
+  s+='<script>\n(function(){\n"use strict";\n';
+  s+='var C={wa:"'+wa+'",wh:"'+wh+'",c1:"'+cor1+'",c2:"'+cor2+'",m:"'+msg.replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\n/g,'\\n')+'"};';
+  s+='\nvar IDS='+JSON.stringify(allIds)+';';
+  s+='\nfunction init(){\n';
+  s+='  var fab=document.createElement("button");\n';
+  s+='  fab.setAttribute("aria-label","Falar pelo WhatsApp");\n';
+  s+='  fab.style.cssText="position:fixed;bottom:24px;right:24px;z-index:9998;width:58px;height:58px;border-radius:50%;background:"+C.c1+";box-shadow:0 6px 20px rgba(0,0,0,.3);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s";\n';
+  s+='  fab.innerHTML=\''+svgWa(30,30).replace(/'/g,"\\'")+'\';';
+  s+='\n  fab.onmouseover=function(){this.style.transform="scale(1.1)";this.style.boxShadow="0 8px 24px rgba(0,0,0,.35)";};\n';
+  s+='  fab.onmouseout=function(){this.style.transform="scale(1)";this.style.boxShadow="0 6px 20px rgba(0,0,0,.3)";};\n';
+  s+='  document.body.appendChild(fab);\n';
+
+  var modalHtml='<div id=\\"bgo-box\\" style=\\"background:#fff;width:100%;max-width:430px;border-radius:24px 24px 0 0;overflow:hidden\\"><style>@keyframes bgoUp{from{transform:translateY(50px);opacity:0}to{transform:none;opacity:1}}#bgo-box{animation:bgu .28s cubic-bezier(.22,1,.36,1)}@keyframes bgu{from{transform:translateY(50px);opacity:0}to{transform:none;opacity:1}}@media(min-width:520px){#bgo-ov{align-items:center!important}#bgo-box{border-radius:20px!important;max-width:430px;margin:0 16px}}</style>'
+    +'<div style=\\"background:'+cor1+';padding:20px 18px 16px;display:flex;align-items:flex-start;gap:12px\\">'+svgWa(26,26).replace('style="width:26px;height:26px;fill:white;flex-shrink:0"','style=\\"width:26px;height:26px;fill:white;flex-shrink:0;margin-top:3px\\"')+'<div style=\\"flex:1\\"><h3 style=\\"margin:0 0 3px;color:#fff;font-size:16px;font-family:inherit;font-weight:700\\">'+titulo.replace(/"/g,'\\"')+'</h3><p style=\\"margin:0;color:rgba(255,255,255,.82);font-size:13px;font-family:inherit\\">'+sub.replace(/"/g,'\\"')+'</p></div><button id=\\"bgo-x\\" style=\\"background:rgba(0,0,0,.18);border:none;cursor:pointer;color:#fff;font-size:18px;padding:4px 8px;border-radius:50%;flex-shrink:0;line-height:1\\">✕</button></div>'
+    +'<div style=\\"padding:20px 18px 22px\\"><div id=\\"bgo-fa\\">'
+    +fldHtml('bgo_nm','Nome completo','text','João Silva',true).replace(/"/g,'\\"')
+    +fldHtml('bgo_tel','Celular / WhatsApp','tel','(61) 99999-0000',true).replace(/"/g,'\\"')
+    +fldHtml('bgo_em','E-mail','email','joao@email.com',true).replace(/"/g,'\\"')
+    +extraHtml.replace(/"/g,'\\"')
+    +'<div id=\\"bgo-err\\" style=\\"color:#c0392b;font-size:12px;margin-top:8px;display:none;padding:9px 12px;background:#fff0f0;border-radius:9px;border:1px solid #fcc;font-family:inherit\\">⚠️ Preencha nome, celular e e-mail para continuar.</div>'
+    +'<button id=\\"bgo-btn\\" style=\\"width:100%;padding:13px;background:'+cor1+';color:#fff;border:none;border-radius:11px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;margin-top:10px;box-shadow:0 3px 12px rgba(0,0,0,.15)\\">'+svgWa(17,17).replace(/"/g,'\\"')+' Iniciar conversa no WhatsApp</button>'
+    +'<p style=\\"font-size:11px;color:#bbb;text-align:center;margin-top:12px;line-height:1.5;font-family:inherit\\">Seus dados são usados apenas para entrar em contato. Não enviamos spam.</p>'
+    +'</div><div id=\\"bgo-ok\\" style=\\"display:none;text-align:center;padding:32px 0 16px\\"><svg viewBox=\\"0 0 24 24\\" style=\\"width:56px;height:56px;fill:'+cor1+'\\"><path d=\\"M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm-1.5 17.5l-4.5-4.5 1.41-1.41L10.5 14.67l6.59-6.59L18.5 9.5l-8 8z\\"/></svg><p style=\\"color:#222;font-size:15px;margin:12px 0 0;font-family:inherit;font-weight:600\\">Dados enviados! 🎉</p><p style=\\"color:#777;font-size:13px;margin:4px 0 0;font-family:inherit\\">Abrindo o WhatsApp agora…</p></div></div></div>';
+
+  s+='\n  var ov=document.createElement("div");\n';
+  s+='  ov.id="bgo-ov";\n';
+  s+='  ov.style.cssText="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);align-items:flex-end;justify-content:center";\n';
+  s+='  ov.innerHTML=\''+modalHtml.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+'\';';
+  s+='\n  document.body.appendChild(ov);\n';
+
+  s+='\n  function utms(){var p=new URLSearchParams(window.location.search);return{utm_source:p.get("utm_source")||"direto",utm_medium:p.get("utm_medium")||"",utm_campaign:p.get("utm_campaign")||"",pagina:window.location.href,dispositivo:/Mobi|Android/i.test(navigator.userAgent)?"Mobile":"Desktop"};}\n';
+  s+='  function dH(){return new Date().toLocaleDateString("pt-BR");}\n';
+  s+='  function hA(){return new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});}\n';
+  s+='  function abrirModal(){ov.style.display="flex";setTimeout(function(){var el=document.getElementById("bgo_nm");if(el)el.focus();},80);}\n';
+  s+='  function fechar(){ov.style.display="none";setTimeout(function(){document.getElementById("bgo-fa").style.display="";document.getElementById("bgo-ok").style.display="none";document.getElementById("bgo-err").style.display="none";IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.value="";});var btn=document.getElementById("bgo-btn");btn.disabled=false;btn.innerHTML=\''+svgWa(17,17).replace(/'/g,"\\'")+' Iniciar conversa no WhatsApp\';},300);}\n';
+  s+='  fab.onclick=abrirModal;\n';
+  s+='  ov.onclick=function(e){if(e.target===ov)fechar();};\n';
+  s+='  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&ov.style.display==="flex")fechar();});\n';
+  s+='  document.getElementById("bgo-x").onclick=fechar;\n';
+  s+='  document.getElementById("bgo-btn").onclick=function(){\n';
+  s+='    var nm=document.getElementById("bgo_nm").value.trim();\n';
+  s+='    var tel=document.getElementById("bgo_tel").value.trim();\n';
+  s+='    var em=document.getElementById("bgo_em").value.trim();\n';
+  s+='    if(!nm||!tel||!em||!/\\S+@\\S+\\.\\S+/.test(em)){document.getElementById("bgo-err").style.display="block";return;}\n';
+  s+='    document.getElementById("bgo-err").style.display="none";\n';
+  s+='    var btn=document.getElementById("bgo-btn");btn.disabled=true;btn.textContent="Enviando…";\n';
+  s+='    var extra={};\n';
+  s+='    IDS.slice(3).forEach(function(id){var el=document.getElementById(id);if(el)extra[id]=el.value;});\n';
+  s+='    var pl=Object.assign({data:dH(),hora:hA(),nome:nm,telefone:tel,email:em},extra,utms());\n';
+  s+='    fetch(C.wh,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(pl)}).catch(function(){});\n';
+  s+='    setTimeout(function(){document.getElementById("bgo-fa").style.display="none";document.getElementById("bgo-ok").style.display="block";var mf=C.m.replace("{{nome}}",nm);setTimeout(function(){window.open("https://wa.me/"+C.wa+"?text="+encodeURIComponent(mf),"_blank");setTimeout(fechar,2500);},900);},700);\n';
+  s+='  };\n';
+  s+='}\n';
+  s+='if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}\n';
+  s+='})();\n<\/script>';
+
   document.getElementById('codeSnippet').textContent=s;
 }
 
-// ── APPS SCRIPT ───────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════
+// APPS SCRIPT
+// ═══════════════════════════════════════════════════
 function gerarApps(nome){
-  var s='// B.GO Apps Script — '+nome+'\nvar CONFIG={nomeCliente:"'+nome+'",nomePasta:"B.GO — Leads de Clientes"};\n';
+  var s='// ══════════════════════════════════════════════════\n';
+  s+='// B.GO — Google Apps Script\n';
+  s+='// Cliente: '+nome+'\n';
+  s+='// Gerado em: '+new Date().toLocaleDateString('pt-BR')+'\n';
+  s+='// ══════════════════════════════════════════════════\n\n';
+  s+='var CONFIG={\n  nomeCliente:"'+nome+'",\n  nomePasta:"B.GO — Leads de Clientes"\n};\n\n';
   s+='var MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];\n\n';
-  s+='function configurarCliente(){var p=getPasta();var pl=getPlanilha(p);var ss=SpreadsheetApp.openById(pl.getId());var s1=ss.getSheetByName("Sheet1")||ss.getSheetByName("Página1");getMes(ss);if(!ss.getSheetByName("📊 Resumo"))criarResumo(ss);if(s1&&ss.getSheets().length>1)ss.deleteSheet(s1);Logger.log("✅ "+CONFIG.nomeCliente);}\n\n';
-  s+='function doPost(e){try{var d=JSON.parse(e.postData.contents);var ss=SpreadsheetApp.openById(getPlanilha(getPasta()).getId());var aba=getMes(ss);if(!ss.getSheetByName("📊 Resumo"))criarResumo(ss);var p=aba.getLastRow()+1;aba.appendRow([p-1,d.data||hj(),d.hora||hr(),d.nome||"",d.telefone||"",d.email||"",d.especialidade||"",d.convenio||"",d.utm_source||"direto",d.utm_medium||"",d.utm_campaign||"",d.pagina||"",d.dispositivo||"","Novo Lead"]);fmtLinha(aba,p);return ContentService.createTextOutput(JSON.stringify({status:"ok",total:aba.getLastRow()-3})).setMimeType(ContentService.MimeType.JSON);}catch(e){return ContentService.createTextOutput(JSON.stringify({status:"erro",msg:e.toString()})).setMimeType(ContentService.MimeType.JSON);}}\n\n';
-  s+='function doGet(){try{var ss=SpreadsheetApp.openById(getPlanilha(getPasta()).getId());var d=new Date();var n=MESES[d.getMonth()]+" "+d.getFullYear();var a=ss.getSheetByName(n);var total=a?Math.max(0,a.getLastRow()-3):0;var url="https://drive.google.com/drive/folders/";var ps=DriveApp.getFoldersByName(CONFIG.nomePasta);if(ps.hasNext())url+=ps.next().getId();return ContentService.createTextOutput(JSON.stringify({status:"ok",total:total,driveUrl:url})).setMimeType(ContentService.MimeType.JSON);}catch(e){return ContentService.createTextOutput(JSON.stringify({status:"erro"})).setMimeType(ContentService.MimeType.JSON);}}\n\n';
-  s+='function criarAbaNovoMes(){getMes(SpreadsheetApp.openById(getPlanilha(getPasta()).getId()));}\n';
+  s+='// ── Rode UMA VEZ para criar pasta e planilha ──────\n';
+  s+='function configurarCliente(){\n';
+  s+='  var pasta=getPasta();\n';
+  s+='  var pl=getPlanilha(pasta);\n';
+  s+='  var ss=SpreadsheetApp.openById(pl.getId());\n';
+  s+='  var s1=ss.getSheetByName("Sheet1")||ss.getSheetByName("Página1");\n';
+  s+='  getMes(ss);\n';
+  s+='  if(!ss.getSheetByName("📊 Resumo"))criarResumo(ss);\n';
+  s+='  if(s1&&ss.getSheets().length>1)ss.deleteSheet(s1);\n';
+  s+='  Logger.log("✅ Configurado: "+CONFIG.nomeCliente);\n';
+  s+='  Logger.log("🔗 ID: "+pl.getId());\n';
+  s+='}\n\n';
+  s+='// ── Recebe leads do widget ─────────────────────────\n';
+  s+='function doPost(e){\n';
+  s+='  try{\n';
+  s+='    var d=JSON.parse(e.postData.contents);\n';
+  s+='    var ss=SpreadsheetApp.openById(getPlanilha(getPasta()).getId());\n';
+  s+='    var aba=getMes(ss);\n';
+  s+='    if(!ss.getSheetByName("📊 Resumo"))criarResumo(ss);\n';
+  s+='    var row=aba.getLastRow()+1;\n';
+  s+='    aba.appendRow([\n';
+  s+='      row-3,\n';
+  s+='      d.data||hj(),d.hora||hr(),\n';
+  s+='      d.nome||"",d.telefone||"",d.email||"",\n';
+  s+='      d.bgo_esp||"",d.bgo_conv||"",\n';
+  s+='      d.utm_source||"direto",d.utm_medium||"",d.utm_campaign||"",\n';
+  s+='      d.pagina||"",d.dispositivo||"",\n';
+  s+='      JSON.stringify(d)||"",\n';
+  s+='      "Novo Lead"\n';
+  s+='    ]);\n';
+  s+='    fmtLinha(aba,row);\n';
+  s+='    return ok({total:row-3});\n';
+  s+='  }catch(err){return ok({erro:err.toString()});}\n';
+  s+='}\n\n';
+  s+='// ── Contador para o dashboard ──────────────────────\n';
+  s+='function doGet(){\n';
+  s+='  try{\n';
+  s+='    var ss=SpreadsheetApp.openById(getPlanilha(getPasta()).getId());\n';
+  s+='    var d=new Date();\n';
+  s+='    var n=MESES[d.getMonth()]+" "+d.getFullYear();\n';
+  s+='    var a=ss.getSheetByName(n);\n';
+  s+='    var total=a?Math.max(0,a.getLastRow()-3):0;\n';
+  s+='    var driveUrl="https://drive.google.com/drive/folders/";\n';
+  s+='    var ps=DriveApp.getFoldersByName(CONFIG.nomePasta);\n';
+  s+='    if(ps.hasNext())driveUrl+=ps.next().getId();\n';
+  s+='    return ok({total:total,driveUrl:driveUrl,cliente:CONFIG.nomeCliente});\n';
+  s+='  }catch(err){return ok({total:0,erro:err.toString()});}\n';
+  s+='}\n\n';
+  s+='// ── Gatilho mensal ─────────────────────────────────\n';
+  s+='function criarAbaNovoMes(){getMes(SpreadsheetApp.openById(getPlanilha(getPasta()).getId()));}\n\n';
+  s+='// ── Funções internas ───────────────────────────────\n';
   s+='function getPasta(){var p=DriveApp.getFoldersByName(CONFIG.nomePasta);return p.hasNext()?p.next():DriveApp.createFolder(CONFIG.nomePasta);}\n';
-  s+='function getPlanilha(pasta){var n="Leads — "+CONFIG.nomeCliente;var a=pasta.getFilesByName(n);if(a.hasNext())return SpreadsheetApp.openById(a.next().getId());var nv=SpreadsheetApp.create(n);var f=DriveApp.getFileById(nv.getId());pasta.addFile(f);DriveApp.getRootFolder().removeFile(f);return nv;}\n';
-  s+='function getMes(ss){var d=new Date();var n=MESES[d.getMonth()]+" "+d.getFullYear();var a=ss.getSheetByName(n);if(!a){var r=ss.getSheetByName("📊 Resumo");var p=r?ss.getSheets().indexOf(r):ss.getSheets().length;a=ss.insertSheet(n,p);cabecalho(a,n);}return a;}\n';
-  s+='function cabecalho(aba,mes){var C=[["#",32],["Data",88],["Hora",60],["Nome",180],["Celular",140],["E-mail",200],["Especialidade",200],["Convênio",155],["UTM Source",105],["UTM Medium",105],["UTM Campaign",145],["Página",270],["Dispositivo",100],["Status",130]];aba.setRowHeight(1,50);aba.getRange(1,1,1,C.length).merge().setValue("B.GO — "+CONFIG.nomeCliente.toUpperCase()).setBackground("#2D0A34").setFontColor("#FFF").setFontFamily("Arial").setFontSize(13).setFontWeight("bold").setHorizontalAlignment("center").setVerticalAlignment("middle");aba.setRowHeight(2,22);aba.getRange(2,1,1,C.length).merge().setValue("Leads do Site  |  "+mes).setBackground("#3D1545").setFontColor("#CCBBCC").setFontFamily("Arial").setFontSize(8).setHorizontalAlignment("center").setVerticalAlignment("middle");aba.setRowHeight(3,28);aba.getRange(3,1,1,C.length).setValues([C.map(function(c){return c[0];})]).setBackground("#F2EEF4").setFontColor("#2D0A34").setFontFamily("Arial").setFontSize(9).setFontWeight("bold").setHorizontalAlignment("center").setVerticalAlignment("middle").setWrap(true);for(var i=0;i<C.length;i++)aba.setColumnWidth(i+1,C[i][1]);aba.getRange(4,14,500,1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(["Novo Lead","Em Contato","Agendado","Não Atendeu","Fechado","Descartado"],true).build());aba.setFrozenRows(3);}\n';
-  s+='function fmtLinha(aba,l){aba.setRowHeight(l,20);aba.getRange(l,1,1,14).setBackground(l%2===0?"#FAF7FB":"#FFF").setFontFamily("Arial").setFontSize(9).setVerticalAlignment("middle");aba.getRange(l,1).setHorizontalAlignment("center");aba.getRange(l,14).setFontColor("#1A7A44").setFontWeight("bold").setBackground("#E6F4ED");}\n';
-  s+='function criarResumo(ss){var a=ss.insertSheet("📊 Resumo");a.getRange("A1:E1").merge().setValue("RESUMO — "+CONFIG.nomeCliente.toUpperCase()).setBackground("#2D0A34").setFontColor("#FFF").setFontFamily("Arial").setFontSize(13).setFontWeight("bold").setHorizontalAlignment("center").setVerticalAlignment("middle");}\n';
+  s+='function getPlanilha(pasta){\n';
+  s+='  var n="Leads — "+CONFIG.nomeCliente;\n';
+  s+='  var a=pasta.getFilesByName(n);\n';
+  s+='  if(a.hasNext())return SpreadsheetApp.openById(a.next().getId());\n';
+  s+='  var nv=SpreadsheetApp.create(n);\n';
+  s+='  var f=DriveApp.getFileById(nv.getId());\n';
+  s+='  pasta.addFile(f);DriveApp.getRootFolder().removeFile(f);\n';
+  s+='  return nv;\n';
+  s+='}\n';
+  s+='function getMes(ss){\n';
+  s+='  var d=new Date();\n';
+  s+='  var n=MESES[d.getMonth()]+" "+d.getFullYear();\n';
+  s+='  var a=ss.getSheetByName(n);\n';
+  s+='  if(!a){\n';
+  s+='    var r=ss.getSheetByName("📊 Resumo");\n';
+  s+='    var p=r?ss.getSheets().indexOf(r):ss.getSheets().length;\n';
+  s+='    a=ss.insertSheet(n,p);\n';
+  s+='    cabecalho(a,n);\n';
+  s+='  }\n';
+  s+='  return a;\n';
+  s+='}\n';
+  s+='function cabecalho(aba,mes){\n';
+  s+='  var C=[["#",32],["Data",88],["Hora",60],["Nome",180],["Celular",140],["E-mail",200],\n';
+  s+='         ["Especialidade",200],["Convênio",150],["UTM Source",105],["UTM Medium",105],\n';
+  s+='         ["UTM Campaign",145],["Página",260],["Dispositivo",100],["Dados extras",200],["Status",130]];\n';
+  s+='  aba.setRowHeight(1,60);\n';
+  s+='  var r1=aba.getRange(1,1,1,C.length);\n';
+  s+='  r1.merge().setValue("B.GO Marketing Médico — "+CONFIG.nomeCliente.toUpperCase());\n';
+  s+='  r1.setBackground("#2D0A34").setFontColor("#FFFFFF").setFontFamily("Arial")\n';
+  s+='    .setFontSize(14).setFontWeight("bold").setHorizontalAlignment("center").setVerticalAlignment("middle");\n';
+  s+='  aba.setRowHeight(2,22);\n';
+  s+='  var r2=aba.getRange(2,1,1,C.length);\n';
+  s+='  r2.merge().setValue("Leads do Site  ·  "+mes+"  ·  bgomarketingmedico.com.br");\n';
+  s+='  r2.setBackground("#3D1545").setFontColor("#CCBBCC").setFontFamily("Arial")\n';
+  s+='    .setFontSize(9).setHorizontalAlignment("center").setVerticalAlignment("middle");\n';
+  s+='  aba.setRowHeight(3,30);\n';
+  s+='  var r3=aba.getRange(3,1,1,C.length);\n';
+  s+='  r3.setValues([C.map(function(c){return c[0];})]).setBackground("#F2EEF4")\n';
+  s+='    .setFontColor("#2D0A34").setFontFamily("Arial").setFontSize(9).setFontWeight("bold")\n';
+  s+='    .setHorizontalAlignment("center").setVerticalAlignment("middle").setWrap(true);\n';
+  s+='  r3.setBorder(true,true,true,true,true,true,"#BBA8C0",SpreadsheetApp.BorderStyle.SOLID_MEDIUM);\n';
+  s+='  for(var i=0;i<C.length;i++)aba.setColumnWidth(i+1,C[i][1]);\n';
+  s+='  aba.getRange(4,15,500,1).setDataValidation(\n';
+  s+='    SpreadsheetApp.newDataValidation()\n';
+  s+='      .requireValueInList(["Novo Lead","Em Contato","Agendado","Não Atendeu","Fechado","Descartado"],true)\n';
+  s+='      .build());\n';
+  s+='  aba.setFrozenRows(3);\n';
+  s+='}\n';
+  s+='function fmtLinha(aba,l){\n';
+  s+='  var bg=(l%2===0)?"#FAF7FB":"#FFFFFF";\n';
+  s+='  aba.setRowHeight(l,21);\n';
+  s+='  aba.getRange(l,1,1,15).setBackground(bg).setFontFamily("Arial").setFontSize(9).setVerticalAlignment("middle")\n';
+  s+='    .setBorder(true,true,true,true,true,true,"#DDD5E0",SpreadsheetApp.BorderStyle.SOLID);\n';
+  s+='  aba.getRange(l,1).setHorizontalAlignment("center");\n';
+  s+='  aba.getRange(l,15).setFontColor("#1A7A44").setFontWeight("bold").setBackground("#E6F4ED");\n';
+  s+='}\n';
+  s+='function criarResumo(ss){\n';
+  s+='  var a=ss.insertSheet("📊 Resumo");\n';
+  s+='  a.setRowHeight(1,56);\n';
+  s+='  a.getRange("A1:E1").merge().setValue("RESUMO DE LEADS — "+CONFIG.nomeCliente.toUpperCase())\n';
+  s+='    .setBackground("#2D0A34").setFontColor("#FFFFFF").setFontFamily("Arial")\n';
+  s+='    .setFontSize(13).setFontWeight("bold").setHorizontalAlignment("center").setVerticalAlignment("middle");\n';
+  s+='  a.setColumnWidth(1,240);a.setColumnWidth(2,100);a.setColumnWidth(3,200);\n';
+  s+='}\n';
+  s+='function ok(d){return ContentService.createTextOutput(JSON.stringify(Object.assign({status:"ok"},d))).setMimeType(ContentService.MimeType.JSON);}\n';
   s+='function hj(){return Utilities.formatDate(new Date(),"America/Sao_Paulo","dd/MM/yyyy");}\n';
   s+='function hr(){return Utilities.formatDate(new Date(),"America/Sao_Paulo","HH:mm");}\n';
-  s+='function testar(){doPost({postData:{contents:JSON.stringify({nome:"Teste",telefone:"(61) 99999-0000",email:"teste@bgo.com",utm_source:"google",dispositivo:"Mobile",pagina:"https://teste.com.br"})}});Logger.log("✅ Teste inserido.");}\n';
+  s+='function testar(){doPost({postData:{contents:JSON.stringify({nome:"João Teste",telefone:"(61) 99999-0000",email:"teste@bgo.com.br",utm_source:"google",dispositivo:"Mobile",pagina:"https://teste.com.br"})}});Logger.log("✅ Lead de teste inserido.");}\n';
+
   document.getElementById('codeApps').textContent=s;
 }
 
-// ── PASSOS ────────────────────────────────────────────────────────────
-function gerarPassos(nome,webhook,whOk,sl){
+// ═══════════════════════════════════════════════════
+// PASSOS
+// ═══════════════════════════════════════════════════
+function gerarPassos(nome,wh,whOk,sl){
   var steps=[
-    {n:'1',t:'',h:'Abrir o Google Apps Script',b:'Acesse <a href="https://script.google.com" target="_blank" style="color:var(--roxo);font-weight:600">script.google.com</a> → <strong>Novo projeto</strong>. Nomeie: <code>Widget B.GO — '+nome+'</code>'},
-    {n:'2',t:'',h:'Colar o código e salvar',b:'Apague tudo, cole o conteúdo da aba <strong>⚙️ Apps Script</strong> e salve com <code>Ctrl+S</code>.'},
-    {n:'3',t:'',h:'Executar configurarCliente()',b:'Selecione <code>configurarCliente</code> no menu e clique em <strong>▶ Executar</strong>. Na primeira vez autorize as permissões. Aguarde o log: <code>✅ '+nome+'</code>',sa:'g',sm:'✅ Cria a pasta "B.GO — Leads de Clientes" e a planilha "Leads — '+nome+'" no Drive automaticamente.'},
-    {n:'4',t:'',h:'Publicar como Web App',b:'<strong>Implantar → Nova implantação</strong> → Tipo: <code>App da Web</code> → Executar como: <code>Eu</code> → Acesso: <code>Qualquer pessoa</code> → Implantar → copie a <strong>URL</strong>.'},
-    {n:'5',t:whOk?'done':'',h:whOk?'URL já configurada ✅':'Colar a URL e gerar novamente',b:whOk?'URL já está no snippet. Próximo passo.':'Cole a URL no campo <strong>"URL do Google Apps Script"</strong> e clique em <strong>Gerar widget</strong> novamente.'},
-    {n:'6',t:'auto',h:'Configurar gatilho mensal',b:'Menu ⏰ <strong>Acionadores</strong> → <strong>+ Adicionar acionador</strong>:<br>• Função: <code>criarAbaNovoMes</code><br>• Implantação: <code>Versão 1</code><br>• Tipo: <code>Contador de meses</code><br>• Dia: <code>1</code> | Hora: <code>0h–1h</code> → Salvar',sa:'b',sm:'🔄 Nova aba criada automaticamente todo dia 1° do mês.'},
-    {n:'7',t:'',h:'Colar snippet no site',b:'Copie da aba <strong>💻 Snippet</strong> e cole antes do <code>&lt;/body&gt;</code>.',plat:true},
-    {n:'8',t:'',h:'Subir página de URL limpa no GitHub',b:'Clique em <strong>⬇️ Baixar página do cliente</strong> acima. Suba o arquivo baixado na pasta <code>wa/</code> do repositório <code>agente-bgo</code>.<br>URL final: <code>bgomarketingmedico.github.io/agente-bgo/wa/'+sl+'</code>',sa:'g',sm:'✅ Cole essa URL em qualquer botão "WhatsApp" do site do cliente.'},
-    {n:'9',t:'done',h:'Testar',b:'Acesse o site com <code>?utm_source=google&amp;utm_medium=cpc&amp;utm_campaign=teste</code>. Preencha o formulário e confirme o lead na planilha do Drive. ✅'}
+    {n:'1',t:'',h:'Abrir o Google Apps Script',
+     b:'Acesse <a href="https://script.google.com" target="_blank" style="color:var(--roxo);font-weight:600">script.google.com</a> → clique em <strong>Novo projeto</strong>. Nomeie como: <code>Widget B.GO — '+nome+'</code>'},
+    {n:'2',t:'',h:'Colar o código e salvar',
+     b:'Apague todo o código padrão, cole o conteúdo da aba <strong>⚙️ Apps Script</strong> acima e salve com <code>Ctrl+S</code>.'},
+    {n:'3',t:'',h:'Executar configurarCliente()',
+     b:'No menu de funções selecione <code>configurarCliente</code> e clique em <strong>▶ Executar</strong>.<br>Na primeira vez o Google pedirá permissão — clique em <strong>Revisar permissões → Avançado → Permitir</strong>.<br>Aguarde o log: <code>✅ Configurado: '+nome+'</code>',
+     sa:'g',sm:'✅ Cria automaticamente a pasta "B.GO — Leads de Clientes" e a planilha "Leads — '+nome+'" no seu Google Drive, já com cabeçalho B.GO formatado.'},
+    {n:'4',t:'',h:'Publicar como Web App e copiar a URL',
+     b:'Clique em <strong>Implantar → Nova implantação</strong>.<br>• Tipo: <code>App da Web</code><br>• Executar como: <code>Eu (seu e-mail)</code><br>• Quem pode acessar: <code>Qualquer pessoa</code><br><br>Clique em <strong>Implantar</strong> → em <strong>App da Web → URL</strong> clique em <strong>Copiar</strong>.'},
+    {n:'5',t:whOk?'dn':'',h:whOk?'URL do webhook já configurada ✅':'Colar a URL e gerar novamente',
+     b:whOk?'A URL já está no snippet. Pode ir para o próximo passo.':'Cole a URL copiada no campo <strong>URL do Google Apps Script</strong> no painel acima e clique em <strong>Gerar widget</strong> novamente.'},
+    {n:'6',t:'au',h:'Configurar gatilho mensal',
+     b:'Menu lateral <strong>⏰ Acionadores</strong> → role até o fim → <strong>+ Adicionar acionador</strong>:<br>• Função: <code>criarAbaNovoMes</code> &nbsp;• Implantação: <code>Versão 1</code><br>• Tipo: <code>Contador de meses</code> &nbsp;• Dia: <code>1</code> &nbsp;• Hora: <code>0h–1h</code><br><br>Clique em <strong>Salvar</strong>.',
+     sa:'b',sm:'🔄 A partir de agora, uma nova aba é criada automaticamente todo dia 1° do mês — sem precisar de nenhuma ação.'},
+    {n:'7',t:'',h:'Colar o snippet no site do cliente',
+     b:'Copie o código da aba <strong>💻 Snippet do Site</strong> acima.',plat:true},
+    {n:'8',t:'',h:'Subir a página da URL limpa no GitHub',
+     b:'Clique em <strong>⬇️ Baixar página do cliente</strong> acima. Suba o arquivo na pasta <code>wa/</code> do repositório <code>agente-bgo</code>.<br><br>URL final ficará: <code>bgomarketingmedico.github.io/agente-bgo/wa/'+sl+'</code>',
+     sa:'g',sm:'✅ Cole essa URL em qualquer botão WhatsApp do site. Funciona igual ao botão flutuante — captura o lead antes de abrir o WhatsApp.'},
+    {n:'9',t:'dn',h:'Testar tudo',
+     b:'Acesse o site com <code>?utm_source=google&utm_medium=cpc&utm_campaign=teste-bgo</code> na URL.<br>Preencha o formulário com dados fictícios e confirme que a linha apareceu na planilha do Drive em <strong>B.GO — Leads de Clientes → Leads — '+nome+'</strong>. ✅'}
   ];
+
   var ul=document.getElementById('stepsList');
   ul.innerHTML=steps.map(function(s,i){
     var isLast=i===steps.length-1;
-    var nc='sn'+(s.t==='done'?' done':s.t==='auto'?' auto':'');
-    var nt=s.t==='done'&&s.n!=='5'?'✓':s.n;
-    var badge=s.t==='auto'?'<span class="badge-auto">🔄 auto</span>':'';
-    var alert_=s.sa?'<div class="sa sa-'+(s.sa==='g'?'g':'b')+'">'+s.sm+'</div>':'';
-    var plat='';
+    var nc='sn'+(s.t==='dn'?' dn':s.t==='au'?' au':'');
+    var nt=s.t==='dn'&&s.n!=='5'?'✓':s.n;
+    var badge=s.t==='au'?'<span class="badge-au">🔄 automático</span>':'';
+    var alertH=s.sa?'<div class="sa sa-'+(s.sa==='g'?'g':'b')+'">'+s.sm+'</div>':'';
+    var platH='';
     if(s.plat){
       var g='pg'+i;
-      plat='<div class="ptabs">'
-        +'<div class="ptab active" data-pg="'+g+'" data-pn="wix" onclick="showPtab(\''+g+'\',\'wix\')">Wix</div>'
+      platH='<div class="ptabs">'
+        +'<div class="ptab on" data-pg="'+g+'" data-pn="wix" onclick="showPtab(\''+g+'\',\'wix\')">Wix</div>'
         +'<div class="ptab" data-pg="'+g+'" data-pn="wp" onclick="showPtab(\''+g+'\',\'wp\')">WordPress</div>'
         +'<div class="ptab" data-pg="'+g+'" data-pn="html" onclick="showPtab(\''+g+'\',\'html\')">HTML puro</div>'
         +'</div>'
-        +'<div class="ptc active" data-tg="'+g+'" data-tn="wix"><strong>manage.wix.com</strong> → Configurações → Código personalizado → + Adicionar → cole o snippet → Todas as páginas → Corpo — fim → Aplicar → <strong>Publicar</strong>. ⚠️ Sem publicar o botão não aparece.</div>'
-        +'<div class="ptc" data-tg="'+g+'" data-tn="wp">Plugin <strong>WPCode</strong> (gratuito) → Code Snippets → + Adicionar → HTML → cole → ative → salve.</div>'
-        +'<div class="ptc" data-tg="'+g+'" data-tn="html">Abra o HTML, localize <code>&lt;/body&gt;</code> e cole antes. Salve e faça upload.</div>';
+        +'<div class="ptc on" data-tg="'+g+'" data-tn="wix"><strong>manage.wix.com</strong> → Configurações → Código personalizado → + Adicionar código personalizado → cole o snippet → Todas as páginas → Corpo — fim → Aplicar → <strong>Publicar o site</strong>. ⚠️ Sem publicar o botão não aparece.</div>'
+        +'<div class="ptc" data-tg="'+g+'" data-tn="wp">Plugin <strong>WPCode</strong> (gratuito) → Code Snippets → + Adicionar snippets → HTML → cole o código → ative → Salvar. Ou em Aparência → Editor de tema → footer.php antes do &lt;/body&gt;.</div>'
+        +'<div class="ptc" data-tg="'+g+'" data-tn="html">Abra o arquivo HTML, localize <code>&lt;/body&gt;</code> no final e cole o snippet imediatamente antes. Salve e faça upload do arquivo atualizado.</div>';
     }
-    return '<li class="si"><div class="sl"><div class="'+nc+'">'+nt+'</div>'+(isLast?'':'<div class="sline"></div>')+'</div><div class="sb"><h3>'+s.h+badge+'</h3><p>'+s.b+'</p>'+alert_+plat+'</div></li>';
+    return '<li class="si"><div class="sl"><div class="'+nc+'">'+nt+'</div>'+(isLast?'':'<div class="sln"></div>')+'</div>'
+      +'<div class="sb"><h3>'+s.h+badge+'</h3><p>'+s.b+'</p>'+alertH+platH+'</div></li>';
   }).join('');
 }
 
-// ── BAIXAR PÁGINA CLIENTE ─────────────────────────────────────────────
+// ═══════════════════════════════════════════════════
+// BAIXAR PÁGINA CLIENTE
+// ═══════════════════════════════════════════════════
 function baixarPagina(){
-  var nome    =document.getElementById('nomeCliente').value.trim();
-  var wa      =document.getElementById('whatsapp').value.trim().replace(/\D/g,'');
-  var msg     =document.getElementById('mensagemWA').value.trim();
-  var webhook =document.getElementById('webhookUrl').value.trim()||'';
-  var cor1    =document.getElementById('corPrincipal').value;
-  var titulo  =document.getElementById('tituloModal').value.trim();
-  var sub     =document.getElementById('subtituloModal').value.trim();
-  var esp     =document.getElementById('exibirEsp').checked;
-  var conv    =document.getElementById('exibirConv').checked;
-  var sl      =slug(nome);
+  var nome  =document.getElementById('f-nome').value.trim();
+  var wa    =document.getElementById('f-wa').value.trim().replace(/\D/g,'');
+  var msg   =document.getElementById('f-msg').value.trim();
+  var wh    =document.getElementById('f-wh').value.trim()||'';
+  var cor1  =document.getElementById('f-cor1').value;
+  var titulo=document.getElementById('f-titulo').value.trim();
+  var sub   =document.getElementById('f-sub').value.trim();
+  var esp   =document.getElementById('f-esp').checked;
+  var conv  =document.getElementById('f-conv').checked;
+  var sl    =slug(nome);
+
+  var WP='M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z';
 
   var xH='';
-  if(esp)xH+='<div class="field"><label>Especialidade / Tratamento</label><input type="text" id="f_esp" placeholder="Ex: Varizes..."></div>';
-  if(conv)xH+='<div class="field"><label>Particular ou Convênio?</label><select id="f_conv"><option value="">Selecione…</option><option>Particular</option><option>Convênio</option><option>Não sei ainda</option></select></div>';
+  if(esp)xH+='<div style="margin-bottom:15px"><label style="display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px;font-family:inherit">Especialidade / Tratamento</label><input type="text" id="f_esp" placeholder="Ex: Varizes, Botox…" style="display:block;width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none"></div>';
+  if(conv)xH+='<div style="margin-bottom:15px"><label style="display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px;font-family:inherit">Particular ou Convênio?</label><select id="f_conv" style="display:block;width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;-webkit-appearance:none;appearance:none"><option value="">Selecione…</option><option>Particular</option><option>Convênio</option><option>Não sei ainda</option></select></div>';
+  (customFields||[]).forEach(function(f){
+    if(f.tipo==='select'){
+      var opts=f.opts.split(',').map(function(o){return '<option>'+o.trim()+'</option>'}).join('');
+      xH+='<div style="margin-bottom:15px"><label style="display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px;font-family:inherit">'+f.label+'</label><select id="'+f.id+'" style="display:block;width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;-webkit-appearance:none;appearance:none"><option value="">Selecione…</option>'+opts+'</select></div>';
+    }else if(f.tipo==='textarea'){
+      xH+='<div style="margin-bottom:15px"><label style="display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px;font-family:inherit">'+f.label+'</label><textarea id="'+f.id+'" rows="3" style="display:block;width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;resize:vertical"></textarea></div>';
+    }else{
+      xH+='<div style="margin-bottom:15px"><label style="display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px;font-family:inherit">'+f.label+'</label><input type="'+f.tipo+'" id="'+f.id+'" style="display:block;width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none"></div>';
+    }
+  });
 
-  var html='<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n<title>WhatsApp — '+nome+'</title>\n<meta name="robots" content="noindex">\n<style>\n*{box-sizing:border-box;margin:0;padding:0}\nbody{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f7f5f9;min-height:100vh;display:flex;align-items:center;justify-content:center}\n.w{width:100%;max-width:420px;margin:14px;animation:up .3s ease}\n@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}\n.m{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(45,10,52,.14)}\n.hd{background:'+cor1+';padding:18px 18px 14px;display:flex;align-items:flex-start;gap:11px}\n.hd svg{width:25px;height:25px;fill:#fff;flex-shrink:0;margin-top:2px}\n.hd h2{color:#fff;font-size:1rem;font-weight:700;margin:0 0 2px}\n.hd p{color:rgba(255,255,255,.8);font-size:.78rem;margin:0}\n.bd{padding:18px}\n.field{margin-bottom:12px}\n.field label{display:block;font-size:.74rem;font-weight:700;color:#444;margin-bottom:4px}\n.field input,.field select{width:100%;border:1.5px solid #ddd;border-radius:8px;padding:9px 11px;font-size:.86rem;font-family:inherit;outline:none;color:#111;background:#fafafa}\n.field input:focus,.field select:focus{border-color:'+cor1+'}\n.btn{width:100%;padding:12px;background:'+cor1+';color:#fff;border:none;border-radius:9px;font-size:.92rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:inherit;margin-top:5px}\n.btn svg{width:16px;height:16px;fill:#fff}\n.btn:disabled{opacity:.6;cursor:default}\n.err{color:#c0392b;font-size:.75rem;margin-top:6px;display:none}\n.ok{display:none;text-align:center;padding:26px 0 12px}\n.ok svg{width:50px;height:50px;margin-bottom:8px}\n.ok h3{color:#222;font-size:.98rem;margin:0 0 5px}\n.ok p{color:#777;font-size:.82rem}\n.lgpd{font-size:.68rem;color:#aaa;text-align:center;margin-top:10px;line-height:1.4}\n.pw{text-align:center;margin-top:13px;font-size:11px;color:#aaa}\n.pw a{color:#8B5A9A;text-decoration:none;font-weight:600}\n</style>\n</head>\n<body>\n<div class="w">\n<div class="m">\n<div class="hd"><svg viewBox="0 0 24 24"><path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/></svg><div><h2>'+titulo+'</h2><p>'+sub+'</p></div></div>\n<div class="bd">\n<div id="fa">\n<div class="field"><label>Nome completo *</label><input type="text" id="nm" placeholder="João Silva" autocomplete="name"></div>\n<div class="field"><label>Celular / WhatsApp *</label><input type="tel" id="tel" placeholder="(61) 99999-0000" autocomplete="tel"></div>\n<div class="field"><label>E-mail *</label><input type="email" id="em" placeholder="joao@email.com" autocomplete="email"></div>\n'+xH+'\n<div class="err" id="err">⚠️ Preencha nome, celular e e-mail.</div>\n<button class="btn" id="btn"><svg viewBox="0 0 24 24"><path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/></svg> Iniciar conversa no WhatsApp</button>\n<div class="lgpd">Seus dados são usados apenas para entrar em contato. Não enviamos spam.</div>\n</div>\n<div class="ok" id="ok"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E6F4ED"/><path d="M7 12.5l3.5 3.5 6.5-7" stroke="#1A7A44" stroke-width="2" fill="none" stroke-linecap="round"/></svg><h3>Tudo certo! 🎉</h3><p>Abrindo o WhatsApp…</p></div>\n</div>\n</div>\n<div class="pw">Powered by <a href="https://bgomarketingmedico.com.br" target="_blank">B.GO Marketing Médico</a></div>\n</div>\n<script>\nvar W="'+wa+'",H="'+webhook.replace(/"/g,'\\"')+'",M="'+msg.replace(/"/g,'\\"')+'";\nvar p=new URLSearchParams(window.location.search);\nfunction utms(){return{utm_source:p.get("utm_source")||"direto",utm_medium:p.get("utm_medium")||"",utm_campaign:p.get("utm_campaign")||"",pagina:document.referrer||location.href,dispositivo:/Mobi|Android/i.test(navigator.userAgent)?"Mobile":"Desktop"};}\ndocument.getElementById("btn").onclick=function(){\nvar nm=document.getElementById("nm").value.trim();\nvar tel=document.getElementById("tel").value.trim();\nvar em=document.getElementById("em").value.trim();\nif(!nm||!tel||!em||!/\\\\S+@\\\\S+\\\\.\\\\S+/.test(em)){document.getElementById("err").style.display="block";return;}\ndocument.getElementById("err").style.display="none";\nvar btn=document.getElementById("btn");btn.disabled=true;btn.textContent="Enviando…";\nvar espEl=document.getElementById("f_esp");var convEl=document.getElementById("f_conv");\nvar pl=Object.assign({data:new Date().toLocaleDateString("pt-BR"),hora:new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),nome:nm,telefone:tel,email:em,especialidade:espEl?espEl.value:"",convenio:convEl?convEl.value:""},utms());\nif(H)fetch(H,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(pl)}).catch(function(){});\nsetTimeout(function(){document.getElementById("fa").style.display="none";document.getElementById("ok").style.display="block";var mf=M.replace("{{nome}}",nm);setTimeout(function(){window.location.href="https://wa.me/"+W+"?text="+encodeURIComponent(mf);},800);},600);\n};\n<\/script>\n</body>\n</html>';
+  var html='<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n<title>WhatsApp — '+nome+'</title>\n<meta name="robots" content="noindex,nofollow">\n<style>\n*{box-sizing:border-box;margin:0;padding:0}\nbody{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f0ecf4;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}\n.wrap{width:100%;max-width:440px;animation:up .3s cubic-bezier(.22,1,.36,1)}\n@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}\n.modal{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 12px 48px rgba(45,10,52,.18)}\n.hd{background:'+cor1+';padding:22px 20px 18px;display:flex;align-items:flex-start;gap:13px}\n.hd svg{width:27px;height:27px;fill:#fff;flex-shrink:0;margin-top:3px}\n.hd h2{color:#fff;font-size:17px;font-weight:700;margin:0 0 4px;line-height:1.3}\n.hd p{color:rgba(255,255,255,.82);font-size:13px;margin:0}\n.bd{padding:22px 20px 24px}\n.f{margin-bottom:16px}\n.f label{display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px}\n.f input,.f select,.f textarea{display:block;width:100%;border:1.5px solid #ddd;border-radius:11px;padding:12px 14px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}\n.f input:focus,.f select:focus,.f textarea:focus{border-color:'+cor1+';box-shadow:0 0 0 3px rgba(37,211,102,.12);background:#fff}\n.req{color:#e74c3c}\n.btn{width:100%;padding:14px;background:'+cor1+';color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;font-family:inherit;margin-top:10px;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:opacity .2s,transform .1s}\n.btn:hover{opacity:.92;transform:translateY(-1px)}\n.btn:disabled{opacity:.6;cursor:default;transform:none}\n.btn svg{width:18px;height:18px;fill:#fff}\n.err{color:#c0392b;font-size:12px;margin-top:9px;display:none;padding:10px 13px;background:#fff0f0;border-radius:9px;border:1px solid #fcc}\n.ok{display:none;text-align:center;padding:36px 0 16px}\n.ok svg{width:60px;height:60px;margin-bottom:12px}\n.ok h3{color:#111;font-size:17px;font-weight:700;margin:0 0 6px}\n.ok p{color:#777;font-size:13px}\n.lgpd{font-size:11px;color:#bbb;text-align:center;margin-top:14px;line-height:1.5}\n.pw{text-align:center;margin-top:16px;font-size:11px;color:#999}\n.pw a{color:#8B5A9A;text-decoration:none;font-weight:600}\n</style>\n</head>\n<body>\n<div class="wrap">\n<div class="modal">\n<div class="hd"><svg viewBox="0 0 24 24"><path d="'+WP+'"/></svg><div><h2>'+titulo+'</h2><p>'+sub+'</p></div></div>\n<div class="bd">\n<div id="fa">\n<div class="f"><label>Nome completo <span class="req">*</span></label><input type="text" id="nm" placeholder="João Silva" autocomplete="name"></div>\n<div class="f"><label>Celular / WhatsApp <span class="req">*</span></label><input type="tel" id="tel" placeholder="(61) 99999-0000" autocomplete="tel"></div>\n<div class="f"><label>E-mail <span class="req">*</span></label><input type="email" id="em" placeholder="joao@email.com" autocomplete="email"></div>\n'+xH+'\n<div class="err" id="err">⚠️ Preencha nome, celular e e-mail para continuar.</div>\n<button class="btn" id="btn"><svg viewBox="0 0 24 24"><path d="'+WP+'"/></svg>Iniciar conversa no WhatsApp</button>\n<div class="lgpd">Seus dados são usados apenas para entrar em contato com você. Não enviamos spam.</div>\n</div>\n<div class="ok" id="ok">\n<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E6F4ED"/><path d="M7 12.5l3.5 3.5 6.5-7" stroke="#1A7A44" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>\n<h3>Tudo certo! 🎉</h3><p>Abrindo o WhatsApp agora…</p>\n</div>\n</div>\n</div>\n<div class="pw">Powered by <a href="https://bgomarketingmedico.com.br" target="_blank">B.GO Marketing Médico</a></div>\n</div>\n<script>\nvar WA="'+wa+'",WH="'+wh.replace(/"/g,'\\"')+'",MSG="'+msg.replace(/"/g,'\\"')+'";\nvar p=new URLSearchParams(window.location.search);\nfunction utms(){return{utm_source:p.get("utm_source")||"direto",utm_medium:p.get("utm_medium")||"",utm_campaign:p.get("utm_campaign")||"",pagina:document.referrer||location.href,dispositivo:/Mobi|Android/i.test(navigator.userAgent)?"Mobile":"Desktop"};}\ndocument.getElementById("btn").onclick=function(){\nvar nm=document.getElementById("nm").value.trim();\nvar tel=document.getElementById("tel").value.trim();\nvar em=document.getElementById("em").value.trim();\nif(!nm||!tel||!em||!/\\S+@\\S+\\.\\S+/.test(em)){document.getElementById("err").style.display="block";return;}\ndocument.getElementById("err").style.display="none";\nvar btn=document.getElementById("btn");btn.disabled=true;btn.textContent="Enviando…";\nvar extra={};\n["f_esp","f_conv"].concat('+JSON.stringify((customFields||[]).map(function(f){return f.id}))+').forEach(function(id){var el=document.getElementById(id);if(el)extra[id]=el.value;});\nvar pl=Object.assign({data:new Date().toLocaleDateString("pt-BR"),hora:new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),nome:nm,telefone:tel,email:em},extra,utms());\nif(WH)fetch(WH,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(pl)}).catch(function(){});\nsetTimeout(function(){document.getElementById("fa").style.display="none";document.getElementById("ok").style.display="block";var mf=MSG.replace("{{nome}}",nm);setTimeout(function(){window.location.href="https://wa.me/"+WA+"?text="+encodeURIComponent(mf);},900);},700);\n};\n<\/script>\n</body>\n</html>';
 
   var b=new Blob([html],{type:'text/html'});
   var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=sl+'.html';a.click();URL.revokeObjectURL(a.href);
-  document.getElementById('instrGithub').style.display='block';
-  document.getElementById('btnBaixar').textContent='✓ Baixado! Suba na pasta wa/ do GitHub';
-  document.getElementById('btnBaixar').style.background='#1A7A44';
+  document.getElementById('dlInfo').style.display='block';
+  document.getElementById('btnDl').textContent='✓ Baixado! Suba na pasta wa/';
+  document.getElementById('btnDl').style.background='#1A7A44';
 }
 
-// ── DASHBOARD ─────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════
 function renderDash(){
-  var cl=getClientes();
-  var g=document.getElementById('clientesGrid');
+  var cl=getCl();
+  document.getElementById('st-total').textContent=cl.length;
+  document.getElementById('st-mes').textContent=getMes();
+
+  var grid=document.getElementById('clientesGrid');
   if(!cl.length){
-    g.innerHTML='<div class="empty"><div class="ei">🏥</div><h3>Nenhum cliente ainda</h3><p>Clique em <strong>"＋ Novo Cliente"</strong> para começar.</p></div>';
+    grid.innerHTML='<div class="empty-dash"><div class="ei">🏥</div><h3>Nenhum cliente ainda</h3><p>Clique em <strong>"+ Novo Cliente"</strong> no menu acima para começar a gerar widgets.</p></div>';
+    document.getElementById('st-leads').textContent='—';
     return;
   }
-  g.innerHTML=cl.map(function(c,i){
-    var acoes=c.webhook&&c.webhook.indexOf('SEU_ID')<0
-      ?'<button class="btn btn-roxo btn-sm" onclick="abrirDrive(\''+i+'\')">📁 Abrir no Drive</button>'
-       +'<button class="btn btn-outline btn-sm" onclick="buscarLeads(\''+c.webhook+'\','+i+')">🔄 Atualizar leads</button>'
-      :'<div style="font-size:11px;color:var(--muted);text-align:center;padding:6px">Configure a URL do Apps Script</div>';
+
+  grid.innerHTML=cl.map(function(c,i){
+    var temWh=c.wh&&c.wh.indexOf('SEU_ID')<0;
+    var acoes='';
+    if(temWh){
+      acoes+='<button class="ca ca-roxo" onclick="abrirDrive('+i+')">'
+        +'<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>'
+        +'Abrir no Drive</button>';
+      acoes+='<button class="ca ca-ghost" onclick="refreshLeads('+i+',\''+c.wh+'\')">🔄 Atualizar leads</button>';
+    }else{
+      acoes+='<div style="font-size:11px;color:var(--hint);text-align:center;padding:6px 0">Configure a URL do Apps Script para habilitar integração</div>';
+    }
+    acoes+='<button class="ca ca-outline" onclick="editarCliente('+i+')">'
+      +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
+      +'Editar / Ver snippet</button>';
+
     return '<div class="cc">'
-      +'<div class="cc-top"><div class="cc-av">🏥</div><div><div class="cc-nome">'+c.nome+'</div><div class="cc-wa">+'+c.wa+'</div></div></div>'
-      +'<div class="cc-body">'
-      +'<div class="cnt-row">'
-        +'<div class="cnt-box"><div class="cnt-num" id="cnt-'+i+'"><span style="font-size:12px;color:var(--muted)">...</span></div><div class="cnt-lbl">LEADS ESTE MÊS</div></div>'
-        +'<div class="cnt-div"></div>'
-        +'<div class="cnt-box"><div class="cnt-num" style="font-size:13px;color:var(--muted)">'+mesAtual()+'</div><div class="cnt-lbl">MÊS ATUAL</div></div>'
+      +'<div class="cc-hd">'
+        +'<div class="cc-nome">'+c.nome+'</div>'
+        +'<div class="cc-wa">'
+          +'<svg viewBox="0 0 24 24" fill="rgba(255,255,255,.5)" style="width:11px;height:11px"><path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52z"/></svg>'
+          +'+'+c.wa+'</div>'
+        +'<div class="cc-badge">⬜ '+getMes()+'</div>'
       +'</div>'
-      +'<div class="cc-actions">'+acoes+'<button class="btn btn-outline btn-sm" onclick="editarCliente(\''+i+'\')">✏️ Editar / Ver snippet</button></div>'
-      +'</div></div>';
+      +'<div class="cc-body">'
+        +'<div class="cc-cnt">'
+          +'<div class="cc-cnt-main">'
+            +'<div class="cc-cnt-num" id="cnt-'+i+'"><span style="font-size:14px;color:var(--hint)">...</span></div>'
+            +'<div class="cc-cnt-lbl">LEADS ESTE MÊS</div>'
+          +'</div>'
+          +'<div class="cc-cnt-mes">'
+            +'<strong>'+getMes()+'</strong>'
+            +'<div>Período</div>'
+          +'</div>'
+        +'</div>'
+        +'<div class="cc-acts">'+acoes+'</div>'
+      +'</div>'
+    +'</div>';
   }).join('');
+
+  // Busca contadores
+  var totalLeads=0;var fetched=0;
   cl.forEach(function(c,i){
-    if(c.webhook&&c.webhook.indexOf('SEU_ID')<0)buscarLeads(c.webhook,i);
-    else document.getElementById('cnt-'+i).innerHTML='<span style="font-size:12px;color:var(--muted)">—</span>';
+    if(c.wh&&c.wh.indexOf('SEU_ID')<0){
+      fetch(c.wh).then(function(r){return r.json();}).then(function(d){
+        var el=document.getElementById('cnt-'+i);
+        if(el){var n=typeof d.total!=='undefined'?d.total:0;el.textContent=n;totalLeads+=parseInt(n)||0;}
+        fetched++;
+        if(fetched===cl.filter(function(x){return x.wh&&x.wh.indexOf('SEU_ID')<0}).length){
+          document.getElementById('st-leads').textContent=totalLeads;
+        }
+      }).catch(function(){
+        var el=document.getElementById('cnt-'+i);
+        if(el)el.innerHTML='<span style="font-size:12px;color:var(--hint)">—</span>';
+      });
+    }else{
+      var el=document.getElementById('cnt-'+i);
+      if(el)el.innerHTML='<span style="font-size:12px;color:var(--hint)">—</span>';
+    }
   });
 }
 
-function buscarLeads(wh,i){
+function refreshLeads(i,wh){
+  var el=document.getElementById('cnt-'+i);
+  if(el)el.innerHTML='<span style="font-size:12px;color:var(--hint)">...</span>';
   fetch(wh).then(function(r){return r.json();}).then(function(d){
-    var el=document.getElementById('cnt-'+i);if(el)el.textContent=typeof d.total!=='undefined'?d.total:'—';
-  }).catch(function(){var el=document.getElementById('cnt-'+i);if(el)el.innerHTML='<span style="font-size:12px;color:var(--muted)">—</span>';});
+    if(el)el.textContent=typeof d.total!=='undefined'?d.total:'—';
+  }).catch(function(){if(el)el.innerHTML='<span style="font-size:12px;color:var(--hint)">—</span>';});
 }
 
 function abrirDrive(i){
-  var c=getClientes()[i];if(!c)return;
-  fetch(c.webhook).then(function(r){return r.json();}).then(function(d){
+  var c=getCl()[i];if(!c)return;
+  fetch(c.wh).then(function(r){return r.json();}).then(function(d){
     window.open(d.driveUrl||'https://drive.google.com','_blank');
   }).catch(function(){window.open('https://drive.google.com','_blank');});
 }
 
 function editarCliente(i){
-  var c=getClientes()[i];if(!c)return;
-  document.getElementById('nomeCliente').value=c.nome;
-  document.getElementById('whatsapp').value=c.wa;
-  document.getElementById('webhookUrl').value=c.webhook||'';
-  document.getElementById('corPrincipal').value=c.cor||'#25D366';
-  showPage('criar');window.scrollTo(0,0);
+  var c=getCl()[i];if(!c)return;
+  document.getElementById('f-nome').value=c.nome;
+  document.getElementById('f-wa').value=c.wa;
+  document.getElementById('f-wh').value=c.wh||'';
+  document.getElementById('f-cor1').value=c.cor||'#25D366';
+  document.getElementById('f-titulo').value=c.titulo||'Fale com a gente';
+  document.getElementById('f-msg').value=c.msg||'';
+  customFields=c.fields||[];
+  renderCustomFields();
+  showPg('criar');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 // Init
