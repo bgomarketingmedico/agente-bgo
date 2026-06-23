@@ -251,12 +251,22 @@ input[type=color]{height:40px;padding:4px 8px;cursor:pointer}
     <!-- URL COMPARTILHÁVEL -->
     <div style="padding:16px 20px 0">
       <div class="url-share-box">
-        <div class="url-label">🔗 URL COMPARTILHÁVEL — para botões CTA do site</div>
+        <div class="url-label">🔗 URL LIMPA — para botões CTA do site</div>
         <div class="url-share-row">
           <input type="text" id="urlCompartilhavel" readonly/>
           <button class="btn btn-roxo btn-sm" onclick="copiarURL()">Copiar</button>
         </div>
-        <div class="url-hint">Cole esta URL nos botões "WhatsApp" do site (<code>href="..."</code>). Quando o visitante clicar, o formulário B.GO abre e captura os dados antes de abrir o WhatsApp — igual ao botão flutuante.</div>
+        <div class="url-hint">Cole esta URL nos botões "WhatsApp" do site (<code>href="..."</code>). O visitante clica → formulário B.GO captura o lead → WhatsApp abre.<br><br>
+        ⬇️ <strong>Baixe também o arquivo do cliente</strong> e suba na pasta <code>wa/</code> do seu GitHub:</div>
+        <button class="btn btn-verde btn-sm" style="margin-top:8px;width:100%" id="btnBaixarPagina" onclick="baixarPaginaCliente()">
+          ⬇️ Baixar página do cliente para subir no GitHub
+        </button>
+        <div id="instrucaoGithub" style="display:none;margin-top:10px;background:#E6F4ED;border:1px solid #A8D8B9;border-radius:8px;padding:10px 12px;font-size:12px;color:#1A5C35;line-height:1.6">
+          <strong>Como subir no GitHub:</strong><br>
+          1. No repositório <code>agente-bgo</code>, crie a pasta <code>wa</code> se não existir<br>
+          2. Dentro de <code>wa/</code>, suba o arquivo baixado acima<br>
+          3. Após o deploy (~30s), a URL estará no ar ✅
+        </div>
       </div>
     </div>
 
@@ -345,6 +355,130 @@ function copiarURL(){
   });
 }
 
+function slugify(str){
+  return str.toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'');
+}
+
+function baixarPaginaCliente(){
+  var nome      = document.getElementById('nomeCliente').value.trim();
+  var wa        = document.getElementById('whatsapp').value.trim().replace(/\D/g,'');
+  var msg       = document.getElementById('mensagemWA').value.trim();
+  var webhook   = document.getElementById('webhookUrl').value.trim()||'';
+  var cor1      = document.getElementById('corPrincipal').value;
+  var titulo    = document.getElementById('tituloModal').value.trim();
+  var subtitulo = document.getElementById('subtituloModal').value.trim();
+  var exibirEsp = document.getElementById('exibirEsp').checked;
+  var exibirConv= document.getElementById('exibirConv').checked;
+
+  var WICO = '<svg viewBox=\"0 0 24 24\"><path d=\"M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z\"/><\/svg>';
+
+  var extraFields = '';
+  if(exibirEsp) extraFields += '<div class=\"field\"><label>Especialidade / Tratamento</label><input type=\"text\" id=\"f_esp\" placeholder=\"Ex: Varizes...\"></div>';
+  if(exibirConv) extraFields += '<div class=\"field\"><label>Particular ou Convênio?</label><select id=\"f_conv\"><option value=\"\">Selecione…</option><option>Particular</option><option>Convênio</option><option>Não sei ainda</option></select></div>';
+
+  var html = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WhatsApp — ${nome}</title>
+<meta name="robots" content="noindex">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f7f5f9;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.wrap{width:100%;max-width:440px;margin:16px;animation:up .3s cubic-bezier(.22,1,.36,1)}
+@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.modal{background:white;border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(45,10,52,.15)}
+.hd{background:${cor1};padding:20px 20px 16px;display:flex;align-items:flex-start;gap:12px}
+.hd svg{width:28px;height:28px;fill:white;flex-shrink:0;margin-top:2px}
+.hd h2{color:white;font-size:1.05rem;font-weight:700;margin:0 0 3px}
+.hd p{color:rgba(255,255,255,.82);font-size:.82rem;margin:0}
+.bd{padding:20px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.76rem;font-weight:700;color:#444;margin-bottom:5px}
+.req{color:#e74c3c}
+.field input,.field select{width:100%;border:1.5px solid #ddd;border-radius:9px;padding:10px 12px;font-size:.88rem;font-family:inherit;outline:none;color:#111;background:#fafafa;transition:border-color .15s}
+.field input:focus,.field select:focus{border-color:${cor1};box-shadow:0 0 0 3px rgba(37,211,102,.1);background:#fff}
+.btn{width:100%;padding:13px;background:${cor1};color:white;border:none;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;margin-top:6px}
+.btn:disabled{opacity:.6;cursor:default}
+.btn svg{width:17px;height:17px;fill:white}
+.err{color:#c0392b;font-size:.77rem;margin-top:8px;display:none}
+.ok{display:none;text-align:center;padding:28px 0 16px}
+.ok svg{width:52px;height:52px;margin-bottom:10px}
+.ok h3{color:#222;font-size:1rem;margin:0 0 6px}
+.ok p{color:#777;font-size:.85rem}
+.lgpd{font-size:.7rem;color:#aaa;text-align:center;margin-top:12px;line-height:1.4}
+.pw{text-align:center;margin-top:14px;font-size:11px;color:#aaa}
+.pw a{color:#8B5A9A;text-decoration:none;font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="modal">
+    <div class="hd">
+      ${WICO}
+      <div><h2>${titulo}</h2><p>${subtitulo}</p></div>
+    </div>
+    <div class="bd">
+      <div id="fa">
+        <div class="field"><label>Nome completo <span class="req">*</span></label><input type="text" id="nm" placeholder="João Silva" autocomplete="name"></div>
+        <div class="field"><label>Celular / WhatsApp <span class="req">*</span></label><input type="tel" id="tel" placeholder="(61) 99999-0000" autocomplete="tel"></div>
+        <div class="field"><label>E-mail <span class="req">*</span></label><input type="email" id="em" placeholder="joao@email.com" autocomplete="email"></div>
+        ${extraFields}
+        <div class="err" id="err">⚠️ Preencha nome, celular e e-mail para continuar.</div>
+        <button class="btn" id="btn">${WICO} Iniciar conversa no WhatsApp</button>
+        <div class="lgpd">Seus dados são usados apenas para entrar em contato. Não enviamos spam.</div>
+      </div>
+      <div class="ok" id="ok">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E6F4ED"/><path d="M7 12.5l3.5 3.5 6.5-7" stroke="#1A7A44" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        <h3>Tudo certo! 🎉</h3><p>Abrindo o WhatsApp agora…</p>
+      </div>
+    </div>
+  </div>
+  <div class="pw">Powered by <a href="https://bgomarketingmedico.com.br" target="_blank">B.GO Marketing Médico</a></div>
+</div>
+<script>
+var CFG={wa:"${wa}",webhook:"${webhook.replace(/"/g,'\"')}",msg:"${msg.replace(/"/g,'\"').replace(/
+/g,'\n')}"};
+var p=new URLSearchParams(window.location.search);
+function utms(){return{utm_source:p.get("utm_source")||"direto",utm_medium:p.get("utm_medium")||"",utm_campaign:p.get("utm_campaign")||"",utm_content:p.get("utm_content")||"",utm_term:p.get("utm_term")||"",pagina:document.referrer||window.location.href,dispositivo:/Mobi|Android/i.test(navigator.userAgent)?"Mobile":"Desktop"};}
+document.getElementById("btn").addEventListener("click",function(){
+  var nm=document.getElementById("nm").value.trim();
+  var tel=document.getElementById("tel").value.trim();
+  var em=document.getElementById("em").value.trim();
+  if(!nm||!tel||!em||!/\S+@\S+\.\S+/.test(em)){document.getElementById("err").style.display="block";return;}
+  document.getElementById("err").style.display="none";
+  var btn=document.getElementById("btn");btn.disabled=true;btn.textContent="Enviando…";
+  var espEl=document.getElementById("esp");var convEl=document.getElementById("conv");
+  var payload=Object.assign({data:new Date().toLocaleDateString("pt-BR"),hora:new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),nome:nm,telefone:tel,email:em,especialidade:espEl?espEl.value:"",convenio:convEl?convEl.value:""},utms());
+  if(CFG.webhook)fetch(CFG.webhook,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)}).catch(function(){});
+  setTimeout(function(){
+    document.getElementById("fa").style.display="none";
+    document.getElementById("ok").style.display="block";
+    var msgF=CFG.msg.replace("{{nome}}",nm);
+    setTimeout(function(){window.location.href="https://wa.me/"+CFG.wa+"?text="+encodeURIComponent(msgF);},900);
+  },700);
+});
+<\/script>
+</body>
+</html>`;
+
+  var slug = slugify(nome);
+  var blob = new Blob([html], {type:'text/html'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = slug+'.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+
+  document.getElementById('instrucaoGithub').style.display = 'block';
+  document.getElementById('btnBaixarPagina').textContent = '✓ Arquivo baixado! Agora suba na pasta wa/ do GitHub';
+  document.getElementById('btnBaixarPagina').style.background = '#1A7A44';
+}
+
 // ═══════════════════════════════════════════════════
 // GERAR WIDGET
 // ═══════════════════════════════════════════════════
@@ -364,18 +498,15 @@ function gerarWidget(){
 
   var webhookOk = webhook!=='https://script.google.com/macros/s/SEU_DEPLOYMENT_ID/exec';
 
-  // URL compartilhável — página intermediária no GitHub Pages
-  var baseGH = 'https://bgomarketingmedico.github.io/agente-bgo/wa.html';
-  var urlShare = baseGH
-    +'?wa='+encodeURIComponent(wa)
-    +'&wh='+encodeURIComponent(webhook)
-    +'&cor='+encodeURIComponent(cor1)
-    +'&titulo='+encodeURIComponent(titulo)
-    +'&sub='+encodeURIComponent(subtitulo)
-    +'&msg='+encodeURIComponent(msg)
-    +'&esp='+exibirEsp
-    +'&conv='+exibirConv
-    +'&nome='+encodeURIComponent(nome);
+  // URL limpa — baseada no slug do cliente
+  function slugify(str){
+    return str.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^a-z0-9]+/g,'-')
+      .replace(/^-+|-+$/g,'');
+  }
+  var slug = slugify(nome);
+  var urlShare = 'https://bgomarketingmedico.github.io/agente-bgo/wa/'+slug;
 
   document.getElementById('urlCompartilhavel').value = urlShare;
   document.getElementById('wa-preview-btn').style.background = cor1;
