@@ -462,6 +462,7 @@ function renderDash(){
   g.innerHTML=cl.map(function(c,i){
     var acoes=c.webhook&&c.webhook.indexOf('SEU_ID')<0
       ?'<button class="btn btn-roxo btn-sm" onclick="abrirDrive(\''+i+'\')">📁 Abrir no Drive</button>'
+       +'<button class="btn btn-outline btn-sm" onclick="buscarLeads(\''+c.webhook+'\','+i+')">🔄 Atualizar leads</button>'
       :'<div style="font-size:11px;color:var(--muted);text-align:center;padding:6px">Configure a URL do Apps Script</div>';
     return '<div class="cc">'
       +'<div class="cc-top"><div class="cc-av">🏥</div><div><div class="cc-nome">'+c.nome+'</div><div class="cc-wa">+'+c.wa+'</div></div></div>'
