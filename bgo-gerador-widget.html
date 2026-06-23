@@ -368,9 +368,28 @@ header{background:var(--roxo);padding:0 28px;height:56px;display:flex;align-item
         <input type="text" id="urlShare" readonly>
         <button class="btn btn-roxo btn-sm" onclick="copiarUrl()">Copiar</button>
       </div>
-      <div class="url-hint">
-        Cole nos botões WhatsApp do site: <code>&lt;a href="URL"&gt;WhatsApp&lt;/a&gt;</code><br>
-        O visitante clica → formulário captura o lead → WhatsApp abre automaticamente
+      <div style="margin-top:10px">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;letter-spacing:.03em">COMO USAR NOS BOTÕES DO SITE</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+          <button class="ptab on" data-pg="ctapg" data-pn="wix" onclick="showPtab('ctapg','wix')" style="font-size:11px">Wix</button>
+          <button class="ptab" data-pg="ctapg" data-pn="wp" onclick="showPtab('ctapg','wp')" style="font-size:11px">WordPress</button>
+          <button class="ptab" data-pg="ctapg" data-pn="html" onclick="showPtab('ctapg','html')" style="font-size:11px">HTML puro</button>
+        </div>
+        <div class="ptc on" data-tg="ctapg" data-tn="wix" style="font-size:12px">
+          No <strong>Editor Wix</strong>: clique no botão → <strong>Conectar ao link</strong> → <strong>Web address</strong> → cole a URL → marque <strong>"Abrir em nova aba"</strong> → Salvar → Publicar.
+        </div>
+        <div class="ptc" data-tg="ctapg" data-tn="wp" style="font-size:12px">
+          No <strong>Elementor / Gutenberg</strong>: clique no botão → campo de link → cole a URL → marque <strong>"Abrir em nova aba"</strong> → Atualizar.<br>Ou diretamente no HTML: <code>&lt;a href="<span class="cta-url-inline">URL</span>" target="_blank"&gt;Falar no WhatsApp&lt;/a&gt;</code>
+        </div>
+        <div class="ptc" data-tg="ctapg" data-tn="html" style="font-size:12px">
+          Cole onde quiser no HTML do site:<br>
+          <code>&lt;a href="<span class="cta-url-inline">URL</span>" target="_blank" rel="noopener"&gt;Falar no WhatsApp&lt;/a&gt;</code><br><br>
+          Para um botão estilizado:<br>
+          <code>&lt;a href="<span class="cta-url-inline">URL</span>" target="_blank" style="background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700"&gt;📲 Falar no WhatsApp&lt;/a&gt;</code>
+        </div>
+        <div style="margin-top:8px;font-size:11.5px;color:var(--muted);line-height:1.6">
+          O visitante clica → formulário captura nome, celular e e-mail → WhatsApp abre automaticamente com a mensagem personalizada.
+        </div>
       </div>
       <div class="dl-btn-wrap">
         <button class="btn btn-verde btn-sm" id="btnDl" onclick="baixarPagina()">
@@ -520,6 +539,7 @@ function gerarWidget(){
 
   var urlLimpa='https://bgomarketingmedico.github.io/agente-bgo/wa/'+sl;
   document.getElementById('urlShare').value=urlLimpa;
+  document.querySelectorAll('.cta-url-inline').forEach(function(el){el.textContent=urlLimpa;});
   document.getElementById('wa-prev-btn').style.background=cor1;
   document.getElementById('out-title').textContent='Widget gerado — '+nome;
   document.getElementById('out-sub').textContent='URL: '+urlLimpa;
