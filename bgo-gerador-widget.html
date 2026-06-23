@@ -364,9 +364,18 @@ function gerarWidget(){
 
   var webhookOk = webhook!=='https://script.google.com/macros/s/SEU_DEPLOYMENT_ID/exec';
 
-  // URL compartilhável — abre formulário modal via parâmetro
-  var urlBase = window.location.href.split('?')[0];
-  var urlShare = urlBase+'?bgo_open=1&wa='+wa+'&cor='+encodeURIComponent(cor1)+'&titulo='+encodeURIComponent(titulo)+'&msg='+encodeURIComponent(msg)+'&webhook='+encodeURIComponent(webhook)+'&esp='+exibirEsp+'&conv='+exibirConv;
+  // URL compartilhável — página intermediária no GitHub Pages
+  var baseGH = 'https://bgomarketingmedico.github.io/agente-bgo/wa.html';
+  var urlShare = baseGH
+    +'?wa='+encodeURIComponent(wa)
+    +'&wh='+encodeURIComponent(webhook)
+    +'&cor='+encodeURIComponent(cor1)
+    +'&titulo='+encodeURIComponent(titulo)
+    +'&sub='+encodeURIComponent(subtitulo)
+    +'&msg='+encodeURIComponent(msg)
+    +'&esp='+exibirEsp
+    +'&conv='+exibirConv
+    +'&nome='+encodeURIComponent(nome);
 
   document.getElementById('urlCompartilhavel').value = urlShare;
   document.getElementById('wa-preview-btn').style.background = cor1;
