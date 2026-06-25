@@ -202,17 +202,123 @@ header{background:var(--roxo);padding:0 28px;height:56px;display:flex;align-item
   header{padding:0 16px}
   .pg{padding:20px 14px}
 }
+
+/* ══════════════════════════════════════════════
+   DARK FUTURISTIC THEME — B.GO
+══════════════════════════════════════════════ */
+body{
+  background-color:#080012;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 15% 10%, rgba(90,31,110,.45) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 50% at 85% 85%, rgba(45,10,52,.7) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(26,10,46,.5) 0%, transparent 70%);
+  background-attachment:fixed;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(139,90,154,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(139,90,154,.04) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+header{
+  background:rgba(13,1,24,.85)!important;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(139,90,154,.25);
+  box-shadow:0 1px 0 rgba(139,90,154,.15),0 4px 32px rgba(0,0,0,.5)!important;
+  height:62px!important;
+}
+.pg{position:relative;z-index:1}
+
+/* Dashboard dark cards */
+.stat-card{
+  background:rgba(255,255,255,.04)!important;
+  border-color:rgba(201,168,216,.15)!important;
+  box-shadow:0 4px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06)!important;
+  backdrop-filter:blur(12px);
+}
+.stat-card .sv{color:#C9A8D8!important}
+.stat-card .sl{color:rgba(255,255,255,.45)!important}
+.cc{
+  background:rgba(255,255,255,.04)!important;
+  border-color:rgba(201,168,216,.12)!important;
+  box-shadow:0 8px 32px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.05)!important;
+  backdrop-filter:blur(12px);
+}
+.cc:hover{box-shadow:0 12px 48px rgba(90,31,110,.35),inset 0 1px 0 rgba(255,255,255,.08)!important;transform:translateY(-3px)}
+.cc-body{background:transparent!important}
+.cc-cnt{background:rgba(255,255,255,.06)!important;border:1px solid rgba(201,168,216,.1)}
+.cc-cnt-num{color:#C9A8D8!important}
+.cc-cnt-lbl{color:rgba(255,255,255,.4)!important}
+.cc-cnt-mes{color:rgba(255,255,255,.35)!important}
+.cc-cnt-mes strong{color:#B08AC8!important}
+.cc-acts .ca-ghost{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.1)!important;color:rgba(255,255,255,.65)!important}
+.cc-acts .ca-ghost:hover{background:rgba(255,255,255,.12)!important;color:#fff!important}
+.cc-acts .ca-outline{background:transparent!important;border-color:rgba(201,168,216,.3)!important;color:#C9A8D8!important}
+.cc-acts .ca-outline:hover{background:rgba(139,90,154,.2)!important;color:#fff!important}
+.dash-top h1{color:rgba(255,255,255,.92)!important}
+.dash-top p{color:rgba(255,255,255,.45)!important}
+.empty-dash h3{color:rgba(255,255,255,.8)!important}
+.empty-dash p{color:rgba(255,255,255,.4)!important}
+
+/* Header logo B.GO */
+.bgo-logo-svg{height:38px;width:auto;display:block}
+.bgo-logo-tag{font-size:9px;color:rgba(255,255,255,.38);letter-spacing:.12em;font-weight:500;margin-top:1px}
+
+/* Botão Como Fazer */
+.nbtn-cf{
+  background:linear-gradient(135deg,rgba(90,31,110,.6),rgba(45,10,52,.8));
+  color:rgba(255,255,255,.9);border:1px solid rgba(201,168,216,.3);
+  border-radius:var(--r8);padding:7px 14px;font-size:12px;font-weight:600;
+  cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:6px;
+}
+.nbtn-cf:hover{background:linear-gradient(135deg,rgba(90,31,110,.9),rgba(61,21,69,.9));border-color:rgba(201,168,216,.6);color:#fff;box-shadow:0 0 20px rgba(139,90,154,.3)}
+
+/* Modal Como Fazer */
+#cf-modal{display:none;position:fixed;inset:0;z-index:9000;background:rgba(5,0,15,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);align-items:center;justify-content:center;padding:16px}
+#cf-modal.on{display:flex}
+.cf-box{background:linear-gradient(145deg,#12002A,#1E0535,#2D0A34);border:1px solid rgba(201,168,216,.2);border-radius:20px;width:100%;max-width:680px;max-height:88vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 32px 80px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.08)}
+.cf-hd{padding:22px 24px 18px;border-bottom:1px solid rgba(201,168,216,.12);display:flex;align-items:center;gap:12px;flex-shrink:0}
+.cf-hd-ico{width:38px;height:38px;background:linear-gradient(135deg,var(--roxo3),var(--roxo));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.cf-hd h2{color:#fff;font-size:16px;font-weight:700;flex:1}
+.cf-hd p{color:rgba(255,255,255,.4);font-size:11px;margin-top:2px}
+.cf-close{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.cf-close:hover{background:rgba(255,255,255,.15);color:#fff}
+.cf-body{overflow-y:auto;padding:20px 24px 24px;flex:1}
+.cf-body::-webkit-scrollbar{width:4px}
+.cf-body::-webkit-scrollbar-thumb{background:rgba(139,90,154,.4);border-radius:4px}
+.cf-step{display:flex;gap:14px;margin-bottom:20px}
+.cf-step:last-child{margin-bottom:0}
+.cf-num{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--roxo3),var(--roxo));color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;box-shadow:0 2px 8px rgba(45,10,52,.4)}
+.cf-step-body h3{font-size:13px;font-weight:700;color:rgba(255,255,255,.92);margin-bottom:4px}
+.cf-step-body p{font-size:12px;color:rgba(255,255,255,.5);line-height:1.65}
+.cf-step-body code{background:rgba(255,255,255,.08);color:#C9A8D8;padding:1px 6px;border-radius:4px;font-size:11px}
+.cf-step-body strong{color:rgba(255,255,255,.8)}
+.cf-divider{height:1px;background:rgba(201,168,216,.1);margin:16px 0}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">B.</div>
-  <div class="logo-txt">
-    <strong>B.GO — Widget WhatsApp</strong>
-    <span>MARKETING MÉDICO DE ALTA PERFORMANCE</span>
-  </div>
+  <!-- Logo SVG B.GO -->
+  <svg class="bgo-logo-svg" viewBox="0 0 148 40" xmlns="http://www.w3.org/2000/svg" aria-label="B.GO Marketing Médico">
+    <!-- B letter -->
+    <rect x="1" y="1" width="8" height="38" rx="2" fill="white"/>
+    <path d="M9 1 H23 Q34 1 34 11 Q34 21 23 21 H9Z" fill="white"/>
+    <path d="M9 20 H25 Q37 20 37 30 Q37 39 25 39 H9Z" fill="white"/>
+    <path d="M13 5 H21 Q28 5 28 11 Q28 17 21 17 H13Z" fill="#0D0118"/>
+    <path d="M13 24 H23 Q31 24 31 30 Q31 36 23 36 H13Z" fill="#0D0118"/>
+    <!-- .GO -->
+    <text x="43" y="27" font-family="Arial Black,Arial,sans-serif" font-size="22" font-weight="900" fill="white" dominant-baseline="auto">.GO</text>
+    <!-- tagline -->
+    <text x="43" y="37" font-family="Arial,sans-serif" font-size="7.5" font-weight="400" fill="rgba(255,255,255,0.38)" letter-spacing="1.2">MARKETING MÉDICO</text>
+  </svg>
+
   <div class="hnav">
+    <button class="nbtn-cf" onclick="abrirCF()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Como fazer
+    </button>
     <button class="nbtn on" id="nb-dash" onclick="showPg('dash')">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
       Clientes
@@ -223,6 +329,113 @@ header{background:var(--roxo);padding:0 28px;height:56px;display:flex;align-item
     </button>
   </div>
 </header>
+
+<!-- ═══ MODAL COMO FAZER ═══ -->
+<div id="cf-modal" onclick="if(event.target===this)fecharCF()">
+  <div class="cf-box">
+    <div class="cf-hd">
+      <div class="cf-hd-ico">🚀</div>
+      <div style="flex:1"><h2>Como criar um novo cliente</h2><p>Passo a passo completo — do zero ao widget no ar</p></div>
+      <button class="cf-close" onclick="fecharCF()">✕</button>
+    </div>
+    <div class="cf-body">
+
+      <div class="cf-step">
+        <div class="cf-num">1</div>
+        <div class="cf-step-body">
+          <h3>Criar novo cliente no painel</h3>
+          <p>Clique em <strong>"+ Novo Cliente"</strong> no menu superior. Preencha o nome da clínica e o número do WhatsApp no formato <code>5561999990000</code> (DDI + DDD + número, só dígitos).</p>
+        </div>
+      </div>
+
+      <div class="cf-step">
+        <div class="cf-num">2</div>
+        <div class="cf-step-body">
+          <h3>Configurar aparência e campos</h3>
+          <p>Defina o título, subtítulo e cor do botão. Ative <strong>Especialidade</strong> ou <strong>Convênio</strong> se necessário. Adicione campos personalizados se a clínica precisar de informações extras.</p>
+        </div>
+      </div>
+
+      <div class="cf-divider"></div>
+      <p style="font-size:10px;color:rgba(255,255,255,.3);margin-bottom:14px;letter-spacing:.08em">CONFIGURAR O GOOGLE APPS SCRIPT (uma vez por cliente)</p>
+
+      <div class="cf-step">
+        <div class="cf-num">3</div>
+        <div class="cf-step-body">
+          <h3>Abrir o Google Apps Script</h3>
+          <p>Acesse <code>script.google.com</code> → clique em <strong>Novo projeto</strong> → nomeie como <code>Widget B.GO — Nome do Cliente</code>.</p>
+        </div>
+      </div>
+
+      <div class="cf-step">
+        <div class="cf-num">4</div>
+        <div class="cf-step-body">
+          <h3>Colar o código e executar</h3>
+          <p>No painel, clique em <strong>Gerar widget</strong> → aba <strong>⚙️ Apps Script</strong> → copie todo o código → cole no editor do Apps Script, apagando o código padrão → salve com <code>Ctrl+S</code>.<br><br>Selecione a função <code>configurarCliente</code> no menu → clique em <strong>▶ Executar</strong>. Na primeira vez o Google pedirá permissão — clique em <strong>Revisar permissões → Avançado → Permitir</strong>.</p>
+        </div>
+      </div>
+
+      <div class="cf-step">
+        <div class="cf-num">5</div>
+        <div class="cf-step-body">
+          <h3>Publicar como Web App e copiar a URL</h3>
+          <p>Clique em <strong>Implantar → Nova implantação</strong> → Tipo: <code>App da Web</code> → Executar como: <code>Eu</code> → Quem acessa: <code>Qualquer pessoa</code> → <strong>Implantar</strong> → copie a URL gerada.</p>
+        </div>
+      </div>
+
+      <div class="cf-step">
+        <div class="cf-num">6</div>
+        <div class="cf-step-body">
+          <h3>Colar a URL no painel e gerar novamente</h3>
+          <p>Volte ao painel → campo <strong>URL do Google Apps Script</strong> → cole a URL → clique em <strong>Gerar widget</strong> novamente para o snippet incluir o webhook.</p>
+        </div>
+      </div>
+
+      <div class="cf-divider"></div>
+      <p style="font-size:10px;color:rgba(255,255,255,.3);margin-bottom:14px;letter-spacing:.08em">COLOCAR NO AR</p>
+
+      <div class="cf-step">
+        <div class="cf-num">7</div>
+        <div class="cf-step-body">
+          <h3>Copiar o snippet e colar no site</h3>
+          <p>Aba <strong>💻 Snippet do Site</strong> → copie o código → cole no site do cliente antes do <code>&lt;/body&gt;</code>.<br><br>
+          <strong>Wix:</strong> Configurações → Código personalizado → + Adicionar → cole → Todas as páginas → Corpo - fim → Aplicar → <strong>Publicar</strong>.<br>
+          <strong>WordPress:</strong> Plugin WPCode → + Snippets → HTML → cole → ativar → Salvar.</p>
+        </div>
+      </div>
+
+      <div class="cf-step">
+        <div class="cf-num">8</div>
+        <div class="cf-step-body">
+          <h3>Subir a página WA no GitHub</h3>
+          <p>Clique em <strong>⬇️ Baixar página do cliente</strong> → salva o arquivo <code>nome-cliente.html</code>.<br><br>
+          <strong>🥇 1º cliente (pasta wa/ ainda não existe):</strong> GitHub → <code>agente-bgo</code> → <strong>Add file → Create new file</strong> → no campo do nome digite <code>wa/nome-cliente.html</code> (a barra <code>/</code> cria a pasta) → abra o arquivo no Bloco de Notas → cole o conteúdo → <strong>Commit changes</strong>.<br><br>
+          <strong>🔁 Próximos clientes:</strong> GitHub → pasta <code>wa/</code> → <strong>Add file → Upload files</strong> → arraste o arquivo → <strong>Commit changes</strong>.<br><br>
+          Aguarde ~30s e a URL estará no ar.</p>
+        </div>
+      </div>
+
+      <div class="cf-step">
+        <div class="cf-num">9</div>
+        <div class="cf-step-body">
+          <h3>Usar a URL nos botões do site</h3>
+          <p>A URL limpa <code>bgomarketingmedico.github.io/agente-bgo/wa/nome-cliente</code> pode ser usada em qualquer botão do site.<br><br>
+          <strong>Wix:</strong> clique no botão → Conectar ao link → Web address → cole a URL → Abrir em nova aba → Salvar → Publicar.<br>
+          <strong>WordPress:</strong> clique no botão → campo link → cole a URL → marque "Abrir em nova aba" → Atualizar.</p>
+        </div>
+      </div>
+
+      <div class="cf-step">
+        <div class="cf-num" style="background:linear-gradient(135deg,#1A7A44,#25D366)">✓</div>
+        <div class="cf-step-body">
+          <h3>Testar tudo</h3>
+          <p>Acesse o site do cliente e clique no botão verde do WhatsApp. Preencha o formulário com dados fictícios e confirme que a linha apareceu na planilha em <strong>B.GO — Leads de Clientes</strong> no Google Drive. ✅</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <!-- ═══ DASHBOARD ═══ -->
 <div class="pg on" id="pg-dash">
@@ -1121,6 +1334,10 @@ function editarCliente(i){
 
 // Init
 renderDash();
+
+function abrirCF(){document.getElementById('cf-modal').classList.add('on');document.body.style.overflow='hidden';}
+function fecharCF(){document.getElementById('cf-modal').classList.remove('on');document.body.style.overflow='';}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')fecharCF();});
 </script>
 </body>
 </html>
