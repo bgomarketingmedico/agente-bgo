@@ -301,17 +301,29 @@ header{
 
 <header>
   <!-- Logo SVG B.GO -->
-  <svg class="bgo-logo-svg" viewBox="0 0 148 40" xmlns="http://www.w3.org/2000/svg" aria-label="B.GO Marketing Médico">
-    <!-- B letter -->
-    <rect x="1" y="1" width="8" height="38" rx="2" fill="white"/>
-    <path d="M9 1 H23 Q34 1 34 11 Q34 21 23 21 H9Z" fill="white"/>
-    <path d="M9 20 H25 Q37 20 37 30 Q37 39 25 39 H9Z" fill="white"/>
-    <path d="M13 5 H21 Q28 5 28 11 Q28 17 21 17 H13Z" fill="#0D0118"/>
-    <path d="M13 24 H23 Q31 24 31 30 Q31 36 23 36 H13Z" fill="#0D0118"/>
-    <!-- .GO -->
-    <text x="43" y="27" font-family="Arial Black,Arial,sans-serif" font-size="22" font-weight="900" fill="white" dominant-baseline="auto">.GO</text>
-    <!-- tagline -->
-    <text x="43" y="37" font-family="Arial,sans-serif" font-size="7.5" font-weight="400" fill="rgba(255,255,255,0.38)" letter-spacing="1.2">MARKETING MÉDICO</text>
+  <svg class="bgo-logo-svg" viewBox="0 0 248 40" xmlns="http://www.w3.org/2000/svg" aria-label="B.GO Marketing Médico">
+    <defs>
+      <mask id="bmask">
+        <rect x="0" y="0" width="44" height="40" fill="white"/>
+        <!-- recortes D dentro do B -->
+        <path d="M13 5 H21 Q29 5 29 11 Q29 17 21 17 H13 Z" fill="black"/>
+        <path d="M13 23 H23 Q33 23 33 30 Q33 37 23 37 H13 Z" fill="black"/>
+      </mask>
+    </defs>
+    <!-- B com recortes via máscara -->
+    <g mask="url(#bmask)" fill="white">
+      <rect x="1" y="1" width="9" height="38" rx="2"/>
+      <path d="M10 1 H23 Q35 1 35 11 Q35 21 23 21 H10 Z"/>
+      <path d="M10 20 H25 Q38 20 38 30 Q38 39 25 39 H10 Z"/>
+    </g>
+    <!-- .go -->
+    <text x="42" y="37" font-family="Arial Black,Arial,sans-serif" font-size="14" font-weight="900" fill="white">.go</text>
+    <!-- divisor -->
+    <line x1="75" y1="5" x2="75" y2="35" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+    <!-- MARKETING MÉDICO -->
+    <text x="83" y="20" font-family="Arial Black,Arial,sans-serif" font-size="13.5" font-weight="900" fill="white">MARKETING MÉDICO</text>
+    <!-- autoridade & perfomance -->
+    <text x="83" y="34" font-family="Arial,sans-serif" font-size="9.5" font-weight="300" fill="rgba(255,255,255,.5)">autoridade &amp; perfomance</text>
   </svg>
 
   <div class="hnav">
