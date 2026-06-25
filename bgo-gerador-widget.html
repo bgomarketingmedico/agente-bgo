@@ -295,6 +295,12 @@ header{
 .cf-step-body code{background:rgba(255,255,255,.08);color:#C9A8D8;padding:1px 6px;border-radius:4px;font-size:11px}
 .cf-step-body strong{color:rgba(255,255,255,.8)}
 .cf-divider{height:1px;background:rgba(201,168,216,.1);margin:16px 0}
+.cf-sec{display:flex;align-items:center;gap:10px;margin:22px 0 16px;padding:11px 14px;background:linear-gradient(135deg,rgba(90,31,110,.45),rgba(45,10,52,.55));border:1px solid rgba(201,168,216,.25);border-left:3px solid #C9A8D8;border-radius:10px}
+.cf-sec:first-child{margin-top:0}
+.cf-sec-ico{font-size:17px;flex-shrink:0}
+.cf-sec-tit{font-size:13.5px;font-weight:800;color:#fff;letter-spacing:.02em}
+.cf-sec-sub{font-size:10.5px;color:rgba(255,255,255,.45);margin-top:1px}
+.cf-code-box{display:block;margin-top:8px;background:rgba(0,0,0,.35);border:1px solid rgba(201,168,216,.25);border-radius:8px;padding:10px 12px;font-size:11px;color:#7FE0A0;word-break:break-all;line-height:1.5}
 </style>
 </head>
 <body>
@@ -352,6 +358,11 @@ header{
     </div>
     <div class="cf-body">
 
+      <div class="cf-sec">
+        <div class="cf-sec-ico">🏥</div>
+        <div><div class="cf-sec-tit">1. CRIAR O CLIENTE</div><div class="cf-sec-sub">Cadastro e configuração no painel</div></div>
+      </div>
+
       <div class="cf-step">
         <div class="cf-num">1</div>
         <div class="cf-step-body">
@@ -368,8 +379,10 @@ header{
         </div>
       </div>
 
-      <div class="cf-divider"></div>
-      <p style="font-size:10px;color:rgba(255,255,255,.3);margin-bottom:14px;letter-spacing:.08em">CONFIGURAR O GOOGLE APPS SCRIPT (uma vez por cliente)</p>
+      <div class="cf-sec">
+        <div class="cf-sec-ico">⚙️</div>
+        <div><div class="cf-sec-tit">2. CONFIGURAR O GOOGLE APPS SCRIPT</div><div class="cf-sec-sub">Uma vez por cliente — cria a planilha de leads no Drive</div></div>
+      </div>
 
       <div class="cf-step">
         <div class="cf-num">3</div>
@@ -403,8 +416,10 @@ header{
         </div>
       </div>
 
-      <div class="cf-divider"></div>
-      <p style="font-size:10px;color:rgba(255,255,255,.3);margin-bottom:14px;letter-spacing:.08em">COLOCAR NO AR</p>
+      <div class="cf-sec">
+        <div class="cf-sec-ico">🚀</div>
+        <div><div class="cf-sec-tit">3. COLOCAR NO AR</div><div class="cf-sec-sub">Site, página WhatsApp e rastreamento de origem</div></div>
+      </div>
 
       <div class="cf-step">
         <div class="cf-num">7</div>
@@ -441,10 +456,12 @@ header{
       <div class="cf-step">
         <div class="cf-num">10</div>
         <div class="cf-step-body">
-          <h3>Rastrear a origem do lead (opcional, recomendado)</h3>
-          <p>Para a planilha mostrar de onde o lead veio (<strong>busca google orgânico</strong>, instagram, tráfego pago…) em vez de "direto", cole <strong>uma vez</strong> este código no site do cliente, antes do <code>&lt;/body&gt;</code>:<br>
-          <code>&lt;script src="https://bgomarketingmedico.github.io/agente-bgo/bgo-origem.js"&gt;&lt;/script&gt;</code><br><br>
-          No Wix: Configurações → Código personalizado → + Adicionar → cole → Todas as páginas → Corpo - fim → Publicar.</p>
+          <h3>Rastrear a origem do lead <span style="color:#7FE0A0">(recomendado)</span></h3>
+          <p>Para a planilha mostrar de onde o lead veio (<strong>busca google orgânico</strong>, instagram, tráfego pago…) em vez de "direto", cole <strong>uma única vez</strong> este código no site do cliente, antes do <code>&lt;/body&gt;</code>:</p>
+          <code class="cf-code-box">&lt;script src="https://bgomarketingmedico.github.io/agente-bgo/bgo-origem.js"&gt;&lt;/script&gt;</code>
+          <p style="margin-top:8px"><strong>Wix:</strong> Configurações → Código personalizado → + Adicionar código → cole acima → marque <strong>Todas as páginas</strong> → posição <strong>Corpo - fim</strong> → Aplicar → <strong>Publicar</strong>.<br>
+          <strong>WordPress:</strong> plugin WPCode → + Adicionar snippet → HTML → cole → ative → Salvar.<br>
+          <span style="color:rgba(255,255,255,.4)">É a mesma linha para todos os clientes. Cola uma vez por site e nunca mais mexe.</span></p>
         </div>
       </div>
 
