@@ -516,6 +516,7 @@ header{
           <div class="fld"><label>WhatsApp <span class="req">*</span></label><input type="tel" id="f-wa" placeholder="5561999999999"><div class="fld-hint">DDI + DDD + número, só números. Ex: 5561999990000</div></div>
           <div class="fld"><label>Mensagem inicial no WhatsApp</label><input type="text" id="f-msg" value="Olá! Meu nome é {{nome}} e gostaria de agendar uma consulta."><div class="fld-hint">Use {{nome}} para incluir o nome do lead automaticamente</div></div>
           <div class="fld"><label>URL do Google Apps Script</label><input type="url" id="f-wh" placeholder="https://script.google.com/macros/s/..."><div class="fld-hint">Obtida no Passo 4 do guia. Pode deixar em branco e preencher depois.</div></div>
+          <div class="fld"><label>E-mail para avisar a cada novo lead</label><input type="text" id="f-mailnotif" placeholder="contato@clinica.com.br"><div class="fld-hint">Opcional. A cada lead, envia um e-mail de aviso para este endereço. Pode usar vários separados por vírgula.</div></div>
         </div>
       </div>
 
@@ -793,6 +794,7 @@ function gerarWidget(){
   var sub   =document.getElementById('f-sub').value.trim();
   var esp   =document.getElementById('f-esp').checked;
   var conv  =document.getElementById('f-conv').checked;
+  var mailNotif=(document.getElementById('f-mailnotif')||{}).value ? document.getElementById('f-mailnotif').value.trim() : '';
   var whOk  =wh.indexOf('SEU_ID')<0;
   var sl    =slug(nome);
 
@@ -808,12 +810,12 @@ function gerarWidget(){
   // Salva cliente
   var cl=getCl();
   var idx=cl.findIndex(function(c){return c.nome===nome});
-  var obj={nome:nome,wa:wa,wh:wh,cor:cor1,titulo:titulo,msg:msg,url:urlLimpa,slug:sl,criado:new Date().toLocaleDateString('pt-BR'),fields:JSON.parse(JSON.stringify(customFields))};
+  var obj={nome:nome,wa:wa,wh:wh,cor:cor1,titulo:titulo,msg:msg,mailNotif:mailNotif,url:urlLimpa,slug:sl,criado:new Date().toLocaleDateString('pt-BR'),fields:JSON.parse(JSON.stringify(customFields))};
   if(idx>=0)cl[idx]=obj;else cl.unshift(obj);
   saveCl(cl);
 
   gerarSnippet(nome,wa,msg,wh,cor1,cor2,titulo,sub,esp,conv,customFields);
-  gerarApps(nome);
+  gerarApps(nome,mailNotif);
   gerarPassos(nome,wh,whOk,sl);
 
   document.getElementById('outputWrap').classList.add('on');
@@ -825,224 +827,31 @@ function gerarWidget(){
 // SNIPPET — DOM-based, sem escaping de strings
 // ═══════════════════════════════════════════════════
 function gerarSnippet(nome,wa,msg,wh,cor1,cor2,titulo,sub,esp,conv,cfs){
-
-  // Monta lista de campos extras para o snippet
-  var extraFieldsCode = '';
-  if(esp){
-    extraFieldsCode += "\n  addField(fa,'bgo_esp','Especialidade / Tratamento','text','Ex: Varizes, Botox…',false);";
-  }
-  if(conv){
-    extraFieldsCode += "\n  addSelect(fa,'bgo_conv','Particular ou Convênio?',['Particular','Convênio','Não sei ainda']);";
-  }
-  (cfs||[]).forEach(function(f){
-    if(f.tipo==='select'){
-      var opts = f.opts.split(',').map(function(o){return o.trim();}).filter(Boolean);
-      extraFieldsCode += "\n  addSelect(fa,'"+f.id+"','"+f.label.replace(/'/g,"\\'")+"',"+JSON.stringify(opts)+");";
-    } else if(f.tipo==='textarea') {
-      extraFieldsCode += "\n  addTextarea(fa,'"+f.id+"','"+f.label.replace(/'/g,"\\'")+'\');';
-    } else {
-      extraFieldsCode += "\n  addField(fa,'"+f.id+"','"+f.label.replace(/'/g,"\\'")+"','"+f.tipo+"','',false);";
-    }
-  });
-
-  var allIds = ['bgo_nm','bgo_tel','bgo_em'];
-  if(esp) allIds.push('bgo_esp');
-  if(conv) allIds.push('bgo_conv');
-  (cfs||[]).forEach(function(f){ allIds.push(f.id); });
-
-  var s = '<!-- B.GO Widget WhatsApp — '+nome+' | '+new Date().toLocaleDateString('pt-BR')+' -->\n';
-  s += '<script>\n(function(){\n"use strict";\n';
-  s += 'var C={wa:"'+wa+'",wh:"'+wh+'",c1:"'+cor1+'",c2:"'+cor2+'",m:'+JSON.stringify(msg)+',t:'+JSON.stringify(titulo)+',s:'+JSON.stringify(sub)+'};\n';
-  s += 'var IDS='+JSON.stringify(allIds)+';\n\n';
-
-  s += 'function mk(tag,css,attrs){\n';
-  s += '  var el=document.createElement(tag);\n';
-  s += '  if(css)el.style.cssText=css;\n';
-  s += '  if(attrs)Object.keys(attrs).forEach(function(k){el.setAttribute(k,attrs[k]);});\n';
-  s += '  return el;\n';
-  s += '}\n\n';
-
-  s += 'function addField(parent,id,label,type,ph,req){\n';
-  s += '  var wrap=mk("div","margin-bottom:16px");\n';
-  s += '  var lbl=mk("label","display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:6px;font-family:inherit");\n';
-  s += '  lbl.textContent=label+(req?" *":"");\n';
-  s += '  if(req){var sp=document.createElement("span");sp.style.color="#e74c3c";sp.textContent=" *";lbl.textContent=label;lbl.appendChild(sp);}\n';
-  s += '  var inp=mk("input","display:block;width:100%;box-sizing:border-box;border:1.5px solid #e0e0e0;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;transition:border-color .15s",{type:type,id:id,placeholder:ph});\n';
-  s += '  inp.addEventListener("focus",function(){this.style.borderColor=C.c1;this.style.boxShadow="0 0 0 3px rgba(37,211,102,.1)";});\n';
-  s += '  inp.addEventListener("blur",function(){this.style.borderColor="#e0e0e0";this.style.boxShadow="none";});\n';
-  s += '  wrap.appendChild(lbl);wrap.appendChild(inp);\n';
-  s += '  parent.appendChild(wrap);\n';
-  s += '}\n\n';
-
-  s += 'function addSelect(parent,id,label,opts){\n';
-  s += '  var wrap=mk("div","margin-bottom:16px");\n';
-  s += '  var lbl=mk("label","display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:6px;font-family:inherit");\n';
-  s += '  lbl.textContent=label;\n';
-  s += '  var sel=mk("select","display:block;width:100%;box-sizing:border-box;border:1.5px solid #e0e0e0;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;-webkit-appearance:none;appearance:none",{id:id});\n';
-  s += '  var def=document.createElement("option");def.value="";def.textContent="Selecione…";sel.appendChild(def);\n';
-  s += '  opts.forEach(function(o){var op=document.createElement("option");op.textContent=o;sel.appendChild(op);});\n';
-  s += '  sel.addEventListener("focus",function(){this.style.borderColor=C.c1;});\n';
-  s += '  sel.addEventListener("blur",function(){this.style.borderColor="#e0e0e0";});\n';
-  s += '  wrap.appendChild(lbl);wrap.appendChild(sel);\n';
-  s += '  parent.appendChild(wrap);\n';
-  s += '}\n\n';
-
-  s += 'function addTextarea(parent,id,label){\n';
-  s += '  var wrap=mk("div","margin-bottom:16px");\n';
-  s += '  var lbl=mk("label","display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:6px;font-family:inherit");\n';
-  s += '  lbl.textContent=label;\n';
-  s += '  var ta=mk("textarea","display:block;width:100%;box-sizing:border-box;border:1.5px solid #e0e0e0;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;resize:vertical;min-height:80px",{id:id,rows:"3"});\n';
-  s += '  ta.addEventListener("focus",function(){this.style.borderColor=C.c1;});\n';
-  s += '  ta.addEventListener("blur",function(){this.style.borderColor="#e0e0e0";});\n';
-  s += '  wrap.appendChild(lbl);wrap.appendChild(ta);\n';
-  s += '  parent.appendChild(wrap);\n';
-  s += '}\n\n';
-
-  s += 'function init(){\n';
-  s += '  // FAB\n';
-  s += '  var fab=mk("button","position:fixed!important;bottom:24px;right:24px;z-index:9998;width:58px!important;height:58px!important;min-width:58px!important;padding:0!important;margin:0!important;box-sizing:border-box!important;border-radius:50%;background-color:"+C.c1+";background-image:url(data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Cpath%20fill%3D%27%23ffffff%27%20d%3D%27M20.52%203.48A11.94%2011.94%200%200%200%2012%200C5.37%200%200%205.37%200%2012c0%202.11.55%204.16%201.6%205.97L0%2024l6.18-1.62A11.94%2011.94%200%200%200%2012%2024c6.63%200%2012-5.37%2012-12%200-3.2-1.25-6.22-3.48-8.52zM12%2022c-1.85%200-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94%209.94%200%200%201%202%2012C2%206.48%206.48%202%2012%202c2.67%200%205.18%201.04%207.07%202.93A9.94%209.94%200%200%201%2022%2012c0%205.52-4.48%2010-10%2010zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94%201.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2%200-.5.07-.77.37C6.47%208.6%205.75%209.27%205.75%2010.67c0%201.4%201.02%202.76%201.17%202.95.15.2%202%203.04%204.86%204.27.68.29%201.21.47%201.62.6.68.21%201.3.18%201.79.11.55-.08%201.77-.72%202.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z%27%2F%3E%3C%2Fsvg%3E);background-position:center center;background-size:30px 30px;background-repeat:no-repeat;box-shadow:0 6px 20px rgba(0,0,0,.3);border:none;cursor:pointer;display:flex!important;align-items:center!important;justify-content:center!important;line-height:0!important;font-size:0!important;transition:transform .2s,box-shadow .2s");\n';
-  s += '  fab.setAttribute("aria-label","Falar pelo WhatsApp");\n';
-  s += '  fab.innerHTML=\'<svg viewBox="0 0 24 24" width="30" height="30" fill="#ffffff" style="width:30px!important;height:30px!important;min-width:30px!important;flex:none!important;fill:#ffffff!important;display:block!important;pointer-events:none"><path fill="#ffffff" d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/></svg>\';\n';
-  s += '  fab.onmouseover=function(){this.style.transform="scale(1.1)";this.style.boxShadow="0 8px 28px rgba(0,0,0,.35)";};\n';
-  s += '  fab.onmouseout=function(){this.style.transform="scale(1)";this.style.boxShadow="0 6px 20px rgba(0,0,0,.3)";};\n';
-  s += '  document.body.appendChild(fab);\n\n';
-
-  s += '  // Overlay\n';
-  s += '  var ov=mk("div","display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);align-items:flex-end;justify-content:center");\n';
-
-  s += '  // Animação CSS\n';
-  s += '  var st=document.createElement("style");\n';
-  s += '  st.textContent="@keyframes bgoUp{from{transform:translateY(50px);opacity:0}to{transform:none;opacity:1}}[aria-label=\\"Falar pelo WhatsApp\\"] svg,[aria-label=\\"Falar pelo WhatsApp\\"] svg path,#bgo-btn svg,#bgo-btn svg path{fill:#ffffff!important;color:#ffffff!important}[aria-label=\\"Falar pelo WhatsApp\\"] svg{width:30px!important;height:30px!important;display:block!important}";\n';
-  s += '  document.head.appendChild(st);\n\n';
-
-  s += '  // Modal box\n';
-  s += '  var box=mk("div","background:#fff;width:100%;max-width:440px;border-radius:24px 24px 0 0;overflow:hidden;animation:bgoUp .28s cubic-bezier(.22,1,.36,1);box-shadow:0 -4px 40px rgba(0,0,0,.15)");\n\n';
-
-  s += '  // Header\n';
-  s += '  var hd=mk("div","background:"+C.c1+";padding:20px 18px 16px;display:flex;align-items:flex-start;gap:12px");\n';
-  s += '  hd.innerHTML=\'<svg viewBox="0 0 24 24" style="width:26px;height:26px;fill:white;flex-shrink:0;margin-top:3px"><path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/></svg>\';\n';
-  s += '  var hdTxt=mk("div","flex:1");\n';
-  s += '  var h3=mk("h3","margin:0 0 3px;color:#fff;font-size:16px;font-family:inherit;font-weight:700;line-height:1.3");\n';
-  s += '  h3.textContent=C.t;\n';
-  s += '  var p=mk("p","margin:0;color:rgba(255,255,255,.82);font-size:13px;font-family:inherit");\n';
-  s += '  p.textContent=C.s;\n';
-  s += '  hdTxt.appendChild(h3);hdTxt.appendChild(p);\n';
-  s += '  var xBtn=mk("button","background:rgba(0,0,0,.18);border:none;cursor:pointer;color:#fff;font-size:18px;padding:4px 8px;border-radius:50%;flex-shrink:0;line-height:1;margin-left:auto");\n';
-  s += '  xBtn.textContent="✕";xBtn.setAttribute("aria-label","Fechar");\n';
-  s += '  hd.appendChild(hdTxt);hd.appendChild(xBtn);\n\n';
-
-  s += '  // Body\n';
-  s += '  var bd=mk("div","padding:20px 18px 22px");\n\n';
-
-  s += '  // Form area\n';
-  s += '  var fa=mk("div","");\n';
-  s += '  fa.id="bgo-fa";\n\n';
-
-  s += '  // Campos obrigatórios\n';
-  s += '  addField(fa,"bgo_nm","Nome completo","text","João Silva",true);\n';
-  s += '  addField(fa,"bgo_tel","Celular / WhatsApp","tel","(61) 99999-0000",true);\n';
-  s += '  addField(fa,"bgo_em","E-mail","email","joao@email.com",true);\n';
-
-  s += extraFieldsCode + '\n\n';
-
-  s += '  // Erro\n';
-  s += '  var err=mk("div","color:#c0392b;font-size:12px;margin-top:8px;display:none;padding:9px 12px;background:#fff0f0;border-radius:9px;border:1px solid #fcc;font-family:inherit");\n';
-  s += '  err.id="bgo-err";\n';
-  s += '  err.textContent="⚠️ Preencha nome, celular e e-mail para continuar.";\n\n';
-
-  s += '  // Botão enviar\n';
-  s += '  var btnTpl=\'<svg viewBox="0 0 24 24" width="17" height="17" fill="#ffffff" style="width:17px!important;height:17px!important;min-width:17px!important;flex:none!important;fill:#ffffff!important;display:inline-block!important"><path fill="#ffffff" d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/></svg> Iniciar conversa no WhatsApp\';\n';
-  s += '  var btn=mk("button","width:100%;padding:13px;background:"+C.c1+";color:#fff;border:none;border-radius:11px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;margin-top:10px;box-shadow:0 3px 12px rgba(0,0,0,.15);transition:opacity .2s");\n';
-  s += '  btn.id="bgo-btn";\n';
-  s += '  btn.innerHTML=btnTpl;\n';
-  s += '  btn.onmouseover=function(){if(!this.disabled)this.style.opacity=".9";};\n';
-  s += '  btn.onmouseout=function(){this.style.opacity="1";};\n\n';
-
-  s += '  // LGPD\n';
-  s += '  var lgpd=mk("p","font-size:11px;color:#bbb;text-align:center;margin-top:12px;line-height:1.5;font-family:inherit");\n';
-  s += '  lgpd.textContent="Seus dados são usados apenas para entrar em contato. Não enviamos spam.";\n\n';
-
-  s += '  fa.appendChild(err);fa.appendChild(btn);fa.appendChild(lgpd);\n\n';
-
-  s += '  // Tela de sucesso\n';
-  s += '  var ok=mk("div","display:none;text-align:center;padding:32px 0 16px");\n';
-  s += '  ok.id="bgo-ok";\n';
-  s += '  ok.innerHTML=\'<svg viewBox="0 0 24 24" style="width:56px;height:56px"><circle cx="12" cy="12" r="12" fill="#E6F4ED"/><path d="M7 12.5l3.5 3.5 6.5-7" stroke="#1A7A44" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><p style="color:#111;font-size:16px;margin:12px 0 4px;font-family:inherit;font-weight:700">Dados enviados! 🎉</p><p style="color:#777;font-size:13px;font-family:inherit">Abrindo o WhatsApp agora…</p>\';\n\n';
-
-  s += '  bd.appendChild(fa);bd.appendChild(ok);\n';
-  s += '  box.appendChild(hd);box.appendChild(bd);\n';
-  s += '  ov.appendChild(box);\n';
-  s += '  document.body.appendChild(ov);\n\n';
-
-  s += '  // Responsivo\n';
-  s += '  function ajustarModal(){\n';
-  s += '    if(window.innerWidth>=520){ov.style.alignItems="center";box.style.borderRadius="20px";box.style.margin="0 16px";}\n';
-  s += '    else{ov.style.alignItems="flex-end";box.style.borderRadius="24px 24px 0 0";box.style.margin="0";}\n';
-  s += '  }\n';
-  s += '  ajustarModal();\n';
-  s += '  window.addEventListener("resize",ajustarModal);\n\n';
-
-  s += '  // UTMs\n';
-  s += '  function origemSite(p){if(p.get("utm_source"))return p.get("utm_source");if(p.get("gclid"))return"google ads";if(p.get("fbclid"))return"facebook ads";var r=document.referrer||"";if(!r)return"direto";var h;try{h=new URL(r).hostname.toLowerCase();}catch(e){return"direto";}if(h.indexOf(location.hostname)>=0)return"direto";if(/(^|\\.)google\\./.test(h))return"busca google orgânico";if(/(^|\\.)bing\\./.test(h))return"busca bing orgânico";if(/(^|\\.)yahoo\\./.test(h))return"busca yahoo orgânico";if(/duckduckgo\\./.test(h))return"busca duckduckgo orgânico";if(/instagram\\./.test(h))return"instagram orgânico";if(/(^|\\.)facebook\\.|(^|\\.)fb\\./.test(h))return"facebook orgânico";if(/youtube\\./.test(h))return"youtube orgânico";if(/linkedin\\./.test(h))return"linkedin orgânico";if(/tiktok\\./.test(h))return"tiktok orgânico";if(/t\\.co|twitter\\.|x\\.com/.test(h))return"twitter orgânico";return h.replace(/^www\\./,"");}\n';
-  s += '  function utms(){var p=new URLSearchParams(window.location.search);return{utm_source:origemSite(p),utm_medium:p.get("utm_medium")||"",utm_campaign:p.get("utm_campaign")||"",pagina:window.location.href,dispositivo:/Mobi|Android/i.test(navigator.userAgent)?"Mobile":"Desktop"};}\n';
-  s += '  function dH(){return new Date().toLocaleDateString("pt-BR");}\n';
-  s += '  function hA(){return new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});}\n\n';
-
-  s += '  // Eventos\n';
-  s += '  fab.onclick=function(){ov.style.display="flex";setTimeout(function(){var el=document.getElementById("bgo_nm");if(el)el.focus();},80);};\n';
-  s += '  xBtn.onclick=fechar;\n';
-  s += '  ov.onclick=function(e){if(e.target===ov)fechar();};\n';
-  s += '  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&ov.style.display==="flex")fechar();});\n\n';
-
-  s += '  function fechar(){\n';
-  s += '    ov.style.display="none";\n';
-  s += '    setTimeout(function(){\n';
-  s += '      fa.style.display="";\n';
-  s += '      ok.style.display="none";\n';
-  s += '      err.style.display="none";\n';
-  s += '      IDS.forEach(function(id){var el=document.getElementById(id);if(el)el.value="";});\n';
-  s += '      btn.disabled=false;\n';
-  s += '      btn.innerHTML=btnTpl;\n';
-  s += '    },300);\n';
-  s += '  }\n\n';
-
-  s += '  btn.onclick=function(){\n';
-  s += '    var nm=document.getElementById("bgo_nm").value.trim();\n';
-  s += '    var tel=document.getElementById("bgo_tel").value.trim();\n';
-  s += '    var em=document.getElementById("bgo_em").value.trim();\n';
-  s += '    if(!nm||!tel||!em||!/\\S+@\\S+\\.\\S+/.test(em)){err.style.display="block";return;}\n';
-  s += '    err.style.display="none";\n';
-  s += '    btn.disabled=true;btn.textContent="Enviando…";\n';
-  s += '    var extra={};\n';
-  s += '    IDS.slice(3).forEach(function(id){var el=document.getElementById(id);if(el)extra[id]=el.value;});\n';
-  s += '    var pl=Object.assign({data:dH(),hora:hA(),nome:nm,telefone:tel,email:em},extra,utms());\n';
-  s += '    fetch(C.wh,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(pl)}).catch(function(){});\n';
-  s += '    setTimeout(function(){\n';
-  s += '      fa.style.display="none";\n';
-  s += '      ok.style.display="block";\n';
-  s += '      var mf=C.m.replace("{{nome}}",nm);\n';
-  s += '      setTimeout(function(){window.open("https://wa.me/"+C.wa+"?text="+encodeURIComponent(mf),"_blank");setTimeout(fechar,2500);},900);\n';
-  s += '    },700);\n';
-  s += '  };\n\n';
-
-  s += '}\n\n';
-
-  s += 'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",init);}else{init();}\n';
-  s += '})();\n<\/script>';
-
+  var fields=(cfs||[]).map(function(f){return {id:f.id,label:f.label,tipo:f.tipo,opts:f.opts||''};});
+  function esc(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  var s='<!-- B.GO Widget WhatsApp \u2014 '+nome+' | '+new Date().toLocaleDateString('pt-BR')+' -->\n';
+  s+='<script src="https://bgomarketingmedico.github.io/agente-bgo/bgo-widget.js"\n';
+  s+='  data-wa="'+esc(wa)+'"\n';
+  s+='  data-wh="'+esc(wh)+'"\n';
+  s+='  data-c1="'+esc(cor1)+'" data-c2="'+esc(cor2)+'"\n';
+  s+='  data-msg="'+esc(msg)+'"\n';
+  s+='  data-titulo="'+esc(titulo)+'" data-sub="'+esc(sub)+'"\n';
+  s+='  data-esp="'+(esp?'1':'0')+'" data-conv="'+(conv?'1':'0')+'"\n';
+  s+='  data-fields=\''+JSON.stringify(fields).replace(/'/g,'&#39;')+'\'><\/script>';
   document.getElementById('codeSnippet').textContent=s;
 }
 
 // ═══════════════════════════════════════════════════
 // APPS SCRIPT
 // ═══════════════════════════════════════════════════
-function gerarApps(nome){
+function gerarApps(nome,mailNotif){
+  mailNotif=mailNotif||'';
   var s='// ══════════════════════════════════════════════════\n';
   s+='// B.GO — Google Apps Script\n';
   s+='// Cliente: '+nome+'\n';
   s+='// Gerado em: '+new Date().toLocaleDateString('pt-BR')+'\n';
   s+='// ══════════════════════════════════════════════════\n\n';
-  s+='var CONFIG={\n  nomeCliente:"'+nome+'",\n  nomePasta:"B.GO — Leads de Clientes"\n};\n\n';
+  s+='var CONFIG={\n  nomeCliente:"'+nome+'",\n  nomePasta:"B.GO — Leads de Clientes",\n  emailNotif:"'+mailNotif.replace(/"/g,'\\"')+'"\n};\n\n';
   s+='var MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];\n\n';
   s+='// ── Rode UMA VEZ para criar pasta e planilha ──────\n';
   s+='function configurarCliente(){\n';
@@ -1075,8 +884,33 @@ function gerarApps(nome){
   s+='      "Novo Lead"\n';
   s+='    ]);\n';
   s+='    fmtLinha(aba,row);\n';
+  s+='    notificarLead(d,row-3);\n';
   s+='    return ok({total:row-3});\n';
   s+='  }catch(err){return ok({erro:err.toString()});}\n';
+  s+='}\n\n';
+  s+='// ── Aviso por e-mail a cada novo lead ──────────────\n';
+  s+='function notificarLead(d,total){\n';
+  s+='  try{\n';
+  s+='    if(!CONFIG.emailNotif)return;\n';
+  s+='    var assunto="🔔 Novo lead — "+CONFIG.nomeCliente+": "+(d.nome||"sem nome");\n';
+  s+='    var origem=d.utm_source||"direto";\n';
+  s+='    var corpo=""\n';
+  s+='      +"Você recebeu um novo lead pelo site!\\n\\n"\n';
+  s+='      +"Cliente: "+CONFIG.nomeCliente+"\\n"\n';
+  s+='      +"━━━━━━━━━━━━━━━━━━━━━━\\n"\n';
+  s+='      +"Nome: "+(d.nome||"-")+"\\n"\n';
+  s+='      +"Celular: "+(d.telefone||"-")+"\\n"\n';
+  s+='      +"E-mail: "+(d.email||"-")+"\\n"\n';
+  s+='      +(d.bgo_esp?"Especialidade: "+d.bgo_esp+"\\n":"")\n';
+  s+='      +(d.bgo_conv?"Convênio: "+d.bgo_conv+"\\n":"")\n';
+  s+='      +"Origem: "+origem+"\\n"\n';
+  s+='      +"Data/Hora: "+(d.data||hj())+" "+(d.hora||hr())+"\\n"\n';
+  s+='      +"━━━━━━━━━━━━━━━━━━━━━━\\n"\n';
+  s+='      +"Total de leads no mês: "+total+"\\n\\n"\n';
+  s+='      +"Abra o WhatsApp e entre em contato o quanto antes. 🚀\\n\\n"\n';
+  s+='      +"— B.GO Marketing Médico";\n';
+  s+='    MailApp.sendEmail({to:CONFIG.emailNotif,subject:assunto,body:corpo,name:"B.GO Leads"});\n';
+  s+='  }catch(e){Logger.log("Falha ao notificar: "+e);}\n';
   s+='}\n\n';
   s+='// ── Contador para o dashboard ──────────────────────\n';
   s+='function doGet(){\n';
@@ -1375,6 +1209,7 @@ function editarCliente(i){
   document.getElementById('f-cor1').value=c.cor||'#25D366';
   document.getElementById('f-titulo').value=c.titulo||'Fale com a gente';
   document.getElementById('f-msg').value=c.msg||'';
+  if(document.getElementById('f-mailnotif'))document.getElementById('f-mailnotif').value=c.mailNotif||'';
   customFields=c.fields||[];
   renderCustomFields();
   showPg('criar');
