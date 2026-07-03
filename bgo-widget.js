@@ -1,4 +1,4 @@
-/* ══════════════════════════════════════════════════════════════
+   /* ══════════════════════════════════════════════════════════════
    B.GO — Widget WhatsApp (loader universal)
    Uso no site do cliente (1 linha, antes do </body>):
    <script src="https://bgomarketingmedico.github.io/agente-bgo/bgo-widget.js"
@@ -183,7 +183,7 @@
     }
     ajustar(); window.addEventListener("resize", ajustar);
 
-    fab.onclick = function () { ov.style.display = "flex"; setTimeout(function () { var el = document.getElementById("bgo_nm"); if (el) el.focus(); }, 80); };
+    fab.onclick = function () { ov.style.display = "flex"; bd.scrollTop = 0; setTimeout(function () { bd.scrollTop = 0; var el = document.getElementById("bgo_nm"); if (el) { try { el.focus({ preventScroll: true }); } catch (e) { } bd.scrollTop = 0; } }, 80); };
     xBtn.onclick = fechar;
     ov.onclick = function (e) { if (e.target === ov) fechar(); };
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && ov.style.display === "flex") fechar(); });
