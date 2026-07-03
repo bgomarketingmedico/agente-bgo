@@ -814,8 +814,13 @@ function gerarWidget(){
   if(idx>=0)cl[idx]=obj;else cl.unshift(obj);
   saveCl(cl);
 
+  var campos=[];
+  if(esp)campos.push({id:'bgo_esp',label:'Especialidade'});
+  if(conv)campos.push({id:'bgo_conv',label:'Convênio'});
+  (customFields||[]).forEach(function(f){campos.push({id:f.id,label:f.label});});
+
   gerarSnippet(nome,wa,msg,wh,cor1,cor2,titulo,sub,esp,conv,customFields);
-  gerarApps(nome,mailNotif);
+  gerarApps(nome,mailNotif,campos);
   gerarPassos(nome,wh,whOk,sl);
 
   document.getElementById('outputWrap').classList.add('on');
@@ -844,14 +849,18 @@ function gerarSnippet(nome,wa,msg,wh,cor1,cor2,titulo,sub,esp,conv,cfs){
 // ═══════════════════════════════════════════════════
 // APPS SCRIPT
 // ═══════════════════════════════════════════════════
-function gerarApps(nome,mailNotif){
+function gerarApps(nome,mailNotif,campos){
   mailNotif=mailNotif||'';
+  campos=campos||[];
   var s='// ══════════════════════════════════════════════════\n';
   s+='// B.GO — Google Apps Script\n';
   s+='// Cliente: '+nome+'\n';
   s+='// Gerado em: '+new Date().toLocaleDateString('pt-BR')+'\n';
   s+='// ══════════════════════════════════════════════════\n\n';
   s+='var CONFIG={\n  nomeCliente:"'+nome+'",\n  nomePasta:"B.GO — Leads de Clientes",\n  emailNotif:"'+mailNotif.replace(/"/g,'\\"')+'"\n};\n\n';
+  s+='// Campos extras (alem de nome/celular/email) que viram coluna na planilha\n';
+  s+='var CAMPOS='+JSON.stringify(campos)+';\n';
+  s+='var STD={data:1,hora:1,nome:1,telefone:1,email:1,utm_source:1,utm_medium:1,utm_campaign:1,pagina:1,dispositivo:1};\n\n';
   s+='var MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];\n\n';
   s+='// ── Rode UMA VEZ para criar pasta e planilha ──────\n';
   s+='function configurarCliente(){\n';
@@ -872,17 +881,10 @@ function gerarApps(nome,mailNotif){
   s+='    var ss=SpreadsheetApp.openById(getPlanilha(getPasta()).getId());\n';
   s+='    var aba=getMes(ss);\n';
   s+='    if(!ss.getSheetByName("📊 Resumo"))criarResumo(ss);\n';
+  s+='    garantirColunas(aba,d);\n';
   s+='    var row=aba.getLastRow()+1;\n';
-  s+='    aba.appendRow([\n';
-  s+='      row-3,\n';
-  s+='      d.data||hj(),d.hora||hr(),\n';
-  s+='      d.nome||"",d.telefone||"",d.email||"",\n';
-  s+='      d.bgo_esp||"",d.bgo_conv||"",\n';
-  s+='      d.utm_source||"direto",d.utm_medium||"",d.utm_campaign||"",\n';
-  s+='      d.pagina||"",d.dispositivo||"",\n';
-  s+='      JSON.stringify(d)||"",\n';
-  s+='      "Novo Lead"\n';
-  s+='    ]);\n';
+  s+='    var vals=montarLinha(aba,d,row-3);\n';
+  s+='    aba.getRange(row,1,1,vals.length).setValues([vals]);\n';
   s+='    fmtLinha(aba,row);\n';
   s+='    notificarLead(d,row-3);\n';
   s+='    return ok({total:row-3});\n';
@@ -901,8 +903,7 @@ function gerarApps(nome,mailNotif){
   s+='      +"Nome: "+(d.nome||"-")+"\\n"\n';
   s+='      +"Celular: "+(d.telefone||"-")+"\\n"\n';
   s+='      +"E-mail: "+(d.email||"-")+"\\n"\n';
-  s+='      +(d.bgo_esp?"Especialidade: "+d.bgo_esp+"\\n":"")\n';
-  s+='      +(d.bgo_conv?"Convênio: "+d.bgo_conv+"\\n":"")\n';
+  s+='      +CAMPOS.map(function(c){return d[c.id]?c.label+": "+d[c.id]+"\\n":"";}).join("")\n';
   s+='      +"Origem: "+origem+"\\n"\n';
   s+='      +"Data/Hora: "+(d.data||hj())+" "+(d.hora||hr())+"\\n"\n';
   s+='      +"━━━━━━━━━━━━━━━━━━━━━━\\n"\n';
@@ -952,9 +953,9 @@ function gerarApps(nome,mailNotif){
   s+='  return a;\n';
   s+='}\n';
   s+='function cabecalho(aba,mes){\n';
-  s+='  var C=[["#",32],["Data",88],["Hora",60],["Nome",180],["Celular",140],["E-mail",200],\n';
-  s+='         ["Especialidade",200],["Convênio",150],["UTM Source",105],["UTM Medium",105],\n';
-  s+='         ["UTM Campaign",145],["Página",260],["Dispositivo",100],["Dados extras",200],["Status",130]];\n';
+  s+='  var C=[["#",32],["Data",88],["Hora",60],["Nome",180],["Celular",140],["E-mail",200]];\n';
+  s+='  CAMPOS.forEach(function(c){C.push([c.label,160]);});\n';
+  s+='  C=C.concat([["UTM Source",105],["UTM Medium",105],["UTM Campaign",145],["Página",260],["Dispositivo",100],["Dados extras",200],["Status",130]]);\n';
   s+='  aba.setRowHeight(1,60);\n';
   s+='  var r1=aba.getRange(1,1,1,C.length);\n';
   s+='  r1.merge().setValue("B.GO Marketing Médico — "+CONFIG.nomeCliente.toUpperCase());\n';
@@ -972,19 +973,20 @@ function gerarApps(nome,mailNotif){
   s+='    .setHorizontalAlignment("center").setVerticalAlignment("middle").setWrap(true);\n';
   s+='  r3.setBorder(true,true,true,true,true,true,"#BBA8C0",SpreadsheetApp.BorderStyle.SOLID_MEDIUM);\n';
   s+='  for(var i=0;i<C.length;i++)aba.setColumnWidth(i+1,C[i][1]);\n';
-  s+='  aba.getRange(4,15,500,1).setDataValidation(\n';
+  s+='  aba.getRange(4,C.length,500,1).setDataValidation(\n';
   s+='    SpreadsheetApp.newDataValidation()\n';
   s+='      .requireValueInList(["Novo Lead","Em Contato","Agendado","Não Atendeu","Fechado","Descartado"],true)\n';
   s+='      .build());\n';
   s+='  aba.setFrozenRows(3);\n';
   s+='}\n';
   s+='function fmtLinha(aba,l){\n';
+  s+='  var nc=aba.getLastColumn();\n';
   s+='  var bg=(l%2===0)?"#FAF7FB":"#FFFFFF";\n';
   s+='  aba.setRowHeight(l,21);\n';
-  s+='  aba.getRange(l,1,1,15).setBackground(bg).setFontFamily("Arial").setFontSize(9).setVerticalAlignment("middle")\n';
+  s+='  aba.getRange(l,1,1,nc).setBackground(bg).setFontFamily("Arial").setFontSize(9).setVerticalAlignment("middle")\n';
   s+='    .setBorder(true,true,true,true,true,true,"#DDD5E0",SpreadsheetApp.BorderStyle.SOLID);\n';
   s+='  aba.getRange(l,1).setHorizontalAlignment("center");\n';
-  s+='  aba.getRange(l,15).setFontColor("#1A7A44").setFontWeight("bold").setBackground("#E6F4ED");\n';
+  s+='  aba.getRange(l,nc).setFontColor("#1A7A44").setFontWeight("bold").setBackground("#E6F4ED");\n';
   s+='}\n';
   s+='function criarResumo(ss){\n';
   s+='  var a=ss.insertSheet("📊 Resumo");\n';
@@ -994,6 +996,50 @@ function gerarApps(nome,mailNotif){
   s+='    .setFontSize(13).setFontWeight("bold").setHorizontalAlignment("center").setVerticalAlignment("middle");\n';
   s+='  a.setColumnWidth(1,240);a.setColumnWidth(2,100);a.setColumnWidth(3,200);\n';
   s+='}\n';
+  s+='// ── Garante 1 coluna por campo preenchido (auto-corrige planilhas antigas) ──\n';
+  s+='function nomesHeader(aba){return aba.getRange(3,1,1,aba.getLastColumn()).getValues()[0];}\n';
+  s+='function garantirColunas(aba,d){\n';
+  s+='  var hn=nomesHeader(aba);\n';
+  s+='  function ensure(nome){\n';
+  s+='    if(hn.indexOf(nome)>=0)return;\n';
+  s+='    var pos=hn.indexOf("Dados extras")+1; if(pos<1)pos=aba.getLastColumn();\n';
+  s+='    aba.insertColumnBefore(pos);\n';
+  s+='    aba.getRange(3,pos).setValue(nome).setBackground("#F2EEF4").setFontColor("#2D0A34")\n';
+  s+='      .setFontFamily("Arial").setFontSize(9).setFontWeight("bold").setHorizontalAlignment("center")\n';
+  s+='      .setVerticalAlignment("middle").setWrap(true)\n';
+  s+='      .setBorder(true,true,true,true,true,true,"#BBA8C0",SpreadsheetApp.BorderStyle.SOLID_MEDIUM);\n';
+  s+='    aba.setColumnWidth(pos,160);\n';
+  s+='    hn=nomesHeader(aba);\n';
+  s+='  }\n';
+  s+='  CAMPOS.forEach(function(c){ensure(c.label);});\n';
+  s+='  Object.keys(d).forEach(function(k){\n';
+  s+='    if(STD[k])return;\n';
+  s+='    var conhecido=false; for(var i=0;i<CAMPOS.length;i++){if(CAMPOS[i].id===k){conhecido=true;break;}}\n';
+  s+='    if(!conhecido)ensure(k);\n';
+  s+='  });\n';
+  s+='  var sc=aba.getLastColumn();\n';
+  s+='  aba.getRange(4,sc,500,1).setDataValidation(SpreadsheetApp.newDataValidation()\n';
+  s+='    .requireValueInList(["Novo Lead","Em Contato","Agendado","Não Atendeu","Fechado","Descartado"],true).build());\n';
+  s+='}\n';
+  s+='function valorCol(nome,d,num){\n';
+  s+='  if(nome==="#")return num;\n';
+  s+='  if(nome==="Data")return d.data||hj();\n';
+  s+='  if(nome==="Hora")return d.hora||hr();\n';
+  s+='  if(nome==="Nome")return d.nome||"";\n';
+  s+='  if(nome==="Celular")return d.telefone||"";\n';
+  s+='  if(nome==="E-mail")return d.email||"";\n';
+  s+='  if(nome==="UTM Source")return d.utm_source||"direto";\n';
+  s+='  if(nome==="UTM Medium")return d.utm_medium||"";\n';
+  s+='  if(nome==="UTM Campaign")return d.utm_campaign||"";\n';
+  s+='  if(nome==="Página")return d.pagina||"";\n';
+  s+='  if(nome==="Dispositivo")return d.dispositivo||"";\n';
+  s+='  if(nome==="Dados extras")return JSON.stringify(d);\n';
+  s+='  if(nome==="Status")return "Novo Lead";\n';
+  s+='  for(var i=0;i<CAMPOS.length;i++){if(CAMPOS[i].label===nome)return d[CAMPOS[i].id]||"";}\n';
+  s+='  if(d.hasOwnProperty(nome))return d[nome]||"";\n';
+  s+='  return "";\n';
+  s+='}\n';
+  s+='function montarLinha(aba,d,num){return nomesHeader(aba).map(function(nome){return valorCol(nome,d,num);});}\n';
   s+='function ok(d){return ContentService.createTextOutput(JSON.stringify(Object.assign({status:"ok"},d))).setMimeType(ContentService.MimeType.JSON);}\n';
   s+='function hj(){return Utilities.formatDate(new Date(),"America/Sao_Paulo","dd/MM/yyyy");}\n';
   s+='function hr(){return Utilities.formatDate(new Date(),"America/Sao_Paulo","HH:mm");}\n';
@@ -1077,8 +1123,8 @@ function baixarPagina(){
   var WP='M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z';
 
   var xH='';
-  if(esp)xH+='<div style="margin-bottom:15px"><label style="display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px;font-family:inherit">Especialidade / Tratamento</label><input type="text" id="f_esp" placeholder="Escreva aqui o que deseja" style="display:block;width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none"></div>';
-  if(conv)xH+='<div style="margin-bottom:15px"><label style="display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px;font-family:inherit">Particular ou Convênio?</label><select id="f_conv" style="display:block;width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;-webkit-appearance:none;appearance:none"><option value="">Selecione…</option><option>Particular</option><option>Convênio</option><option>Não sei ainda</option></select></div>';
+  if(esp)xH+='<div style="margin-bottom:15px"><label style="display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px;font-family:inherit">Especialidade / Tratamento</label><input type="text" id="bgo_esp" placeholder="Escreva aqui o que deseja" style="display:block;width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none"></div>';
+  if(conv)xH+='<div style="margin-bottom:15px"><label style="display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px;font-family:inherit">Particular ou Convênio?</label><select id="bgo_conv" style="display:block;width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;-webkit-appearance:none;appearance:none"><option value="">Selecione…</option><option>Particular</option><option>Convênio</option><option>Não sei ainda</option></select></div>';
   (customFields||[]).forEach(function(f){
     if(f.tipo==='select'){
       var opts=f.opts.split(',').map(function(o){return '<option>'+o.trim()+'</option>'}).join('');
@@ -1090,7 +1136,7 @@ function baixarPagina(){
     }
   });
 
-  var html='<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n<title>WhatsApp — '+nome+'</title>\n<meta name="robots" content="noindex,nofollow">\n<style>\n*{box-sizing:border-box;margin:0;padding:0}\nhtml,body{height:100%}\nbody{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;background:url(\'atendimento-bg.jpg\') center/cover fixed no-repeat}\nbody::before{content:"";position:fixed;inset:0;background:rgba(255,255,255,.72);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:0}\n.wrap{position:relative;z-index:1;width:100%;max-width:440px;animation:up .3s cubic-bezier(.22,1,.36,1)}\n.welcome{text-align:center;color:#1a0a1e;font-size:19px;font-weight:700;line-height:1.35;margin-bottom:16px;text-shadow:0 1px 12px rgba(255,255,255,.8)}\n@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}\n.modal{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 12px 48px rgba(45,10,52,.18);max-height:92vh;display:flex;flex-direction:column}\n.xbtn{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.18);border:none;color:#fff;font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;z-index:2}\n.xbtn:hover{background:rgba(0,0,0,.32)}\n.hd{position:relative;flex-shrink:0;background:'+cor1+';padding:22px 46px 18px 20px;display:flex;align-items:flex-start;gap:13px}\n.hd svg{width:27px;height:27px;fill:#fff;flex-shrink:0;margin-top:3px}\n.hd h2{color:#fff;font-size:17px;font-weight:700;margin:0 0 4px;line-height:1.3}\n.hd p{color:rgba(255,255,255,.82);font-size:13px;margin:0}\n.bd{padding:22px 20px 24px;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto}\n.f{margin-bottom:16px}\n.f label{display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px}\n.f input,.f select,.f textarea{display:block;width:100%;border:1.5px solid #ddd;border-radius:11px;padding:12px 14px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}\n.f input:focus,.f select:focus,.f textarea:focus{border-color:'+cor1+';box-shadow:0 0 0 3px rgba(37,211,102,.12);background:#fff}\n.req{color:#e74c3c}\n.btn{width:100%;padding:14px;background:'+cor1+';color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;font-family:inherit;margin-top:10px;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:opacity .2s,transform .1s}\n.btn:hover{opacity:.92;transform:translateY(-1px)}\n.btn:disabled{opacity:.6;cursor:default;transform:none}\n.btn svg{width:18px;height:18px;fill:#fff}\n.err{color:#c0392b;font-size:12px;margin-top:9px;display:none;padding:10px 13px;background:#fff0f0;border-radius:9px;border:1px solid #fcc}\n.ok{display:none;text-align:center;padding:36px 0 16px}\n.ok svg{width:60px;height:60px;margin-bottom:12px}\n.ok h3{color:#111;font-size:17px;font-weight:700;margin:0 0 6px}\n.ok p{color:#777;font-size:13px}\n.lgpd{font-size:11px;color:#bbb;text-align:center;margin-top:14px;line-height:1.5}\n.pw{text-align:center;margin-top:16px;font-size:11px;color:#999}\n.pw a{color:#8B5A9A;text-decoration:none;font-weight:600}\n</style>\n</head>\n<body>\n<div class="wrap">\n<div class="welcome">Bem-vindo(a), vamos dar início ao seu atendimento</div>\n<div class="modal">\n<div class="hd"><svg viewBox="0 0 24 24"><path d="'+WP+'"/></svg><div><h2>'+titulo+'</h2><p>'+sub+'</p></div><button class="xbtn" onclick="fecharWA()" aria-label="Fechar">✕</button></div>\n<div class="bd">\n<div id="fa">\n<div class="f"><label>Nome completo <span class="req">*</span></label><input type="text" id="nm" placeholder="João Silva" autocomplete="name"></div>\n<div class="f"><label>Celular / WhatsApp <span class="req">*</span></label><input type="tel" id="tel" placeholder="(61) 99999-0000" autocomplete="tel"></div>\n<div class="f"><label>E-mail <span class="req">*</span></label><input type="email" id="em" placeholder="joao@email.com" autocomplete="email"></div>\n'+xH+'\n<div class="err" id="err">⚠️ Preencha nome, celular e e-mail para continuar.</div>\n<button class="btn" id="btn"><svg viewBox="0 0 24 24"><path d="'+WP+'"/></svg>Iniciar conversa no WhatsApp</button>\n<div class="lgpd">Seus dados são usados apenas para entrar em contato com você. Não enviamos spam.</div>\n</div>\n<div class="ok" id="ok">\n<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E6F4ED"/><path d="M7 12.5l3.5 3.5 6.5-7" stroke="#1A7A44" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>\n<h3>Tudo certo! 🎉</h3><p>Abrindo o WhatsApp agora…</p>\n</div>\n</div>\n</div>\n<div class="pw">Powered by <a href="https://bgomarketingmedico.com.br" target="_blank">B.GO Marketing Médico</a></div>\n</div>\n<script>\nvar WA="'+wa+'",WH="'+wh.replace(/"/g,'\\"')+'",MSG="'+msg.replace(/"/g,'\\"')+'";\nvar p=new URLSearchParams(window.location.search);\nfunction fecharWA(){if(history.length>1){history.back();}else{window.close();location.href=document.referrer||"about:blank";}}\nfunction origemWA(){if(p.get("utm_source"))return p.get("utm_source");var r=document.referrer||"";if(!r)return"direto";var h;try{h=new URL(r).hostname.toLowerCase();}catch(e){return"direto";}if(h.indexOf(location.hostname)>=0)return"direto";if(/(^|\\.)google\\./.test(h))return"busca google orgânico";if(/(^|\\.)bing\\./.test(h))return"busca bing orgânico";if(/(^|\\.)yahoo\\./.test(h))return"busca yahoo orgânico";if(/duckduckgo\\./.test(h))return"busca duckduckgo orgânico";if(/instagram\\./.test(h))return"instagram orgânico";if(/(^|\\.)facebook\\.|(^|\\.)fb\\./.test(h))return"facebook orgânico";if(/youtube\\./.test(h))return"youtube orgânico";if(/linkedin\\./.test(h))return"linkedin orgânico";if(/tiktok\\./.test(h))return"tiktok orgânico";if(/t\\.co|twitter\\.|x\\.com/.test(h))return"twitter orgânico";return h.replace(/^www\\./,"");}\nfunction utms(){return{utm_source:origemWA(),utm_medium:p.get("utm_medium")||"",utm_campaign:p.get("utm_campaign")||"",pagina:document.referrer||location.href,dispositivo:/Mobi|Android/i.test(navigator.userAgent)?"Mobile":"Desktop"};}\ndocument.getElementById("btn").onclick=function(){\nvar nm=document.getElementById("nm").value.trim();\nvar tel=document.getElementById("tel").value.trim();\nvar em=document.getElementById("em").value.trim();\nif(!nm||!tel||!em||!/\\S+@\\S+\\.\\S+/.test(em)){document.getElementById("err").style.display="block";return;}\ndocument.getElementById("err").style.display="none";\nvar btn=document.getElementById("btn");btn.disabled=true;btn.textContent="Enviando…";\nvar extra={};\n["f_esp","f_conv"].concat('+JSON.stringify((customFields||[]).map(function(f){return f.id}))+').forEach(function(id){var el=document.getElementById(id);if(el)extra[id]=el.value;});\nvar pl=Object.assign({data:new Date().toLocaleDateString("pt-BR"),hora:new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),nome:nm,telefone:tel,email:em},extra,utms());\nif(WH)fetch(WH,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(pl)}).catch(function(){});\nsetTimeout(function(){document.getElementById("fa").style.display="none";document.getElementById("ok").style.display="block";var mf=MSG.replace("{{nome}}",nm);setTimeout(function(){window.location.href="https://wa.me/"+WA+"?text="+encodeURIComponent(mf);},900);},700);\n};\n<\/script>\n</body>\n</html>';
+  var html='<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n<title>WhatsApp — '+nome+'</title>\n<meta name="robots" content="noindex,nofollow">\n<style>\n*{box-sizing:border-box;margin:0;padding:0}\nhtml,body{height:100%}\nbody{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;background:url(\'atendimento-bg.jpg\') center/cover fixed no-repeat}\nbody::before{content:"";position:fixed;inset:0;background:rgba(255,255,255,.72);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:0}\n.wrap{position:relative;z-index:1;width:100%;max-width:440px;animation:up .3s cubic-bezier(.22,1,.36,1)}\n.welcome{text-align:center;color:#1a0a1e;font-size:19px;font-weight:700;line-height:1.35;margin-bottom:16px;text-shadow:0 1px 12px rgba(255,255,255,.8)}\n@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}\n.modal{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 12px 48px rgba(45,10,52,.18);max-height:92vh;display:flex;flex-direction:column}\n.xbtn{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.18);border:none;color:#fff;font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;z-index:2}\n.xbtn:hover{background:rgba(0,0,0,.32)}\n.hd{position:relative;flex-shrink:0;background:'+cor1+';padding:22px 46px 18px 20px;display:flex;align-items:flex-start;gap:13px}\n.hd svg{width:27px;height:27px;fill:#fff;flex-shrink:0;margin-top:3px}\n.hd h2{color:#fff;font-size:17px;font-weight:700;margin:0 0 4px;line-height:1.3}\n.hd p{color:rgba(255,255,255,.82);font-size:13px;margin:0}\n.bd{padding:22px 20px 24px;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto}\n.f{margin-bottom:16px}\n.f label{display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px}\n.f input,.f select,.f textarea{display:block;width:100%;border:1.5px solid #ddd;border-radius:11px;padding:12px 14px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}\n.f input:focus,.f select:focus,.f textarea:focus{border-color:'+cor1+';box-shadow:0 0 0 3px rgba(37,211,102,.12);background:#fff}\n.req{color:#e74c3c}\n.btn{width:100%;padding:14px;background:'+cor1+';color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;font-family:inherit;margin-top:10px;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:opacity .2s,transform .1s}\n.btn:hover{opacity:.92;transform:translateY(-1px)}\n.btn:disabled{opacity:.6;cursor:default;transform:none}\n.btn svg{width:18px;height:18px;fill:#fff}\n.err{color:#c0392b;font-size:12px;margin-top:9px;display:none;padding:10px 13px;background:#fff0f0;border-radius:9px;border:1px solid #fcc}\n.ok{display:none;text-align:center;padding:36px 0 16px}\n.ok svg{width:60px;height:60px;margin-bottom:12px}\n.ok h3{color:#111;font-size:17px;font-weight:700;margin:0 0 6px}\n.ok p{color:#777;font-size:13px}\n.lgpd{font-size:11px;color:#bbb;text-align:center;margin-top:14px;line-height:1.5}\n.pw{text-align:center;margin-top:16px;font-size:11px;color:#999}\n.pw a{color:#8B5A9A;text-decoration:none;font-weight:600}\n</style>\n</head>\n<body>\n<div class="wrap">\n<div class="welcome">Bem-vindo(a), vamos dar início ao seu atendimento</div>\n<div class="modal">\n<div class="hd"><svg viewBox="0 0 24 24"><path d="'+WP+'"/></svg><div><h2>'+titulo+'</h2><p>'+sub+'</p></div><button class="xbtn" onclick="fecharWA()" aria-label="Fechar">✕</button></div>\n<div class="bd">\n<div id="fa">\n<div class="f"><label>Nome completo <span class="req">*</span></label><input type="text" id="nm" placeholder="João Silva" autocomplete="name"></div>\n<div class="f"><label>Celular / WhatsApp <span class="req">*</span></label><input type="tel" id="tel" placeholder="(61) 99999-0000" autocomplete="tel"></div>\n<div class="f"><label>E-mail <span class="req">*</span></label><input type="email" id="em" placeholder="joao@email.com" autocomplete="email"></div>\n'+xH+'\n<div class="err" id="err">⚠️ Preencha nome, celular e e-mail para continuar.</div>\n<button class="btn" id="btn"><svg viewBox="0 0 24 24"><path d="'+WP+'"/></svg>Iniciar conversa no WhatsApp</button>\n<div class="lgpd">Seus dados são usados apenas para entrar em contato com você. Não enviamos spam.</div>\n</div>\n<div class="ok" id="ok">\n<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E6F4ED"/><path d="M7 12.5l3.5 3.5 6.5-7" stroke="#1A7A44" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>\n<h3>Tudo certo! 🎉</h3><p>Abrindo o WhatsApp agora…</p>\n</div>\n</div>\n</div>\n<div class="pw">Powered by <a href="https://bgomarketingmedico.com.br" target="_blank">B.GO Marketing Médico</a></div>\n</div>\n<script>\nvar WA="'+wa+'",WH="'+wh.replace(/"/g,'\\"')+'",MSG="'+msg.replace(/"/g,'\\"')+'";\nvar p=new URLSearchParams(window.location.search);\nfunction fecharWA(){if(history.length>1){history.back();}else{window.close();location.href=document.referrer||"about:blank";}}\nfunction origemWA(){if(p.get("utm_source"))return p.get("utm_source");var r=document.referrer||"";if(!r)return"direto";var h;try{h=new URL(r).hostname.toLowerCase();}catch(e){return"direto";}if(h.indexOf(location.hostname)>=0)return"direto";if(/(^|\\.)google\\./.test(h))return"busca google orgânico";if(/(^|\\.)bing\\./.test(h))return"busca bing orgânico";if(/(^|\\.)yahoo\\./.test(h))return"busca yahoo orgânico";if(/duckduckgo\\./.test(h))return"busca duckduckgo orgânico";if(/instagram\\./.test(h))return"instagram orgânico";if(/(^|\\.)facebook\\.|(^|\\.)fb\\./.test(h))return"facebook orgânico";if(/youtube\\./.test(h))return"youtube orgânico";if(/linkedin\\./.test(h))return"linkedin orgânico";if(/tiktok\\./.test(h))return"tiktok orgânico";if(/t\\.co|twitter\\.|x\\.com/.test(h))return"twitter orgânico";return h.replace(/^www\\./,"");}\nfunction utms(){return{utm_source:origemWA(),utm_medium:p.get("utm_medium")||"",utm_campaign:p.get("utm_campaign")||"",pagina:document.referrer||location.href,dispositivo:/Mobi|Android/i.test(navigator.userAgent)?"Mobile":"Desktop"};}\ndocument.getElementById("btn").onclick=function(){\nvar nm=document.getElementById("nm").value.trim();\nvar tel=document.getElementById("tel").value.trim();\nvar em=document.getElementById("em").value.trim();\nif(!nm||!tel||!em||!/\\S+@\\S+\\.\\S+/.test(em)){document.getElementById("err").style.display="block";return;}\ndocument.getElementById("err").style.display="none";\nvar btn=document.getElementById("btn");btn.disabled=true;btn.textContent="Enviando…";\nvar extra={};\n["bgo_esp","bgo_conv"].concat('+JSON.stringify((customFields||[]).map(function(f){return f.id}))+').forEach(function(id){var el=document.getElementById(id);if(el)extra[id]=el.value;});\nvar pl=Object.assign({data:new Date().toLocaleDateString("pt-BR"),hora:new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),nome:nm,telefone:tel,email:em},extra,utms());\nif(WH)fetch(WH,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(pl)}).catch(function(){});\nsetTimeout(function(){document.getElementById("fa").style.display="none";document.getElementById("ok").style.display="block";var mf=MSG.replace("{{nome}}",nm);setTimeout(function(){window.location.href="https://wa.me/"+WA+"?text="+encodeURIComponent(mf);},900);},700);\n};\n<\/script>\n</body>\n</html>';
 
   var b=new Blob([html],{type:'text/html'});
   var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=sl+'.html';a.click();URL.revokeObjectURL(a.href);
