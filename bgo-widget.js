@@ -1,4 +1,4 @@
-   /* ══════════════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════
    B.GO — Widget WhatsApp (loader universal)
    Uso no site do cliente (1 linha, antes do </body>):
    <script src="https://bgomarketingmedico.github.io/agente-bgo/bgo-widget.js"
@@ -48,7 +48,7 @@
     return el;
   }
 
-  var FLD = "display:block;width:100%;box-sizing:border-box;border:1.5px solid #e0e0e0;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;transition:border-color .15s";
+  var FLD = "display:block;width:100%;box-sizing:border-box;border:1.5px solid #e0e0e0;border-radius:10px;padding:11px 13px;font-size:14px;line-height:1.4!important;font-family:inherit;color:#111;background:#f8f8f8;outline:none;transition:border-color .15s";
   var LBL = "display:block;font-size:12px;font-weight:700;color:#555;margin-bottom:6px;font-family:inherit";
 
   function addField(parent, id, label, type, ph, req) {
@@ -65,7 +65,7 @@
   function addSelect(parent, id, label, opts) {
     var wrap = mk("div", "margin-bottom:16px");
     var lbl = mk("label", LBL); lbl.textContent = label;
-    var sel = mk("select", FLD + ";-webkit-appearance:none;appearance:none", { id: id });
+    var sel = mk("select", FLD + ";-webkit-appearance:none;appearance:none;height:auto!important;min-height:44px!important", { id: id });
     var def = document.createElement("option"); def.value = ""; def.textContent = "Selecione…"; sel.appendChild(def);
     opts.forEach(function (o) { var op = document.createElement("option"); op.textContent = o; sel.appendChild(op); });
     sel.addEventListener("focus", function () { this.style.borderColor = C.c1; });
