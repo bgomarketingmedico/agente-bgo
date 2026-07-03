@@ -127,9 +127,9 @@
     st.textContent = "@keyframes bgoUp{from{transform:translateY(50px);opacity:0}to{transform:none;opacity:1}}";
     document.head.appendChild(st);
 
-    var box = mk("div", "background:#fff;width:100%;max-width:440px;border-radius:24px 24px 0 0;overflow:hidden;animation:bgoUp .28s cubic-bezier(.22,1,.36,1);box-shadow:0 -4px 40px rgba(0,0,0,.15)");
+    var box = mk("div", "background:#fff;width:100%;max-width:440px;max-height:92vh;display:flex;flex-direction:column;border-radius:24px 24px 0 0;overflow:hidden;animation:bgoUp .28s cubic-bezier(.22,1,.36,1);box-shadow:0 -4px 40px rgba(0,0,0,.15)");
 
-    var hd = mk("div", "position:relative;background:" + C.c1 + ";padding:20px 46px 16px 18px;display:flex;align-items:flex-start;gap:12px");
+    var hd = mk("div", "position:relative;flex-shrink:0;background:" + C.c1 + ";padding:20px 46px 16px 18px;display:flex;align-items:flex-start;gap:12px");
     hd.style.backgroundImage = "none";
     var hdIco = mk("span", "width:26px;height:26px;flex-shrink:0;margin-top:3px;display:inline-block;background-image:url(\"" + ICON + "\");background-size:26px 26px;background-repeat:no-repeat");
     var hdTxt = mk("div", "flex:1");
@@ -140,13 +140,13 @@
     xBtn.textContent = "✕"; xBtn.setAttribute("aria-label", "Fechar");
     hd.appendChild(hdIco); hd.appendChild(hdTxt); hd.appendChild(xBtn);
 
-    var bd = mk("div", "padding:20px 18px 22px");
+    var bd = mk("div", "padding:20px 18px 22px;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto");
     var fa = mk("div", ""); fa.id = "bgo-fa";
 
     addField(fa, "bgo_nm", "Nome completo", "text", "João Silva", true);
     addField(fa, "bgo_tel", "Celular / WhatsApp", "tel", "(61) 99999-0000", true);
     addField(fa, "bgo_em", "E-mail", "email", "joao@email.com", true);
-    if (esp) addField(fa, "bgo_esp", "Especialidade / Tratamento", "text", "Ex: Varizes, Botox…", false);
+    if (esp) addField(fa, "bgo_esp", "Especialidade / Tratamento", "text", "Escreva aqui o que deseja", false);
     if (conv) addSelect(fa, "bgo_conv", "Particular ou Convênio?", ["Particular", "Convênio", "Não sei ainda"]);
     cfs.forEach(function (f) {
       if (f.tipo === "select") addSelect(fa, f.id, f.label, (f.opts || "").split(",").map(function (o) { return o.trim(); }));
