@@ -450,14 +450,17 @@ header{
           <strong>Wix:</strong> clique no botão → Conectar ao link → Web address → cole a URL → deixe <strong>"Abrir na mesma janela"</strong> → Salvar → Publicar.<br>
           <strong>WordPress:</strong> clique no botão → campo link → cole a URL → <strong>não</strong> marque "abrir em nova aba" → Atualizar.<br>
           <span style="color:rgba(255,255,255,.4)">O formulário abre sobre a mesma página; o visitante pode fechar no "✕" e continuar navegando.</span></p>
+          <div style="margin-top:10px;background:rgba(212,161,30,.12);border:1px solid rgba(212,161,30,.35);border-radius:8px;padding:10px 12px;font-size:12px;color:rgba(255,255,255,.75)">
+            ⚠️ <strong style="color:#F0C860">Importante — rastreamento dos botões:</strong> para esses leads que chegam pela URL registrarem <strong>de onde vieram</strong> (Google orgânico, Instagram, anúncio) na planilha, o site <strong>precisa</strong> ter o script do <strong>passo 10</strong> instalado. Sem ele, esses leads chegam como <strong>"direto"</strong>.
+          </div>
         </div>
       </div>
 
       <div class="cf-step">
         <div class="cf-num">10</div>
         <div class="cf-step-body">
-          <h3>Rastrear a origem do lead <span style="color:#7FE0A0">(recomendado)</span></h3>
-          <p>Para a planilha mostrar de onde o lead veio (<strong>busca google orgânico</strong>, instagram, tráfego pago…) em vez de "direto", cole <strong>uma única vez</strong> este código no site do cliente, antes do <code>&lt;/body&gt;</code>:</p>
+          <h3>Rastrear a origem do lead <span style="color:#7FE0A0">(essencial p/ os botões de URL)</span></h3>
+          <p>Faz a planilha mostrar de onde o lead veio (<strong>busca google orgânico</strong>, instagram, tráfego pago…) em vez de "direto". Vale para o botão flutuante <strong>e principalmente para os botões que usam a URL</strong> (passo 9) — sem esse script, os leads da URL chegam sempre como "direto". Cole <strong>uma única vez</strong> no site do cliente, antes do <code>&lt;/body&gt;</code>:</p>
           <code class="cf-code-box">&lt;script src="https://bgomarketingmedico.github.io/agente-bgo/bgo-origem.js"&gt;&lt;/script&gt;</code>
           <p style="margin-top:8px"><strong>Wix:</strong> Configurações → Código personalizado → + Adicionar código → cole acima → marque <strong>Todas as páginas</strong> → posição <strong>Corpo - fim</strong> → Aplicar → <strong>Publicar</strong>.<br>
           <strong>WordPress:</strong> plugin WPCode → + Adicionar snippet → HTML → cole → ative → Salvar.<br>
@@ -521,11 +524,27 @@ header{
       </div>
 
       <div class="card card-last">
-        <div class="ch"><div class="ch-ico">🎨</div><div><h2>Aparência</h2><p>Cores e textos do formulário</p></div></div>
+        <div class="ch"><div class="ch-ico">🎨</div><div><h2>Aparência</h2><p>Logo, cores e textos do formulário</p></div></div>
         <div class="cb">
+          <div class="fld">
+            <label>Logotipo do cliente</label>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div id="logo-prev" style="width:120px;height:50px;border:1.5px dashed var(--roxo-border);border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--roxo-light);overflow:hidden;flex-shrink:0"><span style="font-size:11px;color:var(--hint)">sem logo</span></div>
+              <div style="flex:1">
+                <input type="file" id="f-logo-input" accept="image/png,image/jpeg,image/webp,image/svg+xml" style="display:none" onchange="carregarLogo(this)">
+                <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('f-logo-input').click()">📤 Subir logotipo</button>
+                <button type="button" class="btn btn-sm" id="btn-logo-rm" style="display:none;background:var(--bg);color:var(--muted);border:1px solid var(--border);margin-left:6px" onclick="removerLogo()">Remover</button>
+                <div class="fld-hint">PNG/JPG. É otimizado e embutido automaticamente — não precisa subir em lugar nenhum.</div>
+              </div>
+            </div>
+          </div>
           <div class="fld-row">
-            <div class="fld"><label>Cor principal</label><input type="color" id="f-cor1" value="#25D366"></div>
-            <div class="fld"><label>Cor hover</label><input type="color" id="f-cor2" value="#1DA851"></div>
+            <div class="fld"><label>Cor do cabeçalho</label><input type="color" id="f-corhd" value="#25D366"></div>
+            <div class="fld"><label>Cor do botão</label><input type="color" id="f-cor1" value="#25D366"></div>
+          </div>
+          <div class="fld-row">
+            <div class="fld"><label>Cor do botão (hover)</label><input type="color" id="f-cor2" value="#1DA851"></div>
+            <div class="fld"><label>Texto do cabeçalho</label><select id="f-hdtext"><option value="#ffffff">Claro (branco)</option><option value="#14121a">Escuro</option></select></div>
           </div>
           <div class="fld"><label>Título do formulário</label><input type="text" id="f-titulo" value="Fale com a gente"></div>
           <div class="fld"><label>Subtítulo</label><input type="text" id="f-sub" value="Preencha para iniciarmos a conversa."></div>
@@ -644,12 +663,12 @@ header{
         <div style="margin-top:8px;font-size:11.5px;color:var(--muted);line-height:1.6">
           O visitante clica → formulário captura nome, celular e e-mail → WhatsApp abre automaticamente com a mensagem personalizada.
         </div>
-        <div class="bnr bnr-p" style="margin-top:12px;margin-bottom:0">
+        <div class="bnr bnr-y" style="margin-top:12px;margin-bottom:0">
           <div>
-            <strong>📊 Rastrear origem do lead (Google orgânico, Instagram, etc.)</strong><br>
-            Para a planilha registrar de onde o lead veio (em vez de "direto"), cole <strong>uma única vez</strong> este código no site do cliente, antes do <code>&lt;/body&gt;</code>:<br>
+            <strong>📊 Obrigatório para rastrear a origem destes botões</strong><br>
+            Os botões acima (com a URL) só registram <strong>de onde o lead veio</strong> — Google orgânico, Instagram, tráfego pago — se o site tiver este script. <strong>Sem ele, todo lead que chega pela URL aparece como "direto"</strong> na planilha. Cole <strong>uma única vez</strong> no site do cliente, antes do <code>&lt;/body&gt;</code>:<br>
             <code style="display:block;margin-top:6px;word-break:break-all">&lt;script src="https://bgomarketingmedico.github.io/agente-bgo/bgo-origem.js"&gt;&lt;/script&gt;</code>
-            <span style="display:block;margin-top:6px;font-size:11px">No Wix: Configurações → Código personalizado → + Adicionar → cole → Todas as páginas → Corpo - fim → Publicar.</span>
+            <span style="display:block;margin-top:6px;font-size:11px"><strong>Wix:</strong> Configurações → Código personalizado → + Adicionar → cole → Todas as páginas → Corpo - fim → Publicar. &nbsp;·&nbsp; <strong>WordPress:</strong> WPCode → HTML → cole → ativar. &nbsp;·&nbsp; É a mesma linha para todos os clientes — cola uma vez por site.</span>
           </div>
         </div>
       </div>
@@ -711,6 +730,49 @@ function saveCl(a){localStorage.setItem('bgo_v2',JSON.stringify(a))}
 function getMes(){var m=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];var d=new Date();return m[d.getMonth()]+'/'+d.getFullYear()}
 
 var customFields=[];
+var logoData='';
+
+// ── Logotipo: lê, otimiza (redimensiona) e embute como data URI ──
+function carregarLogo(input){
+  var file=input.files&&input.files[0];
+  if(!file)return;
+  if(file.type==='image/svg+xml'){
+    var r=new FileReader();
+    r.onload=function(e){logoData=e.target.result;mostrarLogo();};
+    r.readAsDataURL(file);
+    return;
+  }
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var img=new Image();
+    img.onload=function(){
+      var maxH=104,maxW=420; // 2x p/ telas retina; no cabeçalho aparece ~44px
+      var scale=Math.min(maxH/img.height,maxW/img.width,4);
+      var w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale));
+      var cv=document.createElement('canvas');cv.width=w;cv.height=h;
+      var ctx=cv.getContext('2d');ctx.drawImage(img,0,0,w,h);
+      var out=cv.toDataURL('image/webp',0.85);
+      if(out.indexOf('data:image/webp')!==0)out=cv.toDataURL('image/png');
+      logoData=out;
+      mostrarLogo();
+      if(out.length>60000)alert('Logo carregado, mas ficou grande ('+Math.round(out.length/1024)+'KB). Se der problema no Wix, use uma imagem menor/mais simples.');
+    };
+    img.onerror=function(){alert('Não consegui ler essa imagem. Tente PNG ou JPG.');};
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function mostrarLogo(){
+  var p=document.getElementById('logo-prev');
+  if(logoData){
+    p.innerHTML='<img src="'+logoData+'" style="max-width:100%;max-height:100%;object-fit:contain">';
+    document.getElementById('btn-logo-rm').style.display='inline-flex';
+  }else{
+    p.innerHTML='<span style="font-size:11px;color:var(--hint)">sem logo</span>';
+    document.getElementById('btn-logo-rm').style.display='none';
+  }
+}
+function removerLogo(){logoData='';document.getElementById('f-logo-input').value='';mostrarLogo();}
 
 // ═══════════════════════════════════════════════════
 // NAVEGAÇÃO
@@ -790,6 +852,8 @@ function gerarWidget(){
   var wh    =document.getElementById('f-wh').value.trim()||'https://script.google.com/macros/s/SEU_ID/exec';
   var cor1  =document.getElementById('f-cor1').value;
   var cor2  =document.getElementById('f-cor2').value;
+  var corhd =(document.getElementById('f-corhd')||{}).value||cor1;
+  var hdtext=(document.getElementById('f-hdtext')||{}).value||'#ffffff';
   var titulo=document.getElementById('f-titulo').value.trim();
   var sub   =document.getElementById('f-sub').value.trim();
   var esp   =document.getElementById('f-esp').checked;
@@ -810,7 +874,7 @@ function gerarWidget(){
   // Salva cliente
   var cl=getCl();
   var idx=cl.findIndex(function(c){return c.nome===nome});
-  var obj={nome:nome,wa:wa,wh:wh,cor:cor1,titulo:titulo,msg:msg,mailNotif:mailNotif,url:urlLimpa,slug:sl,criado:new Date().toLocaleDateString('pt-BR'),fields:JSON.parse(JSON.stringify(customFields))};
+  var obj={nome:nome,wa:wa,wh:wh,cor:cor1,corhd:corhd,hdtext:hdtext,logo:logoData,titulo:titulo,msg:msg,mailNotif:mailNotif,url:urlLimpa,slug:sl,criado:new Date().toLocaleDateString('pt-BR'),fields:JSON.parse(JSON.stringify(customFields))};
   if(idx>=0)cl[idx]=obj;else cl.unshift(obj);
   saveCl(cl);
 
@@ -819,7 +883,7 @@ function gerarWidget(){
   if(conv)campos.push({id:'bgo_conv',label:'Convênio'});
   (customFields||[]).forEach(function(f){campos.push({id:f.id,label:f.label});});
 
-  gerarSnippet(nome,wa,msg,wh,cor1,cor2,titulo,sub,esp,conv,customFields);
+  gerarSnippet(nome,wa,msg,wh,cor1,cor2,titulo,sub,esp,conv,customFields,corhd,hdtext,logoData);
   gerarApps(nome,mailNotif,campos);
   gerarPassos(nome,wh,whOk,sl);
 
@@ -831,17 +895,19 @@ function gerarWidget(){
 // ═══════════════════════════════════════════════════
 // SNIPPET — DOM-based, sem escaping de strings
 // ═══════════════════════════════════════════════════
-function gerarSnippet(nome,wa,msg,wh,cor1,cor2,titulo,sub,esp,conv,cfs){
+function gerarSnippet(nome,wa,msg,wh,cor1,cor2,titulo,sub,esp,conv,cfs,corhd,hdtext,logo){
+  corhd=corhd||cor1; hdtext=hdtext||'#ffffff'; logo=logo||'';
   var fields=(cfs||[]).map(function(f){return {id:f.id,label:f.label,tipo:f.tipo,opts:f.opts||''};});
   function esc(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   var s='<!-- B.GO Widget WhatsApp \u2014 '+nome+' | '+new Date().toLocaleDateString('pt-BR')+' -->\n';
   s+='<script src="https://bgomarketingmedico.github.io/agente-bgo/bgo-widget.js"\n';
   s+='  data-wa="'+esc(wa)+'"\n';
   s+='  data-wh="'+esc(wh)+'"\n';
-  s+='  data-c1="'+esc(cor1)+'" data-c2="'+esc(cor2)+'"\n';
+  s+='  data-c1="'+esc(cor1)+'" data-c2="'+esc(cor2)+'" data-hc="'+esc(corhd)+'" data-ht="'+esc(hdtext)+'"\n';
   s+='  data-msg="'+esc(msg)+'"\n';
   s+='  data-titulo="'+esc(titulo)+'" data-sub="'+esc(sub)+'"\n';
   s+='  data-esp="'+(esp?'1':'0')+'" data-conv="'+(conv?'1':'0')+'"\n';
+  if(logo)s+='  data-logo="'+logo+'"\n';
   s+='  data-fields=\''+JSON.stringify(fields).replace(/'/g,'&#39;')+'\'><\/script>';
   document.getElementById('codeSnippet').textContent=s;
 }
@@ -1114,11 +1180,16 @@ function baixarPagina(){
   var msg   =document.getElementById('f-msg').value.trim();
   var wh    =document.getElementById('f-wh').value.trim()||'';
   var cor1  =document.getElementById('f-cor1').value;
+  var corhd =(document.getElementById('f-corhd')||{}).value||cor1;
+  var hdtext=(document.getElementById('f-hdtext')||{}).value||'#ffffff';
+  var logo  =logoData||'';
   var titulo=document.getElementById('f-titulo').value.trim();
   var sub   =document.getElementById('f-sub').value.trim();
   var esp   =document.getElementById('f-esp').checked;
   var conv  =document.getElementById('f-conv').checked;
   var sl    =slug(nome);
+  var subCol=(hdtext.toLowerCase()==='#ffffff'||hdtext.toLowerCase()==='#fff')?'rgba(255,255,255,.82)':'rgba(0,0,0,.55)';
+  var hdIcoHtml=logo?'<img src="'+logo+'" alt="logo" style="height:38px;max-width:170px;object-fit:contain;display:block;flex-shrink:0">':'<svg viewBox="0 0 24 24" style="width:27px;height:27px;fill:'+hdtext+';flex-shrink:0"><path d="'+WP+'"/></svg>';
 
   var WP='M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z';
 
@@ -1136,7 +1207,7 @@ function baixarPagina(){
     }
   });
 
-  var html='<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n<title>WhatsApp — '+nome+'</title>\n<meta name="robots" content="noindex,nofollow">\n<style>\n*{box-sizing:border-box;margin:0;padding:0}\nhtml,body{height:100%}\nbody{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;background:url(\'atendimento-bg.jpg\') center/cover fixed no-repeat}\nbody::before{content:"";position:fixed;inset:0;background:rgba(255,255,255,.72);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:0}\n.wrap{position:relative;z-index:1;width:100%;max-width:440px;animation:up .3s cubic-bezier(.22,1,.36,1)}\n.welcome{text-align:center;color:#1a0a1e;font-size:19px;font-weight:700;line-height:1.35;margin-bottom:16px;text-shadow:0 1px 12px rgba(255,255,255,.8)}\n@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}\n.modal{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 12px 48px rgba(45,10,52,.18);max-height:92vh;display:flex;flex-direction:column}\n.xbtn{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.18);border:none;color:#fff;font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;z-index:2}\n.xbtn:hover{background:rgba(0,0,0,.32)}\n.hd{position:relative;flex-shrink:0;background:'+cor1+';padding:22px 46px 18px 20px;display:flex;align-items:flex-start;gap:13px}\n.hd svg{width:27px;height:27px;fill:#fff;flex-shrink:0;margin-top:3px}\n.hd h2{color:#fff;font-size:17px;font-weight:700;margin:0 0 4px;line-height:1.3}\n.hd p{color:rgba(255,255,255,.82);font-size:13px;margin:0}\n.bd{padding:22px 20px 24px;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto}\n.f{margin-bottom:16px}\n.f label{display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px}\n.f input,.f select,.f textarea{display:block;width:100%;border:1.5px solid #ddd;border-radius:11px;padding:12px 14px;font-size:14px;line-height:1.4;font-family:inherit;color:#111;background:#f8f8f8;outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}\n.f select{height:auto;min-height:46px}\n.f input:focus,.f select:focus,.f textarea:focus{border-color:'+cor1+';box-shadow:0 0 0 3px rgba(37,211,102,.12);background:#fff}\n.req{color:#e74c3c}\n.btn{width:100%;padding:14px;background:'+cor1+';color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;font-family:inherit;margin-top:10px;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:opacity .2s,transform .1s}\n.btn:hover{opacity:.92;transform:translateY(-1px)}\n.btn:disabled{opacity:.6;cursor:default;transform:none}\n.btn svg{width:18px;height:18px;fill:#fff}\n.err{color:#c0392b;font-size:12px;margin-top:9px;display:none;padding:10px 13px;background:#fff0f0;border-radius:9px;border:1px solid #fcc}\n.ok{display:none;text-align:center;padding:36px 0 16px}\n.ok svg{width:60px;height:60px;margin-bottom:12px}\n.ok h3{color:#111;font-size:17px;font-weight:700;margin:0 0 6px}\n.ok p{color:#777;font-size:13px}\n.lgpd{font-size:11px;color:#bbb;text-align:center;margin-top:14px;line-height:1.5}\n.pw{text-align:center;margin-top:16px;font-size:11px;color:#999}\n.pw a{color:#8B5A9A;text-decoration:none;font-weight:600}\n</style>\n</head>\n<body>\n<div class="wrap">\n<div class="welcome">Bem-vindo(a), vamos dar início ao seu atendimento</div>\n<div class="modal">\n<div class="hd"><svg viewBox="0 0 24 24"><path d="'+WP+'"/></svg><div><h2>'+titulo+'</h2><p>'+sub+'</p></div><button class="xbtn" onclick="fecharWA()" aria-label="Fechar">✕</button></div>\n<div class="bd">\n<div id="fa">\n<div class="f"><label>Nome completo <span class="req">*</span></label><input type="text" id="nm" placeholder="João Silva" autocomplete="name"></div>\n<div class="f"><label>Celular / WhatsApp <span class="req">*</span></label><input type="tel" id="tel" placeholder="(61) 99999-0000" autocomplete="tel"></div>\n<div class="f"><label>E-mail <span class="req">*</span></label><input type="email" id="em" placeholder="joao@email.com" autocomplete="email"></div>\n'+xH+'\n<div class="err" id="err">⚠️ Preencha nome, celular e e-mail para continuar.</div>\n<button class="btn" id="btn"><svg viewBox="0 0 24 24"><path d="'+WP+'"/></svg>Iniciar conversa no WhatsApp</button>\n<div class="lgpd">Seus dados são usados apenas para entrar em contato com você. Não enviamos spam.</div>\n</div>\n<div class="ok" id="ok">\n<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E6F4ED"/><path d="M7 12.5l3.5 3.5 6.5-7" stroke="#1A7A44" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>\n<h3>Tudo certo! 🎉</h3><p>Abrindo o WhatsApp agora…</p>\n</div>\n</div>\n</div>\n<div class="pw">Powered by <a href="https://bgomarketingmedico.com.br" target="_blank">B.GO Marketing Médico</a></div>\n</div>\n<script>\nvar WA="'+wa+'",WH="'+wh.replace(/"/g,'\\"')+'",MSG="'+msg.replace(/"/g,'\\"')+'";\nvar p=new URLSearchParams(window.location.search);\nfunction fecharWA(){if(history.length>1){history.back();}else{window.close();location.href=document.referrer||"about:blank";}}\nfunction origemWA(){if(p.get("utm_source"))return p.get("utm_source");var r=document.referrer||"";if(!r)return"direto";var h;try{h=new URL(r).hostname.toLowerCase();}catch(e){return"direto";}if(h.indexOf(location.hostname)>=0)return"direto";if(/(^|\\.)google\\./.test(h))return"busca google orgânico";if(/(^|\\.)bing\\./.test(h))return"busca bing orgânico";if(/(^|\\.)yahoo\\./.test(h))return"busca yahoo orgânico";if(/duckduckgo\\./.test(h))return"busca duckduckgo orgânico";if(/instagram\\./.test(h))return"instagram orgânico";if(/(^|\\.)facebook\\.|(^|\\.)fb\\./.test(h))return"facebook orgânico";if(/youtube\\./.test(h))return"youtube orgânico";if(/linkedin\\./.test(h))return"linkedin orgânico";if(/tiktok\\./.test(h))return"tiktok orgânico";if(/t\\.co|twitter\\.|x\\.com/.test(h))return"twitter orgânico";return h.replace(/^www\\./,"");}\nfunction utms(){return{utm_source:origemWA(),utm_medium:p.get("utm_medium")||"",utm_campaign:p.get("utm_campaign")||"",pagina:document.referrer||location.href,dispositivo:/Mobi|Android/i.test(navigator.userAgent)?"Mobile":"Desktop"};}\ndocument.getElementById("btn").onclick=function(){\nvar nm=document.getElementById("nm").value.trim();\nvar tel=document.getElementById("tel").value.trim();\nvar em=document.getElementById("em").value.trim();\nif(!nm||!tel||!em||!/\\S+@\\S+\\.\\S+/.test(em)){document.getElementById("err").style.display="block";return;}\ndocument.getElementById("err").style.display="none";\nvar btn=document.getElementById("btn");btn.disabled=true;btn.textContent="Enviando…";\nvar extra={};\n["bgo_esp","bgo_conv"].concat('+JSON.stringify((customFields||[]).map(function(f){return f.id}))+').forEach(function(id){var el=document.getElementById(id);if(el)extra[id]=el.value;});\nvar pl=Object.assign({data:new Date().toLocaleDateString("pt-BR"),hora:new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),nome:nm,telefone:tel,email:em},extra,utms());\nif(WH)fetch(WH,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(pl)}).catch(function(){});\nsetTimeout(function(){document.getElementById("fa").style.display="none";document.getElementById("ok").style.display="block";var mf=MSG.replace("{{nome}}",nm);setTimeout(function(){window.location.href="https://wa.me/"+WA+"?text="+encodeURIComponent(mf);},900);},700);\n};\n<\/script>\n</body>\n</html>';
+  var html='<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width,initial-scale=1.0">\n<title>WhatsApp — '+nome+'</title>\n<meta name="robots" content="noindex,nofollow">\n<style>\n*{box-sizing:border-box;margin:0;padding:0}\nhtml,body{height:100%}\nbody{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;background:url(\'atendimento-bg.jpg\') center/cover fixed no-repeat}\nbody::before{content:"";position:fixed;inset:0;background:rgba(255,255,255,.72);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:0}\n.wrap{position:relative;z-index:1;width:100%;max-width:440px;animation:up .3s cubic-bezier(.22,1,.36,1)}\n.welcome{text-align:center;color:#1a0a1e;font-size:19px;font-weight:700;line-height:1.35;margin-bottom:16px;text-shadow:0 1px 12px rgba(255,255,255,.8)}\n@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}\n.modal{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 12px 48px rgba(45,10,52,.18);max-height:92vh;display:flex;flex-direction:column}\n.xbtn{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.18);border:none;color:#fff;font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;z-index:2}\n.xbtn:hover{background:rgba(0,0,0,.32)}\n.hd{position:relative;flex-shrink:0;background:'+corhd+';padding:22px 46px 18px 20px;display:flex;align-items:center;gap:13px}\n.hd h2{color:'+hdtext+';font-size:17px;font-weight:700;margin:0 0 4px;line-height:1.3}\n.hd p{color:'+subCol+';font-size:13px;margin:0}\n.bd{padding:22px 20px 24px;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto}\n.f{margin-bottom:16px}\n.f label{display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px}\n.f input,.f select,.f textarea{display:block;width:100%;border:1.5px solid #ddd;border-radius:11px;padding:12px 14px;font-size:14px;line-height:1.4;font-family:inherit;color:#111;background:#f8f8f8;outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}\n.f select{height:auto;min-height:46px}\n.f input:focus,.f select:focus,.f textarea:focus{border-color:'+cor1+';box-shadow:0 0 0 3px rgba(37,211,102,.12);background:#fff}\n.req{color:#e74c3c}\n.btn{width:100%;padding:14px;background:'+cor1+';color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;font-family:inherit;margin-top:10px;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:opacity .2s,transform .1s}\n.btn:hover{opacity:.92;transform:translateY(-1px)}\n.btn:disabled{opacity:.6;cursor:default;transform:none}\n.btn svg{width:18px;height:18px;fill:#fff}\n.err{color:#c0392b;font-size:12px;margin-top:9px;display:none;padding:10px 13px;background:#fff0f0;border-radius:9px;border:1px solid #fcc}\n.ok{display:none;text-align:center;padding:36px 0 16px}\n.ok svg{width:60px;height:60px;margin-bottom:12px}\n.ok h3{color:#111;font-size:17px;font-weight:700;margin:0 0 6px}\n.ok p{color:#777;font-size:13px}\n.lgpd{font-size:11px;color:#bbb;text-align:center;margin-top:14px;line-height:1.5}\n.pw{text-align:center;margin-top:16px;font-size:11px;color:#999}\n.pw a{color:#8B5A9A;text-decoration:none;font-weight:600}\n</style>\n</head>\n<body>\n<div class="wrap">\n<div class="welcome">Bem-vindo(a), vamos dar início ao seu atendimento</div>\n<div class="modal">\n<div class="hd">'+hdIcoHtml+'<div><h2>'+titulo+'</h2><p>'+sub+'</p></div><button class="xbtn" onclick="fecharWA()" aria-label="Fechar" style="color:'+hdtext+'">✕</button></div>\n<div class="bd">\n<div id="fa">\n<div class="f"><label>Nome completo <span class="req">*</span></label><input type="text" id="nm" placeholder="João Silva" autocomplete="name"></div>\n<div class="f"><label>Celular / WhatsApp <span class="req">*</span></label><input type="tel" id="tel" placeholder="(61) 99999-0000" autocomplete="tel"></div>\n<div class="f"><label>E-mail <span class="req">*</span></label><input type="email" id="em" placeholder="joao@email.com" autocomplete="email"></div>\n'+xH+'\n<div class="err" id="err">⚠️ Preencha nome, celular e e-mail para continuar.</div>\n<button class="btn" id="btn"><svg viewBox="0 0 24 24"><path d="'+WP+'"/></svg>Iniciar conversa no WhatsApp</button>\n<div class="lgpd">Seus dados são usados apenas para entrar em contato com você. Não enviamos spam.</div>\n</div>\n<div class="ok" id="ok">\n<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E6F4ED"/><path d="M7 12.5l3.5 3.5 6.5-7" stroke="#1A7A44" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>\n<h3>Tudo certo! 🎉</h3><p>Abrindo o WhatsApp agora…</p>\n</div>\n</div>\n</div>\n<div class="pw">Powered by <a href="https://bgomarketingmedico.com.br" target="_blank">B.GO Marketing Médico</a></div>\n</div>\n<script>\nvar WA="'+wa+'",WH="'+wh.replace(/"/g,'\\"')+'",MSG="'+msg.replace(/"/g,'\\"')+'";\nvar p=new URLSearchParams(window.location.search);\nfunction fecharWA(){if(history.length>1){history.back();}else{window.close();location.href=document.referrer||"about:blank";}}\nfunction origemWA(){if(p.get("utm_source"))return p.get("utm_source");var r=document.referrer||"";if(!r)return"direto";var h;try{h=new URL(r).hostname.toLowerCase();}catch(e){return"direto";}if(h.indexOf(location.hostname)>=0)return"direto";if(/(^|\\.)google\\./.test(h))return"busca google orgânico";if(/(^|\\.)bing\\./.test(h))return"busca bing orgânico";if(/(^|\\.)yahoo\\./.test(h))return"busca yahoo orgânico";if(/duckduckgo\\./.test(h))return"busca duckduckgo orgânico";if(/instagram\\./.test(h))return"instagram orgânico";if(/(^|\\.)facebook\\.|(^|\\.)fb\\./.test(h))return"facebook orgânico";if(/youtube\\./.test(h))return"youtube orgânico";if(/linkedin\\./.test(h))return"linkedin orgânico";if(/tiktok\\./.test(h))return"tiktok orgânico";if(/t\\.co|twitter\\.|x\\.com/.test(h))return"twitter orgânico";return h.replace(/^www\\./,"");}\nfunction utms(){return{utm_source:origemWA(),utm_medium:p.get("utm_medium")||"",utm_campaign:p.get("utm_campaign")||"",pagina:document.referrer||location.href,dispositivo:/Mobi|Android/i.test(navigator.userAgent)?"Mobile":"Desktop"};}\ndocument.getElementById("btn").onclick=function(){\nvar nm=document.getElementById("nm").value.trim();\nvar tel=document.getElementById("tel").value.trim();\nvar em=document.getElementById("em").value.trim();\nif(!nm||!tel||!em||!/\\S+@\\S+\\.\\S+/.test(em)){document.getElementById("err").style.display="block";return;}\ndocument.getElementById("err").style.display="none";\nvar btn=document.getElementById("btn");btn.disabled=true;btn.textContent="Enviando…";\nvar extra={};\n["bgo_esp","bgo_conv"].concat('+JSON.stringify((customFields||[]).map(function(f){return f.id}))+').forEach(function(id){var el=document.getElementById(id);if(el)extra[id]=el.value;});\nvar pl=Object.assign({data:new Date().toLocaleDateString("pt-BR"),hora:new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),nome:nm,telefone:tel,email:em},extra,utms());\nif(WH)fetch(WH,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(pl)}).catch(function(){});\nsetTimeout(function(){document.getElementById("fa").style.display="none";document.getElementById("ok").style.display="block";var mf=MSG.replace("{{nome}}",nm);setTimeout(function(){window.location.href="https://wa.me/"+WA+"?text="+encodeURIComponent(mf);},900);},700);\n};\n<\/script>\n</body>\n</html>';
 
   var b=new Blob([html],{type:'text/html'});
   var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=sl+'.html';a.click();URL.revokeObjectURL(a.href);
@@ -1253,6 +1324,10 @@ function editarCliente(i){
   document.getElementById('f-wa').value=c.wa;
   document.getElementById('f-wh').value=c.wh||'';
   document.getElementById('f-cor1').value=c.cor||'#25D366';
+  if(document.getElementById('f-corhd'))document.getElementById('f-corhd').value=c.corhd||c.cor||'#25D366';
+  if(document.getElementById('f-hdtext'))document.getElementById('f-hdtext').value=c.hdtext||'#ffffff';
+  logoData=c.logo||'';
+  mostrarLogo();
   document.getElementById('f-titulo').value=c.titulo||'Fale com a gente';
   document.getElementById('f-msg').value=c.msg||'';
   if(document.getElementById('f-mailnotif'))document.getElementById('f-mailnotif').value=c.mailNotif||'';
