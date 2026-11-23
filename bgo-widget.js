@@ -12,6 +12,23 @@
      data-fields="[]"></script>
 
    O ícone é desenhado como background do botão (à prova de temas).
+
+   Opcionais (rastreamento de anúncios) — DESLIGADOS por padrão.
+   Sem estes atributos o widget funciona exatamente como antes.
+
+     data-rastreio="1"       → liga o rastreamento:
+                               · eventos no dataLayer (para o GTM):
+                                   bgo_abrir_form → o formulário foi aberto
+                                   bgo_lead       → lead enviado (com user_data.email /
+                                                    phone_number p/ conversões otimizadas)
+                               · guarda gclid, gbraid, wbraid, fbclid e utm_* por 90 dias
+                                 e manda à planilha junto com o lead (viram colunas)
+                               · class="bgo-abrir" ou href="#bgo" abrem o formulário
+     data-links="1"          → botões do site que apontam para /agente-bgo/wa/...
+                               abrem este formulário na própria página (sem sair
+                               do site). Ou uma lista de slugs: data-links="saint-moritz".
+     data-aw="AW-123/abcDEF" → com data-rastreio="1", dispara a conversão do Google
+                               Ads direto pelo gtag (só para sites SEM GTM).
 ═══════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
@@ -32,6 +49,38 @@
   var conv = sc.getAttribute("data-conv") === "1";
   var cfs = [];
   try { cfs = JSON.parse(sc.getAttribute("data-fields") || "[]"); } catch (e) { cfs = []; }
+  var LINKS = (sc.getAttribute("data-links") || "").trim();
+  var AW = (sc.getAttribute("data-aw") || "").trim();
+  var TRACK = sc.getAttribute("data-rastreio") === "1";
+
+  // ── Clique de anúncio: guarda gclid/utm por 90 dias (sobrevive à navegação no site)
+  var CK_KEY = "bgo_click", CK_DIAS = 90;
+  var CK_PARAMS = ["gclid", "gbraid", "wbraid", "fbclid", "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
+  function lerClique() {
+    var p = new URLSearchParams(window.location.search), cur = {}, tem = false;
+    CK_PARAMS.forEach(function (k) { var v = p.get(k); if (v) { cur[k] = v; tem = true; } });
+    var salvo = null;
+    try { salvo = JSON.parse(localStorage.getItem(CK_KEY) || "null"); } catch (e) { }
+    if (salvo && (!salvo.ts || Date.now() - salvo.ts > CK_DIAS * 864e5)) salvo = null;
+    if (tem) {
+      cur.ts = Date.now();
+      salvo = cur;
+      try { localStorage.setItem(CK_KEY, JSON.stringify(cur)); } catch (e) { }
+    }
+    return salvo || {};
+  }
+  var CK = TRACK ? lerClique() : {};
+
+  function pushDL(obj) {
+    if (!TRACK) return;
+    try { window.dataLayer = window.dataLayer || []; window.dataLayer.push(obj); } catch (e) { }
+  }
+  function telE164(t) {
+    var d = String(t || "").replace(/\D/g, "").replace(/^0+/, "");
+    if (!d) return "";
+    if (d.length <= 11) d = "55" + d;
+    return "+" + d;
+  }
 
   var WP = "M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z";
   var ICON = "data:image/svg+xml," + encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='#ffffff' d='" + WP + "'/></svg>");
@@ -87,6 +136,10 @@
     if (p.get("utm_source")) return p.get("utm_source");
     if (p.get("gclid")) return "google ads";
     if (p.get("fbclid")) return "facebook ads";
+    // veio de um anúncio antes e navegou pelo site → mantém a origem do anúncio
+    if (CK.utm_source) return CK.utm_source;
+    if (CK.gclid || CK.gbraid || CK.wbraid) return "google ads";
+    if (CK.fbclid) return "facebook ads";
     var r = document.referrer || "";
     if (!r) return "direto";
     var h; try { h = new URL(r).hostname.toLowerCase(); } catch (e) { return "direto"; }
@@ -105,7 +158,13 @@
   }
   function utms() {
     var p = new URLSearchParams(window.location.search);
-    return { utm_source: origem(), utm_medium: p.get("utm_medium") || "", utm_campaign: p.get("utm_campaign") || "", pagina: window.location.href, dispositivo: /Mobi|Android/i.test(navigator.userAgent) ? "Mobile" : "Desktop" };
+    var u = { utm_source: origem(), utm_medium: p.get("utm_medium") || CK.utm_medium || "", utm_campaign: p.get("utm_campaign") || CK.utm_campaign || "", pagina: window.location.href, dispositivo: /Mobi|Android/i.test(navigator.userAgent) ? "Mobile" : "Desktop" };
+    // só com data-rastreio="1" e só quando existir: cada campo novo vira coluna na planilha
+    if (TRACK) ["gclid", "gbraid", "wbraid", "fbclid", "utm_term", "utm_content"].forEach(function (k) {
+      var v = p.get(k) || CK[k];
+      if (v) u[k] = v;
+    });
+    return u;
   }
   function dH() { return new Date().toLocaleDateString("pt-BR"); }
   function hA() { return new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }); }
@@ -183,7 +242,34 @@
     }
     ajustar(); window.addEventListener("resize", ajustar);
 
-    fab.onclick = function () { ov.style.display = "flex"; bd.scrollTop = 0; setTimeout(function () { bd.scrollTop = 0; var el = document.getElementById("bgo_nm"); if (el) { try { el.focus({ preventScroll: true }); } catch (e) { } bd.scrollTop = 0; } }, 80); };
+    function abrir(via) {
+      if (ov.style.display === "flex") return;
+      ov.style.display = "flex"; bd.scrollTop = 0;
+      pushDL({ event: "bgo_abrir_form", bgo_via: via || "botao_flutuante" });
+      setTimeout(function () { bd.scrollTop = 0; var el = document.getElementById("bgo_nm"); if (el) { try { el.focus({ preventScroll: true }); } catch (e) { } bd.scrollTop = 0; } }, 80);
+    }
+    fab.onclick = function () { abrir("botao_flutuante"); };
+
+    // Botões do site abrem o formulário aqui mesmo (sem ir para a página /wa/ em outro domínio)
+    var slugs = (LINKS === "1" || LINKS.toLowerCase() === "todos") ? null
+      : LINKS.split(",").map(function (s) { return s.trim().toLowerCase(); }).filter(Boolean);
+    function linkDoWidget(a) {
+      var href = a.getAttribute("href") || "";
+      if (href === "#bgo") return TRACK;
+      if (!LINKS || href.indexOf("/agente-bgo/wa/") < 0) return false;
+      if (!slugs) return true;
+      var slug = href.split("/agente-bgo/wa/")[1].split(/[?#]/)[0].replace(/\.html$/, "").replace(/\/$/, "").toLowerCase();
+      return slugs.indexOf(slug) >= 0;
+    }
+    document.addEventListener("click", function (e) {
+      if (e.defaultPrevented || e.button > 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      var t = e.target && e.target.closest ? e.target.closest("a, .bgo-abrir") : null;
+      if (!t || t === fab) return;
+      var isClasse = TRACK && t.classList && t.classList.contains("bgo-abrir");
+      if (!isClasse && !(t.tagName === "A" && linkDoWidget(t))) return;
+      e.preventDefault(); e.stopPropagation();
+      abrir(isClasse ? "botao_site" : "link_wa");
+    }, true);
     xBtn.onclick = fechar;
     ov.onclick = function (e) { if (e.target === ov) fechar(); };
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && ov.style.display === "flex") fechar(); });
@@ -208,6 +294,23 @@
       IDS.slice(3).forEach(function (id) { var el = document.getElementById(id); if (el) extra[id] = el.value; });
       var pl = Object.assign({ data: dH(), hora: hA(), nome: nm, telefone: tel, email: em }, extra, utms());
       if (C.wh) fetch(C.wh, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(pl) }).catch(function () {});
+
+      // Conversão: evento para o GTM (+ dados para conversões otimizadas)
+      var emN = em.toLowerCase(), telN = telE164(tel);
+      pushDL({
+        event: "bgo_lead",
+        bgo_origem: pl.utm_source || "",
+        bgo_campanha: pl.utm_campaign || "",
+        bgo_gclid: pl.gclid || "",
+        user_data: { email: emN, phone_number: telN }
+      });
+      // Sites sem GTM: conversão direto pelo gtag (data-aw="AW-XXX/rotulo")
+      if (TRACK && AW && typeof window.gtag === "function") {
+        try {
+          window.gtag("set", "user_data", { email: emN, phone_number: telN });
+          window.gtag("event", "conversion", { send_to: AW });
+        } catch (e) { }
+      }
       setTimeout(function () {
         fa.style.display = "none"; ok.style.display = "block";
         var mf = C.m.replace("{{nome}}", nm);
