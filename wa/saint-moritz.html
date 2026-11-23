@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>WhatsApp — Saint Moritz</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;background:url('atendimento-bg.jpg') center/cover fixed no-repeat}
+body::before{content:"";position:fixed;inset:0;background:rgba(255,255,255,.72);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:0}
+.wrap{position:relative;z-index:1;width:100%;max-width:440px;animation:up .3s cubic-bezier(.22,1,.36,1)}
+.welcome{text-align:center;color:#1a0a1e;font-size:19px;font-weight:700;line-height:1.35;margin-bottom:16px;text-shadow:0 1px 12px rgba(255,255,255,.8)}
+@keyframes up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.modal{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 12px 48px rgba(45,10,52,.18);max-height:92vh;display:flex;flex-direction:column}
+.xbtn{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.18);border:none;color:#fff;font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;z-index:2}
+.xbtn:hover{background:rgba(0,0,0,.32)}
+.hd{position:relative;flex-shrink:0;background:#25d366;padding:22px 46px 18px 20px;display:flex;align-items:center;gap:13px}
+.hd h2{color:#ffffff;font-size:17px;font-weight:700;margin:0 0 4px;line-height:1.3}
+.hd p{color:rgba(255,255,255,.82);font-size:13px;margin:0}
+.bd{padding:22px 20px 24px;overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto}
+.f{margin-bottom:16px}
+.f label{display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px}
+.f input,.f select,.f textarea{display:block;width:100%;border:1.5px solid #ddd;border-radius:11px;padding:12px 14px;font-size:14px;line-height:1.4;font-family:inherit;color:#111;background:#f8f8f8;outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}
+.f select{height:auto;min-height:46px}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:#25d366;box-shadow:0 0 0 3px rgba(37,211,102,.12);background:#fff}
+.req{color:#e74c3c}
+.btn{width:100%;padding:14px;background:#25d366;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;font-family:inherit;margin-top:10px;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:opacity .2s,transform .1s}
+.btn:hover{opacity:.92;transform:translateY(-1px)}
+.btn:disabled{opacity:.6;cursor:default;transform:none}
+.btn svg{width:18px;height:18px;fill:#fff}
+.err{color:#c0392b;font-size:12px;margin-top:9px;display:none;padding:10px 13px;background:#fff0f0;border-radius:9px;border:1px solid #fcc}
+.ok{display:none;text-align:center;padding:36px 0 16px}
+.ok svg{width:60px;height:60px;margin-bottom:12px}
+.ok h3{color:#111;font-size:17px;font-weight:700;margin:0 0 6px}
+.ok p{color:#777;font-size:13px}
+.lgpd{font-size:11px;color:#bbb;text-align:center;margin-top:14px;line-height:1.5}
+.pw{text-align:center;margin-top:16px;font-size:11px;color:#999}
+.pw a{color:#8B5A9A;text-decoration:none;font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="welcome">Bem-vindo(a), vamos dar início ao seu atendimento</div>
+<div class="modal">
+<div class="hd"><img src="data:image/webp;base64,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" alt="logo" style="height:38px;max-width:170px;object-fit:contain;display:block;flex-shrink:0"><div><h2>Vamos iniciar o seu atendimento.</h2><p>Preencha para iniciarmos a conversa.</p></div><button class="xbtn" onclick="fecharWA()" aria-label="Fechar" style="color:#ffffff">✕</button></div>
+<div class="bd">
+<div id="fa">
+<div class="f"><label>Nome completo <span class="req">*</span></label><input type="text" id="nm" placeholder="João Silva" autocomplete="name"></div>
+<div class="f"><label>Celular / WhatsApp <span class="req">*</span></label><input type="tel" id="tel" placeholder="(61) 99999-0000" autocomplete="tel"></div>
+<div class="f"><label>E-mail <span class="req">*</span></label><input type="email" id="em" placeholder="joao@email.com" autocomplete="email"></div>
+<div style="margin-bottom:15px"><label style="display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px;font-family:inherit">Especialidade / Tratamento</label><input type="text" id="bgo_esp" placeholder="Escreva aqui o que deseja" style="display:block;width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none"></div><div style="margin-bottom:15px"><label style="display:block;font-size:12px;font-weight:700;color:#444;margin-bottom:6px;font-family:inherit">Particular ou Convênio?</label><select id="bgo_conv" style="display:block;width:100%;box-sizing:border-box;border:1.5px solid #ddd;border-radius:10px;padding:11px 13px;font-size:14px;font-family:inherit;color:#111;background:#f8f8f8;outline:none;-webkit-appearance:none;appearance:none"><option value="">Selecione…</option><option>Particular</option><option>Convênio</option><option>Não sei ainda</option></select></div>
+<div class="err" id="err">⚠️ Preencha nome, celular e e-mail para continuar.</div>
+<button class="btn" id="btn"><svg viewBox="0 0 24 24"><path d="M20.52 3.48A11.94 11.94 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.65-.5-5.22-1.44l-.37-.22-3.67.96.98-3.57-.24-.38A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.4c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51H7.5c-.2 0-.5.07-.77.37C6.47 8.6 5.75 9.27 5.75 10.67c0 1.4 1.02 2.76 1.17 2.95.15.2 2 3.04 4.86 4.27.68.29 1.21.47 1.62.6.68.21 1.3.18 1.79.11.55-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/></svg>Iniciar conversa no WhatsApp</button>
+<div class="lgpd">Seus dados são usados apenas para entrar em contato com você. Não enviamos spam.</div>
+</div>
+<div class="ok" id="ok">
+<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#E6F4ED"/><path d="M7 12.5l3.5 3.5 6.5-7" stroke="#1A7A44" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<h3>Tudo certo! 🎉</h3><p>Abrindo o WhatsApp agora…</p>
+</div>
+</div>
+</div>
+<div class="pw">Powered by <a href="https://bgomarketingmedico.com.br" target="_blank">B.GO Marketing Médico</a></div>
+</div>
+<script>
+var WA="5561999159944",WH="https://script.google.com/macros/s/AKfycbzZrSl_xwqA8hVpIRYmR9tA_5smvurliB9jwLRtkBkc13Sf6OkJUEfUw3ZXM0CoD1Td/exec",MSG="Olá! Meu nome é {{nome}} e gostaria de agendar uma consulta.";
+var p=new URLSearchParams(window.location.search);
+function fecharWA(){if(history.length>1){history.back();}else{window.close();location.href=document.referrer||"about:blank";}}
+function origemWA(){if(p.get("utm_source"))return p.get("utm_source");var r=document.referrer||"";if(!r)return"direto";var h;try{h=new URL(r).hostname.toLowerCase();}catch(e){return"direto";}if(h.indexOf(location.hostname)>=0)return"direto";if(/(^|\.)google\./.test(h))return"busca google orgânico";if(/(^|\.)bing\./.test(h))return"busca bing orgânico";if(/(^|\.)yahoo\./.test(h))return"busca yahoo orgânico";if(/duckduckgo\./.test(h))return"busca duckduckgo orgânico";if(/instagram\./.test(h))return"instagram orgânico";if(/(^|\.)facebook\.|(^|\.)fb\./.test(h))return"facebook orgânico";if(/youtube\./.test(h))return"youtube orgânico";if(/linkedin\./.test(h))return"linkedin orgânico";if(/tiktok\./.test(h))return"tiktok orgânico";if(/t\.co|twitter\.|x\.com/.test(h))return"twitter orgânico";return h.replace(/^www\./,"");}
+function utms(){return{utm_source:origemWA(),utm_medium:p.get("utm_medium")||"",utm_campaign:p.get("utm_campaign")||"",pagina:document.referrer||location.href,dispositivo:/Mobi|Android/i.test(navigator.userAgent)?"Mobile":"Desktop"};}
+document.getElementById("btn").onclick=function(){
+var nm=document.getElementById("nm").value.trim();
+var tel=document.getElementById("tel").value.trim();
+var em=document.getElementById("em").value.trim();
+if(!nm||!tel||!em||!/\S+@\S+\.\S+/.test(em)){document.getElementById("err").style.display="block";return;}
+document.getElementById("err").style.display="none";
+var btn=document.getElementById("btn");btn.disabled=true;btn.textContent="Enviando…";
+var extra={};
+["bgo_esp","bgo_conv"].concat([]).forEach(function(id){var el=document.getElementById(id);if(el)extra[id]=el.value;});
+var pl=Object.assign({data:new Date().toLocaleDateString("pt-BR"),hora:new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),nome:nm,telefone:tel,email:em},extra,utms());
+if(WH)fetch(WH,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(pl)}).catch(function(){});
+setTimeout(function(){document.getElementById("fa").style.display="none";document.getElementById("ok").style.display="block";var mf=MSG.replace("{{nome}}",nm);setTimeout(function(){window.location.href="https://wa.me/"+WA+"?text="+encodeURIComponent(mf);},900);},700);
+};
+</script>
+</body>
+</html>
